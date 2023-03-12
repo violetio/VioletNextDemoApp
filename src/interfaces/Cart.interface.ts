@@ -1,4 +1,5 @@
 import { Bag } from "./Bag.interface";
+import { ShippingAddress } from "./ShippingAddress.interface";
 
 export interface Cart {
   app_id: number;
@@ -22,4 +23,5 @@ export interface Cart {
   sub_total: number;
   token: string;
   user_id: number;
+  shipping_address: ShippingAddress;
 }
