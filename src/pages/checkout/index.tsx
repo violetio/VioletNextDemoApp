@@ -38,6 +38,7 @@ export default function CheckoutPage() {
           state: "WA",
           type: "SHIPPING",
         },
+        same_address: true,
       });
     }
   }, [cart.id]);
@@ -56,7 +57,7 @@ export default function CheckoutPage() {
         ],
         {
           params: {
-            price_cart: false,
+            price_cart: true,
           },
         }
       );

@@ -39,7 +39,7 @@ apiRoute.post(async (req: CheckoutPaymentRequest, res: NextApiResponse) => {
     }
   );
   // Update payment
-  await axios.post(updatePaymentEndpoint(req.query.cartId));
+  // await axios.post(updatePaymentEndpoint(req.query.cartId));
   res.status(200).json(postShippingResponse.data);
 });
 
