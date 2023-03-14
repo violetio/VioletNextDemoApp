@@ -14,9 +14,26 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+To test Apple pay:
+
+Start ngrok
+
+```
+ngrok http 3000
+```
+
+Add the ngrok domain to the approved domains on Stripe's dashboard
+
+Example: `https://d497-38-95-108-171.ngrok.io`
+
+Access the page with the ngrok url instead of localhost
+
 Environment variables:
+
+```
 APP_SECRET=[REDACTED]
 APP_ID=[REDACTED]
 API_ENDPOINT=[VIOLET_API_ENDPOINT. Ex: https://sandbox-api.violet.io]
 USERNAME=[VIOLET USER EMAIL]
 PASSWORD=[VIOLET USER PASSWORD]
+```

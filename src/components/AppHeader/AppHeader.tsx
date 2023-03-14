@@ -1,4 +1,5 @@
 import { Bag } from "@/interfaces/Bag.interface";
+import HomeIcon from "@/public/svg/home.svg";
 import CartIcon from "@/public/svg/shopping-cart.svg";
 import { RootState } from "@/redux/reducers";
 import { useAppSelector } from "@/redux/store";
@@ -9,6 +10,9 @@ export default function AppHeader() {
   const cart = useAppSelector((state: RootState) => state.cart);
   return (
     <div className={styles.header}>
+      <Link href={"/"}>
+        <HomeIcon className={styles.home} />
+      </Link>
       <div className={styles.cartContainer}>
         <Link href={`/checkout?cartId=${cart.id}`}>
           <CartIcon className={styles.cart} />

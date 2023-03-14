@@ -24,6 +24,7 @@ const tokenIsExpired = (token: string) => {
 
 export default tokenIsExpired;
 
+// Login with the Violet username and password
 const login = async (next: NextHandler) => {
   try {
     const getTokenResponse = await axios.post(

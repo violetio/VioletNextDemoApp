@@ -25,4 +25,5 @@ export interface Bag {
   taxes: any[];
   taxes_included: boolean;
   transactions: any[];
+  shipping_method: any;
 }

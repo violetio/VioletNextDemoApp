@@ -17,3 +17,5 @@ export const updatePaymentEndpoint = (cartId: string) =>
   `${endpointPrefix}/checkout/cart/${cartId}/payment/update`;
 export const checkoutPaymentEndpoint = (cartId: string) =>
   `${endpointPrefix}/checkout/cart/${cartId}/payment`;
+export const submitPaymentEndpoint = (cartId: string) =>
+  `${endpointPrefix}/checkout/cart/${cartId}/submit`;

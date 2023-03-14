@@ -13,6 +13,7 @@ export default function ProductPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { productId } = router.query;
+  // Only make a network request when productId value exists
   const queryUrl = productId ? `/api/catalog/products/${productId}` : null;
   const { data } = useSWR(
     queryUrl,
@@ -51,6 +52,7 @@ export default function ProductPage() {
     }
   }, [selectedSku]);
 
+  // Display all skus from a product and allow the user to select and add one to a cart.
   return (
     <div className={styles.productPage}>
       {data && (
@@ -68,7 +70,7 @@ export default function ProductPage() {
               >
                 <div>Id: {sku.id}</div>
                 {sku.variant_values.map((variant: Variant) => (
-                  <div>
+                  <div key={`${variant.value}_${variant.variant}`}>
                     {variant.variant}: {variant.value}
                   </div>
                 ))}

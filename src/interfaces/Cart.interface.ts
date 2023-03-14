@@ -24,4 +24,6 @@ export interface Cart {
   token: string;
   user_id: number;
   shipping_address: ShippingAddress;
+  payment_intent_client_secret: string;
+  customer: any;
 }
