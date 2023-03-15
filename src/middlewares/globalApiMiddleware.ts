@@ -19,7 +19,7 @@ export const nextConnectConfiguration = () => {
     },
     onNoMatch(req, res) {
       res.status(405).json({ error: `Method '${req.method}' Not Allowed` });
-    }
+    },
   });
 
   apiRoute.use(injectUserToken);
