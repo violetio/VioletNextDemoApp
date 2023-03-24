@@ -2,6 +2,8 @@ import axios from "axios";
 import useSWR from "swr";
 import styles from "@/styles/Home.module.scss";
 import Link from "next/link";
+import Image from "next/image";
+import { Product } from "@/interfaces/Product.interface";
 
 export default function Home() {
   // Fetch products with catalog service
@@ -21,12 +23,19 @@ export default function Home() {
 
   return (
     <div className={styles.home}>
-      Products
+      Ultra
       <div className={styles.products}>
         {data &&
-          data.content.map((product: any) => (
+          data.content.map((product: Product) => (
             <Link key={product.id} href={`/products/${product.id}`}>
-              <div className={styles.product}>{product.name}</div>
+              <Image
+                className={styles.productImage}
+                src={product.default_image_url}
+                alt={product.name}
+                width={200}
+                height={200}
+              />
+              <div className={styles.productName}>{product.name}</div>
             </Link>
           ))}
       </div>
