@@ -1,5 +1,4 @@
-import { Variant } from "./Variant.interface";
-
+import { SkuVariantValue } from "./SkuVariantValue.interface";
 export interface Sku {
   id: number;
   merchant_id: number;
@@ -11,5 +10,5 @@ export interface Sku {
   sale_price: number;
   status: string;
   quantity: number;
-  variant_values: Variant[];
+  variant_values: SkuVariantValue[];
 }

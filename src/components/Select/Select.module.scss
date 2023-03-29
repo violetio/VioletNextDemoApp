@@ -1,0 +1,111 @@
+@use "@/styles/_variables";
+$border-width: 2px;
+
+.violetSelect {
+  display: flex;
+  position: relative;
+  height: 45px;
+  width: 100%;
+  margin: 0;
+  padding: 8px 14px 8px 10px;
+  font-size: variables.$font-size-2;
+  background-color: white;
+  color: variables.$dark-gray;
+  border: $border-width solid variables.$dark-gray;
+  border-radius: 4px;
+  align-items: center;
+  user-select: none;
+  line-height: 1.6;
+  .legendText {
+    position: absolute;
+    top: 8px;
+    color: variables.$dark-gray;
+    // Transition settings when the legend text slides between placeholder position to legend position
+    transition: color 200ms cubic-bezier(0, 0, 0.2, 1) 0ms,
+      transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms,
+      max-width 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+    &.focused {
+      // Slides the legendText to the top left when focused
+      transform: translate(0px, -22px) scale(0.75);
+    }
+  }
+  .hiddenLegend {
+    height: 0;
+    font-size: 14px; // Use this to adjust spacing cutout in the border
+    visibility: hidden;
+  }
+  .chevronDown {
+    width: 20px;
+    height: 20px;
+    margin-left: auto;
+    &.flipped {
+      transform: rotate(180deg);
+    }
+  }
+  &:hover {
+    color: variables.$black;
+    border-color: variables.$black;
+    .legendText {
+      color: variables.$black;
+    }
+    .chevronDown {
+      path {
+        fill: variables.$black;
+      }
+    }
+  }
+  // Set styles when input is focused
+  &.focused {
+    color: variables.$black;
+    border-color: variables.$black;
+    .legendText {
+      color: variables.$black;
+    }
+    .chevronDown {
+      path {
+        fill: variables.$black;
+      }
+    }
+  }
+
+  // Set styles when a value has been selected from the dropdown
+  &.valueSelected {
+    color: variables.$dark-gray;
+    .legendText {
+      transform: translate(0, -22px) scale(0.75);
+    }
+  }
+  .hiddenInput {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    left: -9000px; // We move the hidden input completely off the screen to avoid accidental mouse effects
+  }
+  .options {
+    position: absolute;
+    top: 53px;
+    left: -$border-width;
+    width: calc(100% + #{$border-width * 2});
+    background: #fafafa;
+    box-shadow: -3px 0px 4px rgba(228, 228, 237, 0.19), 4px 3px 15px #cdcdda;
+    border-radius: 4px;
+    z-index: 1;
+    max-height: 300px;
+    overflow-y: auto;
+    .option {
+      display: flex;
+      height: 44px;
+      width: 100%;
+      align-items: center;
+      padding: 12px 16px;
+      &.customHover {
+        // The background of a dropdown menu item when hovered
+        background: variables.$light-gray;
+      }
+    }
+  }
+  .valueLabel {
+    margin-left: 4px;
+  }
+}

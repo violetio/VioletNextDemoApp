@@ -1,4 +1,5 @@
 import { Category } from "./Category.interface";
+import { Offer } from "./Offer.interface";
 import { Variant } from "./Variant.interface";
 
 export interface Product {
@@ -16,6 +17,7 @@ export interface Product {
   meta: string[];
   min_price: number;
   name: string;
+  offers: Offer[];
   qty_available: number;
   related_product_ids: number[];
   tags: string[];

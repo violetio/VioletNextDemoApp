@@ -5,9 +5,9 @@ import styles from "./ProductPage.module.scss";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
 import { Sku } from "@/interfaces/Sku.interface";
-import { Variant } from "@/interfaces/Variant.interface";
 import { useAppDispatch } from "@/redux/store";
 import { setCart } from "@/redux/actions/cart";
+import { SkuVariantValue } from "@/interfaces/SkuVariantValue.interface";
 
 export default function ProductPage() {
   const router = useRouter();
@@ -69,7 +69,7 @@ export default function ProductPage() {
                 onClick={() => setSelectedSku(sku.id)}
               >
                 <div>Id: {sku.id}</div>
-                {sku.variant_values.map((variant: Variant) => (
+                {sku.variant_values.map((variant: SkuVariantValue) => (
                   <div key={`${variant.value}_${variant.variant}`}>
                     {variant.variant}: {variant.value}
                   </div>

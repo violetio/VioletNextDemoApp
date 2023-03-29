@@ -1,0 +1,24 @@
+.productPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .productImage {
+    margin: 20px auto;
+    object-fit: contain;
+    background-color: white;
+  }
+  .variants {
+    width: 100%;
+    .variantName {
+      margin-bottom: 10px;
+    }
+    .variantOption {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+      .disabledRow {
+        color: blue;
+      }
+    }
+  }
+}

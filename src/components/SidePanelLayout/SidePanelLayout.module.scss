@@ -1,0 +1,43 @@
+$panel-width: 400px;
+
+.container {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  background: white;
+  .pageContent {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    overflow-y: auto;
+  }
+  .sidePanel {
+    position: fixed;
+    top: 0;
+    right: -$panel-width;
+    width: $panel-width;
+    height: 100vh;
+    padding: 40px;
+    background-color: white;
+    border-left: 1px solid black;
+    transition: right 300ms ease-in-out;
+    &.active {
+      right: 0;
+      animation: slideInFromRight 300ms ease-in-out;
+    }
+    .closePanel {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+  }
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX($panel-width);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
