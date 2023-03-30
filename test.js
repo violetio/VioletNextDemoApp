@@ -81,11 +81,11 @@ function doRecurse(m, k, start, productVariants, filteredSkus) {
     // console.log();
 }
 
-for(let i = 0; i < arrs.length; i++){ // Loop through each possible variant color/size/etc...
-    doRecurse(memo, "", i, arrs, null);
+// for(let i = 0; i < arrs.length; i++){ // Loop through each possible variant color/size/etc...
+    doRecurse(memo, "", 0, arrs, null);
     // console.log("|");
-}
+// }
 
 console.log(JSON.stringify(memo, null, 4));
-console.log("Only full options:");
-console.log(Object.keys(memo).filter((k) => k.length >= 3).map((k) => `${k}: ${memo[k].flat()}`).join('\n'));
+// console.log("Only full options:");
+// console.log(Object.keys(memo).filter((k) => k.length >= 3).map((k) => `${k}: ${memo[k].flat()}`).join('\n'));

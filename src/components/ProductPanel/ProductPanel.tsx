@@ -130,10 +130,7 @@ const ProductPanel = ({ product }: Props) => {
       }
     };
 
-    for (let i = 0; i < variantArrays.length; i++) {
-      doRecurse(memo, "", i, variantArrays, undefined);
-    }
-    console.log("memo", memo);
+    doRecurse(memo, "", 0, variantArrays, undefined);
     return memo;
   }, [sortedVariantValuesMemo]);
 
@@ -158,7 +155,6 @@ const ProductPanel = ({ product }: Props) => {
   };
 
   const skuExistsInCurrentFilter = (variantName: string, rowValue: string) => {
-    console.log(availableSkus[`${getSkusKey(variantName, rowValue)}`]);
     return availableSkus[`${getSkusKey(variantName, rowValue)}`].length;
   };
 
