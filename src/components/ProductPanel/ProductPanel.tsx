@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./ProductPanel.module.scss";
 import { Product } from "@/interfaces/Product.interface";
 import Image from "next/image";
@@ -8,6 +8,9 @@ import axios from "axios";
 import useSWR from "swr";
 import Select from "../Select/Select";
 import cx from "classnames";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { setCart } from "@/redux/actions/cart";
+import { RootState } from "@/redux/reducers";
 
 interface Props {
   product: Product;
@@ -17,6 +20,8 @@ interface Props {
  * Panel component for displaying product information
  */
 const ProductPanel = ({ product }: Props) => {
+  const dispatch = useAppDispatch();
+  const cartState = useAppSelector((state: RootState) => state.cart);
   const queryUrl = `/api/catalog/products/${product.id}`;
   const { data } = useSWR<Product>(
     queryUrl,
@@ -134,12 +139,44 @@ const ProductPanel = ({ product }: Props) => {
     return memo;
   }, [sortedVariantValuesMemo]);
 
-  const getSkusKey = (variantName: string, rowValue: string) => {
+  const addToCart = useCallback(
+    async (skuId: number) => {
+      if (cartState.cart) {
+        const cart = await axios.post(
+          `/api/checkout/cart/${cartState.cart.id}/skus`,
+          {
+            sku_id: skuId,
+            quantity: 1,
+          },
+          {
+            params: {
+              price_cart: false,
+            },
+          }
+        );
+        dispatch(setCart(cart.data));
+      } else {
+        const cart = await axios.post("/api/checkout/cart", {
+          base_currency: "USD",
+          skus: [
+            {
+              sku_id: skuId,
+              quantity: 1,
+            },
+          ],
+        });
+        dispatch(setCart(cart.data));
+      }
+    },
+    [cartState.cart]
+  );
+
+  const getSkusKey = (variantName?: string, rowValue?: string) => {
     const result = sortedVariantsMemo.reduce(
       (prev: string, variant: Variant) => {
         // Form our key
         let selectedVariantValue = selectedValues[variant.name];
-        if (variantName === variant.name) {
+        if (variantName === variant.name && rowValue) {
           selectedVariantValue = rowValue;
         }
         if (selectedVariantValue) {
@@ -180,7 +217,7 @@ const ProductPanel = ({ product }: Props) => {
                   (variantValue: ProductVariantValue) => variantValue.name
                 )}
                 value={selectedValues[variant.name]}
-                renderOption={(rowValue: string, index: number) => {
+                renderOption={(rowValue: string) => {
                   return (
                     <div
                       className={cx({
@@ -204,7 +241,6 @@ const ProductPanel = ({ product }: Props) => {
                 indexSelected={(index: number) => {
                   const productVariant =
                     sortedVariantValuesMemo[variant.name][index];
-                  const skuIds = productVariant.sku_ids;
                   let selectable = skuExistsInCurrentFilter(
                     variant.name,
                     productVariant.name
@@ -228,6 +264,17 @@ const ProductPanel = ({ product }: Props) => {
             </div>
           ))}
       </div>
+      <button
+        disabled={
+          sortedVariantsMemo.length !== Object.keys(selectedValues).length
+        }
+        onClick={() => {
+          // Add the sku to cart
+          addToCart(availableSkus[getSkusKey()][0]);
+        }}
+      >
+        Add to Cart
+      </button>
     </div>
   );
 };

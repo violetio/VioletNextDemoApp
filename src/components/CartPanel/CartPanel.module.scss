@@ -1,0 +1,28 @@
+.cartPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .header {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  .product {
+    width: 100%;
+    margin-bottom: 20px;
+    .productInfo {
+      display: flex;
+      align-items: center;
+      .productImage {
+        object-fit: contain;
+        min-width: 100px;
+        min-height: 100px;
+      }
+    }
+    .productQuantity {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+  }
+}

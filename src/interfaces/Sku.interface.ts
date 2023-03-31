@@ -11,4 +11,7 @@ export interface Sku {
   status: string;
   quantity: number;
   variant_values: SkuVariantValue[];
+  thumbnail: string;
+  price: number;
+  name: string;
 }

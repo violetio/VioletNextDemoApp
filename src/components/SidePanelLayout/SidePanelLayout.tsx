@@ -6,6 +6,7 @@ import styles from "./SidePanelLayout.module.scss";
 import ProductPanel from "../ProductPanel/ProductPanel";
 import ClosePanelIcon from "@/public/svg/close-panel.svg";
 import { closeSidePanel } from "@/redux/thunks/common";
+import CartPanel from "../CartPanel/CartPanel";
 
 interface Props {
   children: React.ReactNode;
@@ -19,12 +20,14 @@ const SidePanelLayout = ({ children }: Props) => {
   const selectedProduct = useAppSelector(
     (state: RootState) => state.products.selectedProduct
   );
+  const cart = useAppSelector((state: RootState) => state.cart);
+
   return (
     <div className={styles.container}>
       <div className={styles.pageContent}>{children}</div>
       <div
         className={cx(styles.sidePanel, {
-          [styles.active]: selectedProduct,
+          [styles.active]: selectedProduct || cart.showCart,
         })}
       >
         <ClosePanelIcon
@@ -32,6 +35,7 @@ const SidePanelLayout = ({ children }: Props) => {
           onClick={() => dispatch(closeSidePanel())}
         />
         {selectedProduct && <ProductPanel product={selectedProduct} />}
+        {cart.showCart && !selectedProduct && <CartPanel />}
       </div>
     </div>
   );
