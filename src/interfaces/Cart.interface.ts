@@ -21,6 +21,7 @@ export interface Cart {
   status: string;
   stripe_key: string;
   sub_total: number;
+  total: number;
   token: string;
   user_id: number;
   shipping_address: ShippingAddress;

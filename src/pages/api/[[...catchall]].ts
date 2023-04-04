@@ -36,11 +36,13 @@ apiRoute.all(async (req: NextApiRequest, res: NextApiResponse) => {
         [VIOLET_APP_SECRET_HEADER]: process.env.APP_SECRET as string,
         [VIOLET_APP_ID_HEADER]: process.env.APP_ID as string,
         [VIOLET_TOKEN_HEADER]: req.headers[VIOLET_TOKEN_HEADER] as string,
+        "Content-Type": "application/json",
       },
     });
     res.status(response.status).json(response.data);
-  } catch (e) {
-    console.log(`e ${e}`);
+  } catch (e: any) {
+    console.log(`Axios error on ${parsedUrl(req)} ${e}`);
+    res.status(e.response?.status).json(e.response.data);
   }
 });
 

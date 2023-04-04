@@ -164,6 +164,7 @@ const ProductPanel = ({ product }: Props) => {
               quantity: 1,
             },
           ],
+          wallet_based_checkout: true,
         });
         dispatch(setCart(cart.data));
       }
