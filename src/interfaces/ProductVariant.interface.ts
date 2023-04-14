@@ -1,10 +1,10 @@
 import { ProductVariantValue } from "./ProductVariantValue.interface";
 
-export interface Variant {
+export interface ProductVariant {
   id: string;
-  product_id: string;
+  productId: string;
   name: string;
-  visual: boolean;
+  visual?: boolean;
   values: ProductVariantValue[];
-  displayOrder: number;
+  displayOrder?: number;
 }

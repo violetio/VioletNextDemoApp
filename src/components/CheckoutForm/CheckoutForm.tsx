@@ -14,9 +14,15 @@ import styles from "./CheckoutForm.module.scss";
 import { useRouter } from "next/router";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { RootState } from "@/redux/reducers";
-import axios from "axios";
-import { Bag } from "@/interfaces/Bag.interface";
 import { setCart } from "@/redux/actions/cart";
+import {
+  applyCustomerInfoToCart,
+  applyShippingMethodsToBags,
+  fetchShippingOptions,
+  submitPayment,
+  updatePricing,
+} from "@/api/checkout/cart";
+import { AddressType } from "@/enums/AddressType";
 
 interface Props {
   fullApplePayCheckout: boolean;
@@ -36,27 +42,28 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
     shippingOption: PaymentRequestShippingOption,
     updateWith: (details: PaymentRequestUpdateDetails) => void
   ) => {
-    const applyShippingResponse = await axios.post(
-      `/api/checkout/cart/${cartState.cart?.id}/shipping`,
-      cartState.cart?.bags.map((bag) => ({
-        bag_id: bag.bag_id,
-        shipping_method_id: shippingOption.id,
-      })),
-      {
-        params: {
-          price_cart: true,
-        },
-      }
-    );
+    if (cartState.cart?.id) {
+      const applyShippingResponse = await applyShippingMethodsToBags(
+        cartState.cart?.id.toString(),
+        cartState.cart?.bags.map((bag) => ({
+          bagId: bag.id,
+          shippingMethodId: shippingOption.id,
+        }))
+      );
 
-    console.log("applied shipping: ", applyShippingResponse.data);
-    updateWith({
-      status: "success",
-      total: {
-        amount: applyShippingResponse.data.total,
-        label: "Total",
-      },
-    });
+      console.log("applied shipping: ", applyShippingResponse.data);
+      updateWith({
+        status: "success",
+        total: {
+          amount: applyShippingResponse.data.total || 0,
+          label: "Total",
+        },
+      });
+    } else {
+      updateWith({
+        status: "fail",
+      });
+    }
   };
 
   useEffect(() => {
@@ -66,7 +73,7 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
         currency: "usd", //From the the Order object
         total: {
           label: "Sub Total", //From the Order object
-          amount: cartState.cart?.sub_total,
+          amount: cartState.cart?.subTotal || 0,
         },
         requestPayerName: true,
         requestPayerEmail: true,
@@ -94,29 +101,29 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
             state: ev.shippingAddress.region,
             type: "SHIPPING",
           });
-          const updatedCartResponse = await axios.post(
-            `/api/checkout/cart/${cartState.cart?.id}/customer`,
+          const updatedCartResponse = await applyCustomerInfoToCart(
+            cartState.cart?.id.toString() as string,
             {
-              first_name: "John",
-              last_name: "Doe",
+              firstName: "John",
+              lastName: "Doe",
               email: "hello@violet.io",
-              shipping_address: {
-                address_1: "",
-                city: ev.shippingAddress.city,
+              shippingAddress: {
+                address1: "",
+                city: ev.shippingAddress.city!,
                 country: ev.shippingAddress.country,
-                postal_code: ev.shippingAddress.postalCode,
-                state: ev.shippingAddress.region,
-                type: "SHIPPING",
+                postalCode: ev.shippingAddress.postalCode!,
+                state: ev.shippingAddress.region!,
+                type: AddressType.SHIPPING,
               },
-              same_address: true,
+              sameAddress: true,
             }
           );
 
           dispatch(setCart(updatedCartResponse.data));
 
           // Perform server-side request to fetch shipping options
-          const availableShippingOptions = await axios.get(
-            `/api/checkout/cart/${cartState.cart?.id}/shipping/available`
+          const availableShippingOptions = await fetchShippingOptions(
+            cartState.cart?.id.toString() as string
           );
           console.log(
             "update with shipping: ",
@@ -161,34 +168,35 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
         // Confirm the PaymentIntent without handling potential next actions (yet).
         console.log("payment method event: ", event);
         const payerName = event.payerName?.split(" ");
-        const updatedCartResponse = await axios.post(
-          `/api/checkout/cart/${cartState.cart?.id}/customer`,
+        const updatedCartResponse = await applyCustomerInfoToCart(
+          cartState.cart?.id.toString() as string,
           {
-            first_name: payerName?.[0],
-            last_name: payerName?.[1],
+            firstName: payerName?.[0]!,
+            lastName: payerName?.[1]!,
             email: event.payerEmail,
-            shipping_address: {
-              address_1: event.shippingAddress?.addressLine?.[0],
-              city: event.shippingAddress?.city,
-              country: event.shippingAddress?.country,
-              postal_code: event.shippingAddress?.postalCode,
-              state: event.shippingAddress?.region,
-              type: "SHIPPING",
+            shippingAddress: {
+              address1: event.shippingAddress?.addressLine?.[0]!,
+              city: event.shippingAddress?.city!,
+              country: event.shippingAddress?.country!,
+              postalCode: event.shippingAddress?.postalCode!,
+              state: event.shippingAddress?.region!,
+              type: AddressType.SHIPPING,
             },
-            same_address: true,
+            sameAddress: true,
           }
         );
+
         console.log("Updated Customer info: ", updatedCartResponse);
         // Update pricing
-        const updatedPricingResponse = await axios.post(
-          `/api/checkout/cart/${cartState.cart?.id}/payment/update`
+        const updatedPricingResponse = await updatePricing(
+          cartState.cart?.id.toString() as string
         );
 
         console.log("Updated pricing response: ", updatedPricingResponse);
 
         const { paymentIntent, error: confirmError } =
           await stripe.confirmCardPayment(
-            cartState.cart?.payment_intent_client_secret!,
+            cartState.cart?.paymentIntentClientSecret!,
             { payment_method: event.paymentMethod.id },
             { handleActions: false }
           );
@@ -196,7 +204,7 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
         // Update customer info with latest customer information
         if (!confirmError) {
           // Submit payment
-          await axios.post(`/api/checkout/cart/${cartState.cart?.id}/submit`);
+          await submitPayment(cartState.cart?.id.toString() as string);
           complete("success");
         } else {
           // Report to the browser that the payment failed, prompting it to

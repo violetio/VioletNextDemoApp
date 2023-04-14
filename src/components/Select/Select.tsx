@@ -215,7 +215,7 @@ const VioletSelect = ({
               onClick={() => {
                 indexSelected?.(index);
               }}
-              onMouseMove={() => {
+              onMouseEnter={() => {
                 if (inputRef.current) {
                   inputRef.current.value = "";
                 }

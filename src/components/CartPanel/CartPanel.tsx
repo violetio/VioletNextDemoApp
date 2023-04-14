@@ -4,30 +4,47 @@ import { RootState } from "@/redux/reducers";
 import { useCallback, useEffect, useMemo } from "react";
 
 import Image from "next/image";
-import axios from "axios";
 import { setCart } from "@/redux/actions/cart";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "../CheckoutForm/CheckoutForm";
+import {
+  removeSkusFromCart,
+  requestIntentBasedCapturePayment,
+} from "@/api/checkout/cart";
 
-/**
- * Panel component for displaying current cart data
- */
+// TODO: Dynamically load this when the publishable key is received from the Order object
 const stripePromise = loadStripe("pk_test_UHg8oLvg4rrDCbvtqfwTE8qd");
 
+/**
+ * Panel component for displaying current cart data and Stripe payment elements
+ * for completing checkout.
+ */
 const CartPanel = () => {
   const dispatch = useAppDispatch();
   const cartState = useAppSelector((state: RootState) => state.cart);
 
+  /**
+   * Flattens the arrays of SKUs in each bag
+   */
   const skusInCart = useMemo(() => {
-    return cartState.cart?.bags.flatMap((bag) => bag.skus.map((sku) => sku));
+    if (cartState.cart) {
+      return cartState.cart.bags.flatMap((bag) =>
+        bag.skus ? bag.skus?.map((sku) => sku) : []
+      );
+    }
+    return [];
   }, [cartState]);
 
+  /**
+   * Removes a SKU ID from the cart
+   */
   const removeFromCart = useCallback(
     async (skuId: number) => {
       if (cartState.cart?.id) {
-        const cart = await axios.delete(
-          `/api/checkout/cart/${cartState.cart.id}/skus/${skuId}`
+        const cart = await removeSkusFromCart(
+          cartState.cart.id.toString(),
+          skuId.toString()
         );
         dispatch(setCart(cart.data));
       }
@@ -37,25 +54,20 @@ const CartPanel = () => {
 
   useEffect(() => {
     if (cartState.cart?.id) {
-      console.log("calling checkout on cartId: ", cartState.cart?.id);
-      checkout();
+      beginCheckout();
     }
   }, [cartState.cart?.id]);
 
-  // Submit an uncaptured payment to retrieve the payment_intent_client_secret
-  const checkout = useCallback(async () => {
+  /**
+   * Begins the checkout process on the cart by requesting a paymentIntentClientSecret.
+   * The paymentIntentClientSecret is required for Stripe V3 payments.
+   */
+  const beginCheckout = useCallback(async () => {
     const cartId = cartState.cart?.id;
-    if (cartId && !cartState.cart?.payment_intent_client_secret) {
-      const paymentResponse = await axios.post(
-        `/api/checkout/cart/${cartId}/payment`,
-        {
-          intent_based_capture: true,
-        }
-        // {
-        //   params: {
-        //     price_cart: true,
-        //   },
-        // }
+    if (cartId && !cartState.cart?.paymentIntentClientSecret) {
+      const paymentResponse = await requestIntentBasedCapturePayment(
+        cartId.toString(),
+        true
       );
 
       dispatch(setCart(paymentResponse.data));
@@ -66,7 +78,7 @@ const CartPanel = () => {
     <div className={styles.cartPanel}>
       <div className={styles.header}>Cart</div>
       <div className={styles.product}>
-        {skusInCart?.map((sku) => (
+        {skusInCart.map((sku) => (
           <div key={sku.id} className={styles.product}>
             <div className={styles.productInfo}>
               <Image
@@ -93,12 +105,12 @@ const CartPanel = () => {
           </div>
         ))}
       </div>
-      {cartState.cart?.payment_intent_client_secret && (
+      {cartState.cart?.paymentIntentClientSecret && (
         <div className={styles.stripeElement}>
           <Elements
             stripe={stripePromise}
             options={{
-              clientSecret: cartState.cart?.payment_intent_client_secret,
+              clientSecret: cartState.cart?.paymentIntentClientSecret,
             }}
           >
             <CheckoutForm fullApplePayCheckout={true} />

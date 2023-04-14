@@ -1,5 +1,5 @@
 import { Sku } from "./Sku.interface";
-import { Variant } from "./Variant.interface";
+import { ProductVariant } from "./ProductVariant.interface";
 
 export interface Offer {
   id: number;
@@ -19,6 +19,6 @@ export interface Offer {
   max_price: number;
   currency: string;
   source_category_name: string;
-  variants: Variant[];
+  variants: ProductVariant[];
   skus: Sku[];
 }

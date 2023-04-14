@@ -1,9 +1,9 @@
-import { Cart } from "@/interfaces/Cart.interface";
+import { Order } from "@/interfaces/Order.interface";
 import { createReducer, PayloadAction } from "@reduxjs/toolkit";
 import { hideCart, setCart, showCart } from "../actions/cart";
 
 export interface CartState {
-  cart?: Cart;
+  cart?: Order;
   showCart: boolean;
 }
 
@@ -14,7 +14,7 @@ const initialState: CartState = {
 
 export default createReducer(initialState, (builder) =>
   builder
-    .addCase(setCart, (state: CartState, action: PayloadAction<Cart>) => {
+    .addCase(setCart, (state: CartState, action: PayloadAction<Order>) => {
       state.cart = action.payload;
     })
     .addCase(showCart, (state: CartState) => {

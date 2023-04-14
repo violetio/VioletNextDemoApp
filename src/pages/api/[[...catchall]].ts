@@ -7,7 +7,9 @@ import {
 } from "@/strings/headers";
 import { endpointPrefix } from "@/strings/VioletApiPaths";
 import axios from "axios";
+import camelcaseKeys from "camelcase-keys";
 import type { NextApiRequest, NextApiResponse } from "next";
+import snakecaseKeys from "snakecase-keys";
 
 const apiRoute = nextConnectConfiguration();
 
@@ -21,17 +23,23 @@ const parsedUrl = (req: NextApiRequest) => {
   return `${endpointPrefix}${pathname}`;
 };
 
+/**
+ * This NextJS api routes forwards all the requests from the client to Violet.
+ * This allows us to use the APP_SECRET, APP_ID, USERNAME, and PASSWORD environment variables on the server side
+ * without exposing it to the browser.
+ */
 apiRoute.all(async (req: NextApiRequest, res: NextApiResponse) => {
   /**
-   * Next splits the catchall path by / into req.query.catchall. We can delete this
-   * Since we are forwarding the pathname
+   * Next splits the catchall path by / into req.query.catchall.
+   * We can delete this since we are forwarding the pathname.
    */
   delete req.query.catchall;
   try {
     const response = await axios(parsedUrl(req), {
       method: req.method,
-      data: req.body,
-      params: req.query,
+      // The Violet API expects snakecase keys in the query and body parameters
+      data: req.body ? snakecaseKeys(req.body, { deep: true }) : undefined,
+      params: snakecaseKeys(req.query, { deep: true }),
       headers: {
         [VIOLET_APP_SECRET_HEADER]: process.env.APP_SECRET as string,
         [VIOLET_APP_ID_HEADER]: process.env.APP_ID as string,
@@ -39,7 +47,10 @@ apiRoute.all(async (req: NextApiRequest, res: NextApiResponse) => {
         "Content-Type": "application/json",
       },
     });
-    res.status(response.status).json(response.data);
+    res
+      .status(response.status)
+      // Convert snakecase keys into camelcase for use within the project
+      .json(camelcaseKeys(response.data, { deep: true }));
   } catch (e: any) {
     console.log(`Axios error on ${parsedUrl(req)} ${e}`);
     res.status(e.response?.status).json(e.response.data);

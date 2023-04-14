@@ -1,0 +1,40 @@
+import { OrderStatus } from "@/enums/OrderStatus";
+import { Bag } from "./Bag.interface";
+import { OrderAddress } from "./OrderAddress.interface";
+import { OrderCustomer } from "./OrderCustomer.interface";
+import { OrderPaymentMethod } from "./OrderPaymentMethod.interface";
+import { OrderChannel } from "@/enums/OrderChannel";
+import { OrderError } from "./OrderError.interface";
+
+export interface Order {
+  id: number;
+  token: string;
+  userId: number;
+  appId?: number;
+  developerId?: number;
+  customer: OrderCustomer;
+  bags: Bag[];
+  shippingAddress: OrderAddress;
+  billingAddress: OrderAddress;
+  paymentMethod: OrderPaymentMethod;
+  subTotal?: number;
+  shippingTotal?: number;
+  taxTotal?: number;
+  total?: number;
+  appCustomerId?: string;
+  appOrderId?: string;
+  status: OrderStatus;
+  isGuest: boolean;
+  dateCreated?: Date;
+  dateLastModified?: Date;
+  priced?: boolean;
+  walletBasedCheckout?: boolean;
+  currency?: string;
+  referralId?: string;
+  errors: OrderError[];
+  channel: OrderChannel;
+  currencySymbol: string;
+  appName: string;
+  stripeKey: string;
+  paymentIntentClientSecret: string;
+}

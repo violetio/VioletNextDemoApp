@@ -8,19 +8,21 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { setCart } from "@/redux/actions/cart";
-import axios from "axios";
 import styles from "./AppHeader.module.scss";
 import { useEffect } from "react";
+import { cartEndpoint, getCart } from "@/api/checkout/cart";
 
 export default function AppHeader() {
   const router = useRouter();
+  const cartId = router.query.cartId as string;
   const dispatch = useAppDispatch();
   const cart = useAppSelector((state: RootState) => state.cart);
   // Fetch cart data if a cartId is present in the query param
   const { data: getCartData } = useSWR(
-    router.query.cartId ? `/api/checkout/cart/${router.query.cartId}` : null,
-    async (url: string) => (await axios.get(url)).data
+    cartId ? cartEndpoint(cartId) : null,
+    async () => (await getCart(cartId)).data
   );
+
   useEffect(() => {
     if (getCartData) {
       dispatch(setCart(getCartData));
@@ -39,7 +41,8 @@ export default function AppHeader() {
         {cart.cart?.bags && (
           <div className={styles.counter}>
             {cart.cart?.bags.reduce(
-              (skuCount: number, bag: Bag) => skuCount + bag.skus.length,
+              (skuCount: number, bag: Bag) =>
+                skuCount + (bag.skus?.length || 0),
               0
             )}
           </div>

@@ -1,4 +1,4 @@
-import { Cart } from "@/interfaces/Cart.interface";
+import { Order } from "@/interfaces/Order.interface";
 import { createAction } from "@reduxjs/toolkit";
 
 enum CartActionType {
@@ -7,6 +7,6 @@ enum CartActionType {
   HIDE_CART = "HIDE_CART",
 }
 
-export const setCart = createAction<Cart>(CartActionType.SET_CART);
+export const setCart = createAction<Order>(CartActionType.SET_CART);
 export const showCart = createAction(CartActionType.SHOW_CART);
 export const hideCart = createAction(CartActionType.HIDE_CART);
