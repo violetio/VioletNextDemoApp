@@ -12,7 +12,7 @@ export interface OrderShippingMethod {
   maxSubtotal?: number;
   minWeight?: number;
   maxWeight?: number;
-  dateCreated?: Date;
-  dateLastModified?: Date;
+  dateCreated?: string;
+  dateLastModified?: string;
   externalId?: string;
 }

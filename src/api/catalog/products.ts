@@ -1,3 +1,5 @@
+import { Merchant } from "@/interfaces/Merchant.interface";
+import { Offer } from "@/interfaces/Offer.interface";
 import { Order } from "@/interfaces/Order.interface";
 import { OrderSku } from "@/interfaces/OrderSku.interface";
 import { Page } from "@/interfaces/Page.interface";
@@ -76,4 +78,15 @@ export const addSkusToCart = (
       priceCart,
     },
   });
+};
+
+/**
+ * Get Offers for a Merchant by Merchant Id
+ * @see https://docs.violet.io/interact-with-catalogs#lLsN26wkLmAfdiMbxJjZr
+ * @param {string} merchantId
+ */
+export const getMerchantOffers = (
+  merchantId: number
+): Promise<AxiosResponse<Page<Offer>, any>> => {
+  return axios.get<Page<Offer>>(`/api/catalog/offers/merchants/${merchantId}`);
 };

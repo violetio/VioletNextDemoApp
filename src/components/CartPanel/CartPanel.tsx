@@ -1,20 +1,18 @@
 import styles from "./CartPanel.module.scss";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { RootState } from "@/redux/reducers";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
 import Image from "next/image";
 import { setCart } from "@/redux/actions/cart";
-import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "../CheckoutForm/CheckoutForm";
 import {
   removeSkusFromCart,
   requestIntentBasedCapturePayment,
 } from "@/api/checkout/cart";
-
-// TODO: Dynamically load this when the publishable key is received from the Order object
-const stripePromise = loadStripe("pk_test_UHg8oLvg4rrDCbvtqfwTE8qd");
+import { stripe } from "@/stripe/stripe";
+import GuestCheckout from "../GuestCheckout/GuestCheckout";
 
 /**
  * Panel component for displaying current cart data and Stripe payment elements
@@ -23,6 +21,7 @@ const stripePromise = loadStripe("pk_test_UHg8oLvg4rrDCbvtqfwTE8qd");
 const CartPanel = () => {
   const dispatch = useAppDispatch();
   const cartState = useAppSelector((state: RootState) => state.cart);
+  const stripeKey = cartState.cart?.stripeKey;
 
   /**
    * Flattens the arrays of SKUs in each bag
@@ -53,7 +52,8 @@ const CartPanel = () => {
   );
 
   useEffect(() => {
-    if (cartState.cart?.id) {
+    // Request a paymentIntentClientSecret to go through checkout
+    if (cartState.cart?.id && !cartState.cart?.paymentIntentClientSecret) {
       beginCheckout();
     }
   }, [cartState.cart?.id]);
@@ -105,10 +105,10 @@ const CartPanel = () => {
           </div>
         ))}
       </div>
-      {cartState.cart?.paymentIntentClientSecret && (
+      {cartState.cart?.paymentIntentClientSecret && stripeKey && (
         <div className={styles.stripeElement}>
           <Elements
-            stripe={stripePromise}
+            stripe={stripe}
             options={{
               clientSecret: cartState.cart?.paymentIntentClientSecret,
             }}
@@ -117,6 +117,12 @@ const CartPanel = () => {
           </Elements>
         </div>
       )}
+      <div className={styles.guestCheckoutDivider}>
+        <div className={styles.divider} />
+        <div className={styles.label}>Guest Checkout</div>
+        <div className={styles.divider} />
+      </div>
+      <GuestCheckout />
     </div>
   );
 };

@@ -1,7 +1,7 @@
-.stripeElement {
-  margin-top: 40px;
-  width: 400px;
+.sameAsBilling {
+  display: flex;
+  margin-top: 16px;
 }
-.submitButton {
+.submit {
   composes: submit from "../GuestCheckout/GuestCheckout.module.scss";
 }

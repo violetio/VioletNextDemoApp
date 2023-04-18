@@ -21,6 +21,7 @@ $panel-width: 400px;
     background-color: white;
     border-left: 1px solid black;
     transition: right 300ms ease-in-out;
+    overflow-y: auto;
     &.active {
       right: 0;
       animation: slideInFromRight 300ms ease-in-out;

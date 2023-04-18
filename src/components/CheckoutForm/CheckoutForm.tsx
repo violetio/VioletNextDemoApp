@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import {
   PaymentElement,
   PaymentRequestButtonElement,
@@ -69,8 +69,9 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
   useEffect(() => {
     if (stripe && fullApplePayCheckout && cartState.cart) {
       const pr = stripe.paymentRequest({
+        // Using 'US' and 'USD' here for the purposes of the demo. Change this to reflect the appropriate country and currency needed for each use case.
         country: "US", //From the Order object
-        currency: "usd", //From the the Order object
+        currency: "usd", //From the Order object
         total: {
           label: "Sub Total", //From the Order object
           amount: cartState.cart?.subTotal || 0,
@@ -108,7 +109,7 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
               lastName: "Doe",
               email: "hello@violet.io",
               shippingAddress: {
-                address1: "",
+                address_1: "",
                 city: ev.shippingAddress.city!,
                 country: ev.shippingAddress.country,
                 postalCode: ev.shippingAddress.postalCode!,
@@ -175,7 +176,8 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
             lastName: payerName?.[1]!,
             email: event.payerEmail,
             shippingAddress: {
-              address1: event.shippingAddress?.addressLine?.[0]!,
+              address_1: event.shippingAddress?.addressLine?.[0]!,
+              address_2: event.shippingAddress?.addressLine?.[1]!,
               city: event.shippingAddress?.city!,
               country: event.shippingAddress?.country!,
               postalCode: event.shippingAddress?.postalCode!,
@@ -234,14 +236,11 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
       //`Elements` instance that was used to create the Payment Element
       elements,
       confirmParams: {
-        return_url:
-          "https://" +
-          window.location.host +
-          router.pathname +
-          "?" +
-          new URLSearchParams(
-            router.query as Record<string, string>
-          ).toString(),
+        return_url: `https://${
+          window.location.host
+        }/paymentAccepted?${new URLSearchParams(
+          router.query as Record<string, string>
+        ).toString()}`,
       },
     });
 
@@ -251,20 +250,24 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
       // details incomplete)
       setErrorMessage(error.message);
     } else {
+      await submitPayment(cartState.cart?.id.toString() as string);
       // Your customer will be redirected to your `return_url`. For some payment
       // methods like iDEAL, your customer will be redirected to an intermediate
       // site first to authorize the payment, then redirected to the `return_url`.
     }
   };
 
-  // if (paymentRequest) {
   return (
     <>
-      {fullApplePayCheckout && paymentRequest ? (
-        <PaymentRequestButtonElement
-          className={styles.stripeElement}
-          options={{ paymentRequest }}
-        />
+      {fullApplePayCheckout ? (
+        <>
+          {paymentRequest ? (
+            <PaymentRequestButtonElement
+              className={styles.stripeElement}
+              options={{ paymentRequest }}
+            />
+          ) : null}
+        </>
       ) : (
         <form onSubmit={handleSubmit}>
           <PaymentElement />

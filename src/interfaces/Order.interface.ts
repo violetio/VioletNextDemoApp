@@ -25,8 +25,8 @@ export interface Order {
   appOrderId?: string;
   status: OrderStatus;
   isGuest: boolean;
-  dateCreated?: Date;
-  dateLastModified?: Date;
+  dateCreated?: string;
+  dateLastModified?: string;
   priced?: boolean;
   walletBasedCheckout?: boolean;
   currency?: string;

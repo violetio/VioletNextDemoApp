@@ -1,10 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import styles from "./ProductPanel.module.scss";
-import { Product } from "@/interfaces/Product.interface";
+import React, { useCallback, useEffect, useState } from "react";
+import styles from "./OfferPanel.module.scss";
 import Image from "next/image";
-import { ProductVariant } from "@/interfaces/ProductVariant.interface";
-import { ProductVariantValue } from "@/interfaces/ProductVariantValue.interface";
-import useSWR from "swr";
 import Select from "../Select/Select";
 import cx from "classnames";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
@@ -16,38 +12,43 @@ import {
   getProduct,
   getProductEndpoint,
 } from "@/api/catalog/products";
+import useOffer from "@/hooks/useOffer";
+import { Offer } from "@/interfaces/Offer.interface";
+import { Variant, VariantValue } from "@/interfaces/Variant.interface";
+import { Product } from "@/interfaces/Product.interface";
 import useProduct from "@/hooks/useProduct";
+import { ProductVariant } from "@/interfaces/ProductVariant.interface";
+import { ProductVariantValue } from "@/interfaces/ProductVariantValue.interface";
+import useSWR from "swr";
 
 interface Props {
-  product: Product;
+  offer: Offer;
 }
 
 /**
  * Panel component for displaying product information and
  * controls for a user to add a specific product SKU to a cart.
  */
-const ProductPanel = ({ product }: Props) => {
+const OfferPanel = ({ offer }: Props) => {
   const dispatch = useAppDispatch();
   const cartState = useAppSelector((state: RootState) => state.cart);
-  const { data: productData } = useSWR<Product>(
-    getProductEndpoint(product.id),
-    async () => (await getProduct(product.id)).data
-  );
   const [selectedValues, setSelectedValues] = useState<{
     [key: string]: string;
   }>({});
+
   const {
     variants,
     variantValues,
     skusPerVariantCombination,
     getSkusKey,
     skusExistForGivenSelections,
-  } = useProduct(productData);
+  } = useOffer(offer);
 
+  console.log("sku combos: ", skusPerVariantCombination);
   useEffect(() => {
     // Reset selected variant values when a different product is selected
     setSelectedValues({});
-  }, [productData?.id]);
+  }, [offer.id]);
 
   const addToCart = useCallback(
     async (skuId: number) => {
@@ -74,20 +75,20 @@ const ProductPanel = ({ product }: Props) => {
   );
 
   return (
-    <div className={styles.productPanel}>
-      {product.defaultImageUrl && (
+    <div className={styles.offerPanel}>
+      {offer.albums?.[0] && (
         <Image
           className={styles.productImage}
-          src={product.defaultImageUrl}
-          alt={product.name}
+          src={offer.albums[0].primaryMedia.url}
+          alt={offer.name}
           width={300}
           height={300}
         />
       )}
       {/* Create select dropdowns for every variant available for the selected product */}
       <div className={styles.variants}>
-        {productData?.variants &&
-          variants.map((variant: ProductVariant) => (
+        {offer.variants &&
+          variants.map((variant: Variant) => (
             <div
               key={`${variant.id}${variant.name}`}
               className={styles.variantOption}
@@ -95,7 +96,7 @@ const ProductPanel = ({ product }: Props) => {
               <Select
                 placeholder={variant.name}
                 options={variantValues[variant.name].map(
-                  (variantValue: ProductVariantValue) => variantValue.name
+                  (variantValue: VariantValue) => variantValue.name
                 )}
                 value={selectedValues[variant.name]}
                 renderOption={(rowValue: string) => {
@@ -158,4 +159,4 @@ const ProductPanel = ({ product }: Props) => {
   );
 };
 
-export default ProductPanel;
+export default OfferPanel;

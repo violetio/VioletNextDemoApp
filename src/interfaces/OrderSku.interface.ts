@@ -12,8 +12,8 @@ export interface OrderSku {
   thumbnail: string;
   quantity?: number;
   price: number;
-  dateCreated?: Date;
-  dateLastModified?: Date;
+  dateCreated?: string;
+  dateLastModified?: string;
   weight?: number;
   height?: number;
   width?: number;

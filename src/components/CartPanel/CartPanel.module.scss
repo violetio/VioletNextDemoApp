@@ -25,4 +25,19 @@
       margin-top: 10px;
     }
   }
+  .guestCheckoutDivider {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    .divider {
+      height: 1px;
+      background-color: gray;
+      flex-grow: 1;
+    }
+    .label {
+      margin: 0 8px;
+      color: gray;
+    }
+  }
 }

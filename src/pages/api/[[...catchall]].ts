@@ -27,6 +27,7 @@ const parsedUrl = (req: NextApiRequest) => {
  * This NextJS api routes forwards all the requests from the client to Violet.
  * This allows us to use the APP_SECRET, APP_ID, USERNAME, and PASSWORD environment variables on the server side
  * without exposing it to the browser.
+ * @see https://nextjs.org/docs/basic-features/environment-variables
  */
 apiRoute.all(async (req: NextApiRequest, res: NextApiResponse) => {
   /**
@@ -50,7 +51,12 @@ apiRoute.all(async (req: NextApiRequest, res: NextApiResponse) => {
     res
       .status(response.status)
       // Convert snakecase keys into camelcase for use within the project
-      .json(camelcaseKeys(response.data, { deep: true }));
+      .json(
+        camelcaseKeys(response.data, {
+          deep: true,
+          exclude: ["address_1", "address_2"],
+        })
+      );
   } catch (e: any) {
     console.log(`Axios error on ${parsedUrl(req)} ${e}`);
     res.status(e.response?.status).json(e.response.data);

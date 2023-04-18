@@ -2,7 +2,6 @@ import { Currency } from "@/enums/Currency";
 import { Category } from "./Category.interface";
 import { Offer } from "./Offer.interface";
 import { ProductVariant } from "./ProductVariant.interface";
-import { Gender } from "@/enums/Gender";
 import { Meta } from "./Meta.interface";
 import { ProductRequirement } from "@/enums/ProductRequirement";
 
@@ -23,7 +22,6 @@ export interface Product {
   variants?: ProductVariant[];
   offers?: Offer[];
   categories?: Set<Category>;
-  gender?: Gender;
   meta?: Meta[];
   tags?: string[];
   relatedProductIds?: string[];

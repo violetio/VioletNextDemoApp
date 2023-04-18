@@ -1,4 +1,5 @@
 import { Order } from "@/interfaces/Order.interface";
+import { OrderAddress } from "@/interfaces/OrderAddress.interface";
 import { OrderCustomer } from "@/interfaces/OrderCustomer.interface";
 import { OrderShippingMethodWrapper } from "@/interfaces/OrderShippingMethodWrapper.interface";
 import axios, { AxiosResponse } from "axios";
@@ -9,7 +10,6 @@ export const cartEndpoint = (cartId: string) => `/api/checkout/cart/${cartId}`;
  * Retrieves a single cart by its ID
  * @see https://docs.violet.io/get-cart-by-id
  * @param {string} cartId
- * @returns {Promise<AxiosResponse<Order, any>>}
  */
 export const getCart = (cartId: string): Promise<AxiosResponse<Order, any>> => {
   return axios.get<Order>(cartEndpoint(cartId));
@@ -20,7 +20,6 @@ export const getCart = (cartId: string): Promise<AxiosResponse<Order, any>> => {
  * @see https://docs.violet.io/remove-sku-from-cart
  * @param {string} cartId
  * @param {string} skuId
- * @returns {Promise<AxiosResponse<Order, any>>}
  */
 export const removeSkusFromCart = (
   cartId: string,
@@ -76,6 +75,23 @@ export const applyCustomerInfoToCart = (
   customer: OrderCustomer
 ): Promise<AxiosResponse<Order, any>> => {
   return axios.post<Order>(`/api/checkout/cart/${cartId}/customer`, customer);
+};
+
+/**
+ * Applies the provided billing address to the cart.
+ * @see https://docs.violet.io/set-billing-address
+ * @param cartId
+ * @param billingAddress
+ * @returns
+ */
+export const applyBillingAddress = (
+  cartId: string,
+  billingAddress: OrderAddress
+): Promise<AxiosResponse<Order, any>> => {
+  return axios.post<Order>(
+    `/api/checkout/cart/${cartId}/billing_address`,
+    billingAddress
+  );
 };
 
 /**

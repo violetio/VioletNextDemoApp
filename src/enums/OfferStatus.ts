@@ -1,0 +1,8 @@
+export enum OfferStatus {
+  UNAVAILABLE = 0,
+  AVAILABLE = 1,
+  DISABLED_UNAVAILABLE = 2,
+  DISABLED_AVAILABLE = 3,
+  FOR_DELETION = 4,
+  ARCHIVED = 5,
+}

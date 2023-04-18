@@ -7,6 +7,7 @@ import { ShippingMethodCarrier } from "@/enums/ShippingMethodCarrier";
 import { OrderTax } from "./OrderTax.interface";
 import { Transaction } from "./Transaction.interface";
 import { OrderChannel } from "@/enums/OrderChannel";
+import { OrderShippingMethod } from "./OrderShippingMethod.interface";
 
 export interface Bag {
   id: number;
@@ -36,23 +37,4 @@ export interface Bag {
   externalCurrency?: string;
   currencyExchangeRate?: number;
   channel?: OrderChannel;
-}
-
-export interface OrderShippingMethod {
-  id: number;
-  shippingMethodId: string;
-  bagId: number;
-  merchantId: number;
-  type: ShippingMethodType;
-  carrier?: ShippingMethodCarrier;
-  label: string;
-  price: number;
-  trackingNumber?: string;
-  minSubtotal?: number;
-  maxSubtotal?: number;
-  minWeight?: number;
-  maxWeight?: number;
-  dateCreated?: Date;
-  dateLastModified?: Date;
-  externalId?: string;
 }

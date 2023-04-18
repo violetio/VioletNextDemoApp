@@ -6,6 +6,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: '**.cloudfront.net'
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.shopify.com'
       }
     ]
   },

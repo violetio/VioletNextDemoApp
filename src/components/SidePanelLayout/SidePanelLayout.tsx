@@ -3,7 +3,7 @@ import cx from "classnames";
 import { RootState } from "@/redux/reducers";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import styles from "./SidePanelLayout.module.scss";
-import ProductPanel from "../ProductPanel/ProductPanel";
+import OfferPanel from "../OfferPanel/OfferPanel";
 import ClosePanelIcon from "@/public/svg/close-panel.svg";
 import { closeSidePanel } from "@/redux/thunks/common";
 import CartPanel from "../CartPanel/CartPanel";
@@ -17,8 +17,8 @@ interface Props {
  */
 const SidePanelLayout = ({ children }: Props) => {
   const dispatch = useAppDispatch();
-  const selectedProduct = useAppSelector(
-    (state: RootState) => state.products.selectedProduct
+  const selectedOffer = useAppSelector(
+    (state: RootState) => state.offers.selectedOffer
   );
   const cart = useAppSelector((state: RootState) => state.cart);
 
@@ -27,15 +27,16 @@ const SidePanelLayout = ({ children }: Props) => {
       <div className={styles.pageContent}>{children}</div>
       <div
         className={cx(styles.sidePanel, {
-          [styles.active]: selectedProduct || cart.showCart,
+          [styles.active]: selectedOffer || cart.showCart,
         })}
       >
         <ClosePanelIcon
           className={styles.closePanel}
           onClick={() => dispatch(closeSidePanel())}
         />
-        {selectedProduct && <ProductPanel product={selectedProduct} />}
-        {cart.showCart && !selectedProduct && <CartPanel />}
+        {/* {selectedOffer && <OfferPanel offer={selectedOffer} />} */}
+        {selectedOffer && <OfferPanel offer={selectedOffer} />}
+        {cart.showCart && !selectedOffer && <CartPanel />}
       </div>
     </div>
   );

@@ -4,8 +4,8 @@ export interface OrderAddress {
   id?: number;
   orderId?: number;
   name?: string;
-  address1: string;
-  address2?: string;
+  address_1: string;
+  address_2?: string;
   city: string;
   state: string;
   country: string;
