@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   PaymentElement,
   PaymentRequestButtonElement,
   useElements,
   useStripe,
-} from "@stripe/react-stripe-js";
+} from '@stripe/react-stripe-js';
 import {
   PaymentRequest,
   PaymentRequestShippingOption,
   PaymentRequestUpdateDetails,
-} from "@stripe/stripe-js";
-import styles from "./CheckoutForm.module.scss";
-import { useRouter } from "next/router";
-import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { RootState } from "@/redux/reducers";
-import { setCart } from "@/redux/actions/cart";
+} from '@stripe/stripe-js';
+import styles from './CheckoutForm.module.scss';
+import { useRouter } from 'next/router';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { RootState } from '@/redux/reducers';
+import { setCart } from '@/redux/actions/cart';
 import {
   applyCustomerInfoToCart,
   applyShippingMethodsToBags,
   fetchShippingOptions,
   submitPayment,
   updatePricing,
-} from "@/api/checkout/cart";
-import { AddressType } from "@/enums/AddressType";
+} from '@/api/checkout/cart';
+import { AddressType } from '@/enums/AddressType';
 
 interface Props {
   fullApplePayCheckout: boolean;
@@ -51,17 +51,17 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
         }))
       );
 
-      console.log("applied shipping: ", applyShippingResponse.data);
+      console.log('applied shipping: ', applyShippingResponse.data);
       updateWith({
-        status: "success",
+        status: 'success',
         total: {
           amount: applyShippingResponse.data.total || 0,
-          label: "Total",
+          label: 'Total',
         },
       });
     } else {
       updateWith({
-        status: "fail",
+        status: 'fail',
       });
     }
   };
@@ -70,46 +70,46 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
     if (stripe && fullApplePayCheckout && cartState.cart) {
       const pr = stripe.paymentRequest({
         // Using 'US' and 'USD' here for the purposes of the demo. Change this to reflect the appropriate country and currency needed for each use case.
-        country: "US", //From the Order object
-        currency: "usd", //From the Order object
+        country: 'US', //From the Order object
+        currency: 'usd', //From the Order object
         total: {
-          label: "Sub Total", //From the Order object
+          label: 'Sub Total', //From the Order object
           amount: cartState.cart?.subTotal || 0,
         },
         requestPayerName: true,
         requestPayerEmail: true,
         requestShipping: true,
       });
-      console.log("make payment request: ", pr);
+      console.log('make payment request: ', pr);
       // Check the availability of the Payment Request API.
       pr.canMakePayment().then((result) => {
         if (result) {
-          console.log("result: ", result);
+          console.log('result: ', result);
           setPaymentRequest(pr);
         }
       });
-      pr.on("shippingaddresschange", async (ev) => {
-        if (ev.shippingAddress.country !== "US") {
-          ev.updateWith({ status: "invalid_shipping_address" });
+      pr.on('shippingaddresschange', async (ev) => {
+        if (ev.shippingAddress.country !== 'US') {
+          ev.updateWith({ status: 'invalid_shipping_address' });
         } else {
           // Apply customer info with info from Apple Pay
-          console.log("recipient: ", ev.shippingAddress.recipient);
-          console.log("shipping address: ", {
+          console.log('recipient: ', ev.shippingAddress.recipient);
+          console.log('shipping address: ', {
             address_1: ev.shippingAddress.addressLine,
             city: ev.shippingAddress.city,
             country: ev.shippingAddress.country,
             postal_code: ev.shippingAddress.postalCode,
             state: ev.shippingAddress.region,
-            type: "SHIPPING",
+            type: 'SHIPPING',
           });
           const updatedCartResponse = await applyCustomerInfoToCart(
             cartState.cart?.id.toString() as string,
             {
-              firstName: "John",
-              lastName: "Doe",
-              email: "hello@violet.io",
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'hello@violet.io',
               shippingAddress: {
-                address_1: "",
+                address_1: '',
                 city: ev.shippingAddress.city!,
                 country: ev.shippingAddress.country,
                 postalCode: ev.shippingAddress.postalCode!,
@@ -126,13 +126,15 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
           const availableShippingOptions = await fetchShippingOptions(
             cartState.cart?.id.toString() as string
           );
+          console.log('available shipping options: ', availableShippingOptions);
           console.log(
-            "update with shipping: ",
-            availableShippingOptions.data.flatMap((bagShippingMethods: any) => {
-              const shippingMethods = bagShippingMethods.shipping_methods;
+            'update with shipping: ',
+            availableShippingOptions.data.flatMap((bagShippingMethods) => {
+              console.log('bag shipping methods: ', bagShippingMethods);
+              const shippingMethods = bagShippingMethods.shippingMethods;
               return shippingMethods.map((shippingMethod: any) => {
                 return {
-                  id: shippingMethod.shipping_method_id,
+                  id: shippingMethod.shippingMethodId,
                   label: shippingMethod.label,
                   detail: shippingMethod.label,
                   amount: shippingMethod.price,
@@ -141,13 +143,13 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
             })
           );
           ev.updateWith({
-            status: "success",
+            status: 'success',
             shippingOptions: availableShippingOptions.data.flatMap(
               (bagShippingMethods: any) => {
-                const shippingMethods = bagShippingMethods.shipping_methods;
+                const shippingMethods = bagShippingMethods.shippingMethods;
                 return shippingMethods.map((shippingMethod: any) => {
                   return {
-                    id: shippingMethod.shipping_method_id,
+                    id: shippingMethod.shippingMethodId,
                     label: shippingMethod.label,
                     detail: shippingMethod.label,
                     amount: shippingMethod.price,
@@ -158,17 +160,17 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
           });
         }
       });
-      pr.on("shippingoptionchange", function (event) {
-        console.log("shipping option change");
+      pr.on('shippingoptionchange', function (event) {
+        console.log('shipping option change');
         var updateWith = event.updateWith;
         var shippingOption = event.shippingOption;
         // Send shipping method selected to Violet API
         applyShipping(shippingOption, updateWith);
       });
-      pr.on("paymentmethod", async (event) => {
+      pr.on('paymentmethod', async (event) => {
         // Confirm the PaymentIntent without handling potential next actions (yet).
-        console.log("payment method event: ", event);
-        const payerName = event.payerName?.split(" ");
+        console.log('payment method event: ', event);
+        const payerName = event.payerName?.split(' ');
         const updatedCartResponse = await applyCustomerInfoToCart(
           cartState.cart?.id.toString() as string,
           {
@@ -188,13 +190,13 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
           }
         );
 
-        console.log("Updated Customer info: ", updatedCartResponse);
+        console.log('Updated Customer info: ', updatedCartResponse);
         // Update pricing
         const updatedPricingResponse = await updatePricing(
           cartState.cart?.id.toString() as string
         );
 
-        console.log("Updated pricing response: ", updatedPricingResponse);
+        console.log('Updated pricing response: ', updatedPricingResponse);
 
         const { paymentIntent, error: confirmError } =
           await stripe.confirmCardPayment(
@@ -207,12 +209,12 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
         if (!confirmError) {
           // Submit payment
           await submitPayment(cartState.cart?.id.toString() as string);
-          complete("success");
+          complete('success');
         } else {
           // Report to the browser that the payment failed, prompting it to
           // re-show the payment interface, or show an error message and close
           // the payment interface.
-          complete("fail");
+          complete('fail');
         }
       });
     }
@@ -232,13 +234,16 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
     }
 
     console.log(window.location.host + router.pathname);
+
+    await updatePricing(cartState.cart?.id.toString()!);
+
     const { error } = await stripe.confirmPayment({
       //`Elements` instance that was used to create the Payment Element
       elements,
       confirmParams: {
-        return_url: `https://${
-          window.location.host
-        }/paymentAccepted?${new URLSearchParams(
+        return_url: `https://${window.location.host}/paymentAccepted?cartId=${
+          cartState.cart?.id
+        }&${new URLSearchParams(
           router.query as Record<string, string>
         ).toString()}`,
       },
@@ -250,7 +255,6 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
       // details incomplete)
       setErrorMessage(error.message);
     } else {
-      await submitPayment(cartState.cart?.id.toString() as string);
       // Your customer will be redirected to your `return_url`. For some payment
       // methods like iDEAL, your customer will be redirected to an intermediate
       // site first to authorize the payment, then redirected to the `return_url`.

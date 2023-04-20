@@ -9,7 +9,6 @@ import {
   fetchShippingOptions,
 } from "@/api/checkout/cart";
 import { stripe } from "@/stripe/stripe";
-import { useDispatch } from "react-redux";
 import CheckoutForm from "../CheckoutForm/CheckoutForm";
 import AddressForm from "../AddressForm/AddressForm";
 import { OrderShippingMethodWrapper } from "@/interfaces/OrderShippingMethodWrapper.interface";
@@ -19,7 +18,6 @@ import { OrderShippingMethodWrapper } from "@/interfaces/OrderShippingMethodWrap
  * for completing checkout.
  */
 const GuestCheckout = () => {
-  const dispatch = useDispatch();
   const cartState = useAppSelector((state: RootState) => state.cart);
   const [curStep, setCurStep] = useState(0);
   const [email, setEmail] = useState("");
