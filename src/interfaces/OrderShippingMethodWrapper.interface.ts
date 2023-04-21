@@ -1,4 +1,4 @@
-import { OrderShippingMethod } from "./OrderShippingMethod.interface";
+import { OrderShippingMethod } from './OrderShippingMethod.interface';
 
 export interface OrderShippingMethodWrapper {
   bagId: number;

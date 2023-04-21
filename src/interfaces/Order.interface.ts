@@ -1,10 +1,10 @@
-import { OrderStatus } from "@/enums/OrderStatus";
-import { Bag } from "./Bag.interface";
-import { OrderAddress } from "./OrderAddress.interface";
-import { OrderCustomer } from "./OrderCustomer.interface";
-import { OrderPaymentMethod } from "./OrderPaymentMethod.interface";
-import { OrderChannel } from "@/enums/OrderChannel";
-import { OrderError } from "./OrderError.interface";
+import { Bag } from './Bag.interface';
+import { OrderAddress } from './OrderAddress.interface';
+import { OrderCustomer } from './OrderCustomer.interface';
+import { OrderPaymentMethod } from './OrderPaymentMethod.interface';
+import { OrderError } from './OrderError.interface';
+import { OrderChannel } from '@/enums/OrderChannel';
+import { OrderStatus } from '@/enums/OrderStatus';
 
 export interface Order {
   id: number;

@@ -1,15 +1,15 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { nextConnectConfiguration } from "@/middlewares/globalApiMiddleware";
+import axios from 'axios';
+import camelcaseKeys from 'camelcase-keys';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import snakecaseKeys from 'snakecase-keys';
+import { endpointPrefix } from '@/strings/VioletApiPaths';
 import {
   VIOLET_APP_ID_HEADER,
   VIOLET_APP_SECRET_HEADER,
   VIOLET_TOKEN_HEADER,
-} from "@/strings/headers";
-import { endpointPrefix } from "@/strings/VioletApiPaths";
-import axios from "axios";
-import camelcaseKeys from "camelcase-keys";
-import type { NextApiRequest, NextApiResponse } from "next";
-import snakecaseKeys from "snakecase-keys";
+} from '@/strings/headers';
+import { nextConnectConfiguration } from '@/middlewares/globalApiMiddleware';
 
 const apiRoute = nextConnectConfiguration();
 
@@ -17,7 +17,7 @@ const parsedUrl = (req: NextApiRequest) => {
   const reqUrlFromFE = new URL(req.url as string, `http://${req.headers.host}`);
 
   // Trim /api from the pathname
-  let pathname = reqUrlFromFE.pathname.substring(4);
+  const pathname = reqUrlFromFE.pathname.substring(4);
 
   // Append the pathname to the Violet API prefix
   return `${endpointPrefix}${pathname}`;
@@ -45,7 +45,7 @@ apiRoute.all(async (req: NextApiRequest, res: NextApiResponse) => {
         [VIOLET_APP_SECRET_HEADER]: process.env.APP_SECRET as string,
         [VIOLET_APP_ID_HEADER]: process.env.APP_ID as string,
         [VIOLET_TOKEN_HEADER]: req.headers[VIOLET_TOKEN_HEADER] as string,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
     res
@@ -54,11 +54,10 @@ apiRoute.all(async (req: NextApiRequest, res: NextApiResponse) => {
       .json(
         camelcaseKeys(response.data, {
           deep: true,
-          exclude: ["address_1", "address_2"],
+          exclude: ['address_1', 'address_2'],
         })
       );
   } catch (e: any) {
-    console.log(`Axios error on ${parsedUrl(req)} ${e}`);
     res.status(e.response?.status).json(e.response.data);
   }
 });

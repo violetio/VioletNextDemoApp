@@ -1,6 +1,6 @@
-import { Offer } from "@/interfaces/Offer.interface";
-import { Variant, VariantValue } from "@/interfaces/Variant.interface";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo } from 'react';
+import { Offer } from '@/interfaces/Offer.interface';
+import { Variant, VariantValue } from '@/interfaces/Variant.interface';
 
 /**
  * A custom hook that provides offer-related data including variants, variant values, and available SKU information.
@@ -16,7 +16,7 @@ const useOffer = (offer: Offer) => {
       return variants.filter((variant: Variant) => variant.values.length > 0);
     }
     return [];
-  }, [offer?.id]);
+  }, [offer.variants]);
 
   /**
    * @returns an object of variant name to variant value array pairs
@@ -28,13 +28,14 @@ const useOffer = (offer: Offer) => {
       result[variantName] = variant.values;
     });
     return result;
-  }, [offer?.id, variantsMemo]);
+  }, [variantsMemo]);
 
   /**
    * This object contains information about available SKUs for different combinations of variant values.
    * The keys in the object are strings that indicate a specific combination of variant values,
    * and the values are arrays of all the available SKU IDs that match that combination.
-   * Essentially, this object provides a way to look up which SKUs are available for a given combination of variant values.
+   * Essentially, this object provides a way to look up which SKUs are available
+   * for a given combination of variant values.
    * Example:
    *  {
    *    7.5: [30432, 30434, 30322, 30484, 30313, 30314] // 6 SKUs for size 7.5
@@ -69,10 +70,10 @@ const useOffer = (offer: Offer) => {
         // Loop through each possible variant color/size/etc...
         for (let z = 0; z < variantArrays[j].length; z++) {
           // Loop through each variant value. color: black, blue, white, green
-          let key = k
+          const key = k
             ? `${k}|${variantArrays[j][z].name}`
             : variantArrays[j][z].name;
-          let skuIds = variantArrays[j][z].skuIds || [];
+          const skuIds = variantArrays[j][z].skuIds || [];
           let filtered = skuIds;
           if (filteredSkus) {
             filtered = filtered.filter(function (n) {
@@ -84,13 +85,15 @@ const useOffer = (offer: Offer) => {
       }
     };
 
-    doRecurse(memo, "", 0, variantArrays, undefined);
+    doRecurse(memo, '', 0, variantArrays, undefined);
     return memo;
   }, [variantValuesMemo]);
 
   /**
-   * This function takes the sorted names of the product variants and the currently selected values as input and generates a string key
-   * that can be used to look up the available SKUs for that specific combination of variant values in the skusPerVariantCombination object.
+   * This function takes the sorted names of the product variants
+   * and the currently selected values as input and generates a string key
+   * that can be used to look up the available SKUs
+   * for that specific combination of variant values in the skusPerVariantCombination object.
    * @returns skusPerVariantCombination key
    */
   const getSkusKey = useCallback(
@@ -111,7 +114,7 @@ const useOffer = (offer: Offer) => {
             : selectedVariantValue;
         }
         return prev;
-      }, "");
+      }, '');
       return result;
     },
     [variantsMemo]

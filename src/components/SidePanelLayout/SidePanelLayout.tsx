@@ -1,12 +1,12 @@
-import React from "react";
-import cx from "classnames";
-import { RootState } from "@/redux/reducers";
-import { useAppDispatch, useAppSelector } from "@/redux/store";
-import styles from "./SidePanelLayout.module.scss";
-import OfferPanel from "../OfferPanel/OfferPanel";
-import ClosePanelIcon from "@/public/svg/close-panel.svg";
-import { closeSidePanel } from "@/redux/thunks/common";
-import CartPanel from "../CartPanel/CartPanel";
+import React from 'react';
+import cx from 'classnames';
+import OfferPanel from '../OfferPanel/OfferPanel';
+import CartPanel from '../CartPanel/CartPanel';
+import styles from './SidePanelLayout.module.scss';
+import { RootState } from '@/redux/reducers';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import ClosePanelIcon from '@/public/svg/close-panel.svg';
+import { closeSidePanel } from '@/redux/thunks/common';
 
 interface Props {
   children: React.ReactNode;

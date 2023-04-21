@@ -1,9 +1,9 @@
-import { Currency } from "@/enums/Currency";
-import { Category } from "./Category.interface";
-import { Offer } from "./Offer.interface";
-import { ProductVariant } from "./ProductVariant.interface";
-import { Meta } from "./Meta.interface";
-import { ProductRequirement } from "@/enums/ProductRequirement";
+import { Category } from './Category.interface';
+import { Offer } from './Offer.interface';
+import { ProductVariant } from './ProductVariant.interface';
+import { Meta } from './Meta.interface';
+import { Currency } from '@/enums/Currency';
+import { ProductRequirement } from '@/enums/ProductRequirement';
 
 export interface Product {
   id: string;
@@ -15,7 +15,7 @@ export interface Product {
   available?: boolean;
   visible?: boolean;
   totalSales?: number;
-  type?: "physical" | "digital" | "virtual";
+  type?: 'physical' | 'digital' | 'virtual';
   currency?: Currency;
   minPrice?: number;
   maxPrice?: number;

@@ -1,12 +1,12 @@
-import { Merchant } from "@/interfaces/Merchant.interface";
-import { Offer } from "@/interfaces/Offer.interface";
-import { Order } from "@/interfaces/Order.interface";
-import { OrderSku } from "@/interfaces/OrderSku.interface";
-import { Page } from "@/interfaces/Page.interface";
-import { Product } from "@/interfaces/Product.interface";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from 'axios';
+import { Merchant } from '@/interfaces/Merchant.interface';
+import { Offer } from '@/interfaces/Offer.interface';
+import { Order } from '@/interfaces/Order.interface';
+import { OrderSku } from '@/interfaces/OrderSku.interface';
+import { Page } from '@/interfaces/Page.interface';
+import { Product } from '@/interfaces/Product.interface';
 
-export const getProductsEndpoint = "/api/catalog/products";
+export const getProductsEndpoint = '/api/catalog/products';
 
 /**
  * Retrieves a paginated list of all products in ascending order since date of creation.
@@ -47,12 +47,12 @@ export const getProduct = (
 export const createCart = (
   baseCurrency: string,
   skus: Partial<OrderSku> &
-    Required<Pick<OrderSku, "skuId" | "quantity">>[] = [],
+    Required<Pick<OrderSku, 'skuId' | 'quantity'>>[] = [],
   walletBasedCheckout: boolean = true,
   referralId?: string,
   appOrderId?: string
 ): Promise<AxiosResponse<Order, any>> => {
-  return axios.post<Order>("/api/checkout/cart", {
+  return axios.post<Order>('/api/checkout/cart', {
     baseCurrency,
     skus,
     walletBasedCheckout,
@@ -62,7 +62,8 @@ export const createCart = (
 };
 
 /**
- * Adds a SKU to the cart by its ID. Quantity will default to 1 if no quantity is passed. Quantities greater than 10 will default to 10.
+ * Adds a SKU to the cart by its ID. Quantity will default to 1 if no quantity is passed.
+ * Quantities greater than 10 will default to 10.
  * @see https://docs.violet.io/add-sku-to-cart
  * @param {string} cartId
  * @param {OrderSku} skusPayload
@@ -70,7 +71,7 @@ export const createCart = (
  */
 export const addSkusToCart = (
   cartId: string,
-  orderSku: Partial<OrderSku> & Required<Pick<OrderSku, "skuId" | "quantity">>,
+  orderSku: Partial<OrderSku> & Required<Pick<OrderSku, 'skuId' | 'quantity'>>,
   priceCart: boolean = false
 ): Promise<AxiosResponse<Order, any>> => {
   return axios.post<Order>(`/api/checkout/cart/${cartId}/skus`, orderSku, {

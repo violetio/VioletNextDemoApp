@@ -1,7 +1,7 @@
-import cx from "classnames";
-import { ReactElement, useEffect, useRef, useState } from "react";
-import ChevronDownIcon from "@/public/svg/chevron-down.svg";
-import styles from "./Select.module.scss";
+import cx from 'classnames';
+import { ReactElement, useEffect, useRef, useState } from 'react';
+import styles from './Select.module.scss';
+import ChevronDownIcon from '@/public/svg/chevron-down.svg';
 
 export interface VioletSelectProps {
   /**
@@ -92,7 +92,7 @@ const VioletSelect = ({
           value: option,
           index,
         });
-        optionsRefs.current[index].scrollIntoView({ block: "nearest" });
+        optionsRefs.current[index].scrollIntoView({ block: 'nearest' });
         return;
       }
       index++;
@@ -116,7 +116,7 @@ const VioletSelect = ({
     }
     timerRef.current = window.setTimeout(() => {
       if (inputRef.current) {
-        inputRef.current.value = "";
+        inputRef.current.value = '';
       }
     }, 1000);
   };
@@ -133,7 +133,8 @@ const VioletSelect = ({
       onMouseDown={(e) => e.preventDefault()}
       onBlur={() => setFocused(false)}
     >
-      {/* This placeholder is overlayed in the box when there is no value and will slide to the gap created by the legend tag when the input is focused */}
+      {/* This placeholder is overlayed in the box when there is no value 
+      and will slide to the gap created by the legend tag when the input is focused */}
       <div
         className={cx(styles.legendText, {
           [styles.focused]: focused,
@@ -151,21 +152,21 @@ const VioletSelect = ({
         ref={inputRef}
         className={styles.hiddenInput}
         onFocus={(e) => {
-          e.target.value = "";
+          e.target.value = '';
           setFocused(true);
         }}
         onChange={(e) => inputOnChange(e.target.value)}
         onKeyDown={(e) => {
           // Allow the arrow keys to navigate between the dropdown options
-          if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+          if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
             if (!focused) {
               setFocused(true);
             } else {
               // Decrease the index on arrow up
-              if (e.key === "ArrowUp") {
+              if (e.key === 'ArrowUp') {
                 const index =
                   hoveredOption.index > 0 ? hoveredOption.index - 1 : 0;
-                optionsRefs.current[index].scrollIntoView({ block: "nearest" });
+                optionsRefs.current[index].scrollIntoView({ block: 'nearest' });
                 setHoveredOption({
                   value:
                     hoveredOption.index > 0
@@ -179,7 +180,7 @@ const VioletSelect = ({
                   hoveredOption.index < options.length - 1
                     ? hoveredOption.index + 1
                     : options.length - 1;
-                optionsRefs.current[index].scrollIntoView({ block: "nearest" });
+                optionsRefs.current[index].scrollIntoView({ block: 'nearest' });
                 setHoveredOption({
                   value:
                     hoveredOption.index < options.length - 1
@@ -190,7 +191,7 @@ const VioletSelect = ({
               }
             }
           }
-          if (e.key === "Enter") {
+          if (e.key === 'Enter') {
             indexSelected?.(hoveredOption.index);
             setFocused(false);
             e.preventDefault();
@@ -217,7 +218,7 @@ const VioletSelect = ({
               }}
               onMouseEnter={() => {
                 if (inputRef.current) {
-                  inputRef.current.value = "";
+                  inputRef.current.value = '';
                 }
                 setHoveredOption({
                   value: option,

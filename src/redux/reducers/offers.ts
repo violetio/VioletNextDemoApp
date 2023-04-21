@@ -1,6 +1,6 @@
-import { createReducer, PayloadAction } from "@reduxjs/toolkit";
-import { clearSelectedOffer, setSelectedOffer } from "../actions/offers";
-import { Offer } from "@/interfaces/Offer.interface";
+import { createReducer, PayloadAction } from '@reduxjs/toolkit';
+import { clearSelectedOffer, setSelectedOffer } from '../actions/offers';
+import { Offer } from '@/interfaces/Offer.interface';
 
 export interface OfferState {
   selectedOffer?: Offer;

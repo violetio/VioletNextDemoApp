@@ -1,3 +1,63 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals",     
+    "plugin:import/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
+  ],
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "rules": {
+    "semi": "off",
+    "@typescript-eslint/semi": ["error", "always"],
+    "prefer-const": "error",
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "max-len": [
+      1,
+      {
+        "code": 120
+      }
+    ],
+    "no-undef": 1,
+    "linebreak-style": ["warn", "unix"],
+    "quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": true
+      }
+    ],
+    "no-multiple-empty-lines": [
+      "warn", {
+        "max": 1
+      }
+    ],
+    "no-console": "warn",
+    "import/no-anonymous-default-export": ["error", {
+      "allowArray": true,
+      "allowArrowFunction": true,
+      "allowAnonymousClass": false,
+      "allowAnonymousFunction": true,
+      "allowCallExpression": true,
+      "allowLiteral": false,
+      "allowObject": true
+    }],
+    "sort-imports": [
+      "error",
+      { "ignoreCase": true, "ignoreDeclarationSort": true }
+    ],
+    "import/order": "error",
+    "react-hooks/exhaustive-deps": "error"
+  },
+  "globals": {
+    "JSX": "readonly"
+  }
 }

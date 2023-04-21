@@ -3,8 +3,8 @@ export interface OrderShippingMethod {
   shippingMethodId: string;
   bagId: number;
   merchantId: number;
-  type: "variable" | "flat_rate";
-  carrier?: "ups" | "usps" | "fedex" | "dhl" | "ontrac";
+  type: 'variable' | 'flat_rate';
+  carrier?: 'ups' | 'usps' | 'fedex' | 'dhl' | 'ontrac';
   label: string;
   price: number;
   trackingNumber?: string;

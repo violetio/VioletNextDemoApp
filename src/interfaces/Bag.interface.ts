@@ -1,13 +1,13 @@
-import { BagStatus } from "@/enums/BagStatus";
-import { OrderSku } from "./OrderSku.interface";
-import { FulfillmentStatus } from "@/enums/FulfillmentStatus";
-import { FinancialStatus } from "@/enums/FinancialStatus";
-import { ShippingMethodType } from "@/enums/ShippingMethodType";
-import { ShippingMethodCarrier } from "@/enums/ShippingMethodCarrier";
-import { OrderTax } from "./OrderTax.interface";
-import { Transaction } from "./Transaction.interface";
-import { OrderChannel } from "@/enums/OrderChannel";
-import { OrderShippingMethod } from "./OrderShippingMethod.interface";
+import { OrderSku } from './OrderSku.interface';
+import { OrderTax } from './OrderTax.interface';
+import { Transaction } from './Transaction.interface';
+import { OrderShippingMethod } from './OrderShippingMethod.interface';
+import { BagStatus } from '@/enums/BagStatus';
+import { FulfillmentStatus } from '@/enums/FulfillmentStatus';
+import { FinancialStatus } from '@/enums/FinancialStatus';
+import { ShippingMethodType } from '@/enums/ShippingMethodType';
+import { ShippingMethodCarrier } from '@/enums/ShippingMethodCarrier';
+import { OrderChannel } from '@/enums/OrderChannel';
 
 export interface Bag {
   id: number;

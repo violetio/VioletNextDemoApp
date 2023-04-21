@@ -1,13 +1,13 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { NextHandler } from "next-connect";
-import jwtDecode from "jwt-decode";
+import { NextApiRequest, NextApiResponse } from 'next';
+import { NextHandler } from 'next-connect';
+import jwtDecode from 'jwt-decode';
+import axios, { AxiosError } from 'axios';
 import {
   VIOLET_APP_ID_HEADER,
   VIOLET_APP_SECRET_HEADER,
   VIOLET_TOKEN_HEADER,
-} from "@/strings/headers";
-import { loginEndpoint } from "@/strings/VioletApiPaths";
-import axios, { AxiosError } from "axios";
+} from '@/strings/headers';
+import { loginEndpoint } from '@/strings/VioletApiPaths';
 
 /**
  * Middleware to check cookie authentication
@@ -46,7 +46,7 @@ const login = async (next: NextHandler) => {
   }
 };
 
-let token = "";
+let token = '';
 
 export const injectUserToken = async (
   req: NextApiRequest,

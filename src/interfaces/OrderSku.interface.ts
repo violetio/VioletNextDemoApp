@@ -20,17 +20,17 @@ export interface OrderSku {
   length?: number;
   available?: boolean;
   status?:
-    | "IN_PROGRESS"
-    | "PROCESSING"
-    | "SHIPPED"
-    | "PARTIALLY_SHIPPED"
-    | "DELIVERED"
-    | "COULD_NOT_DELIVER"
-    | "RETURNED"
-    | "CANCELED"
-    | "REFUNDED"
-    | "REJECTED";
-  productType?: "PHYSICAL" | "DIGITAL" | "VIRTUAL";
+    | 'IN_PROGRESS'
+    | 'PROCESSING'
+    | 'SHIPPED'
+    | 'PARTIALLY_SHIPPED'
+    | 'DELIVERED'
+    | 'COULD_NOT_DELIVER'
+    | 'RETURNED'
+    | 'CANCELED'
+    | 'REFUNDED'
+    | 'REJECTED';
+  productType?: 'PHYSICAL' | 'DIGITAL' | 'VIRTUAL';
   linePrice?: number;
   quantityFulfilled?: number;
   orderSkuRates?: OrderSkuRate[];
@@ -42,6 +42,6 @@ export interface OrderSkuRate {
   orderSkuId: number;
   amount: number;
   rate?: number;
-  type: "TAX" | "SHIPPING" | "FEE" | "DUTY";
+  type: 'TAX' | 'SHIPPING' | 'FEE' | 'DUTY';
   name: string;
 }

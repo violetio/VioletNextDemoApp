@@ -1,10 +1,10 @@
-import { Order } from "@/interfaces/Order.interface";
-import { createAction } from "@reduxjs/toolkit";
+import { createAction } from '@reduxjs/toolkit';
+import { Order } from '@/interfaces/Order.interface';
 
 enum CartActionType {
-  SET_CART = "SET_CART",
-  SHOW_CART = "SHOW_CART",
-  HIDE_CART = "HIDE_CART",
+  SET_CART = 'SET_CART',
+  SHOW_CART = 'SHOW_CART',
+  HIDE_CART = 'HIDE_CART',
 }
 
 export const setCart = createAction<Order>(CartActionType.SET_CART);

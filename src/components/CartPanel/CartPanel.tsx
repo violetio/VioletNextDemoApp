@@ -1,18 +1,18 @@
-import styles from "./CartPanel.module.scss";
-import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { RootState } from "@/redux/reducers";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import Image from 'next/image';
+import { Elements } from '@stripe/react-stripe-js';
+import CheckoutForm from '../CheckoutForm/CheckoutForm';
+import GuestCheckout from '../GuestCheckout/GuestCheckout';
+import styles from './CartPanel.module.scss';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { RootState } from '@/redux/reducers';
 
-import Image from "next/image";
-import { setCart } from "@/redux/actions/cart";
-import { Elements } from "@stripe/react-stripe-js";
-import CheckoutForm from "../CheckoutForm/CheckoutForm";
+import { setCart } from '@/redux/actions/cart';
 import {
   removeSkusFromCart,
   requestIntentBasedCapturePayment,
-} from "@/api/checkout/cart";
-import { stripe } from "@/stripe/stripe";
-import GuestCheckout from "../GuestCheckout/GuestCheckout";
+} from '@/api/checkout/cart';
+import { stripe } from '@/stripe/stripe';
 
 /**
  * Panel component for displaying current cart data and Stripe payment elements
@@ -48,15 +48,8 @@ const CartPanel = () => {
         dispatch(setCart(cart.data));
       }
     },
-    [cartState.cart?.id]
+    [cartState.cart?.id, dispatch]
   );
-
-  useEffect(() => {
-    // Request a paymentIntentClientSecret to go through checkout
-    if (cartState.cart?.id && !cartState.cart?.paymentIntentClientSecret) {
-      beginCheckout();
-    }
-  }, [cartState.cart?.id]);
 
   /**
    * Begins the checkout process on the cart by requesting a paymentIntentClientSecret.
@@ -72,7 +65,18 @@ const CartPanel = () => {
 
       dispatch(setCart(paymentResponse.data));
     }
-  }, [cartState.cart?.id]);
+  }, [cartState.cart?.id, cartState.cart?.paymentIntentClientSecret, dispatch]);
+
+  useEffect(() => {
+    // Request a paymentIntentClientSecret to go through checkout
+    if (cartState.cart?.id && !cartState.cart?.paymentIntentClientSecret) {
+      beginCheckout();
+    }
+  }, [
+    cartState.cart?.id,
+    beginCheckout,
+    cartState.cart?.paymentIntentClientSecret,
+  ]);
 
   return (
     <div className={styles.cartPanel}>
@@ -90,9 +94,9 @@ const CartPanel = () => {
               />
               <div className={styles.productDetails}>{sku.name}</div>
               <div>
-                {(sku.price / 100).toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
+                {(sku.price / 100).toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
                 })}
               </div>
             </div>

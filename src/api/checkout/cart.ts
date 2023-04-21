@@ -1,8 +1,8 @@
-import { Order } from "@/interfaces/Order.interface";
-import { OrderAddress } from "@/interfaces/OrderAddress.interface";
-import { OrderCustomer } from "@/interfaces/OrderCustomer.interface";
-import { OrderShippingMethodWrapper } from "@/interfaces/OrderShippingMethodWrapper.interface";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from 'axios';
+import { Order } from '@/interfaces/Order.interface';
+import { OrderAddress } from '@/interfaces/OrderAddress.interface';
+import { OrderCustomer } from '@/interfaces/OrderCustomer.interface';
+import { OrderShippingMethodWrapper } from '@/interfaces/OrderShippingMethodWrapper.interface';
 
 export const cartEndpoint = (cartId: string) => `/api/checkout/cart/${cartId}`;
 
@@ -32,20 +32,22 @@ export const removeSkusFromCart = (
  * Apply a payment method to the given cartId
  * @see https://docs.violet.io/apply-payment-method
  * @param {string} cartId
- * @param {boolean} intentBasedCapture Intent Based Capture enables a new payment paradigm that supports 27+ payment methods through Stripe
+ * Intent Based Capture enables a new payment paradigm that supports 27+ payment methods through Stripe
+ * @param {boolean} intentBasedCapture
  */
 export const requestIntentBasedCapturePayment = (
   cartId: string,
   intentBasedCapture: boolean
 ): Promise<AxiosResponse<Order, any>> => {
   return axios.post<Order>(`/api/checkout/cart/${cartId}/payment`, {
-    intent_based_capture: intentBasedCapture,
+    intentBasedCapture,
   });
 };
 
 /**
  * Applies a shipping method to a bag.
- * Shipping methods available to each bag can be retreived from 'Get Available Shipping Methods' endpoint (https://docs.violet.io/get-available-shipping-methods).
+ * Shipping methods available to each bag can be retreived from 'Get Available Shipping Methods' endpoint
+ * (https://docs.violet.io/get-available-shipping-methods).
  * Each bag requires a shipping method.
  * @see https://docs.violet.io/set-shipping-methods
  * @param {string} cartId
@@ -57,7 +59,7 @@ export const applyShippingMethodsToBags = (
 ): Promise<AxiosResponse<Order, any>> => {
   return axios.post<Order>(`/api/checkout/cart/${cartId}/shipping`, bags, {
     params: {
-      price_cart: true,
+      priceCart: true,
     },
   });
 };

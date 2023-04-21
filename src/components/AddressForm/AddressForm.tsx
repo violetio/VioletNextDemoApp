@@ -1,19 +1,19 @@
-import React, { useRef, useCallback, FormEvent } from "react";
-import { AddressElement } from "@stripe/react-stripe-js";
-import styles from "./AddressForm.module.scss";
-import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { RootState } from "@/redux/reducers";
-import { setCart } from "@/redux/actions/cart";
+import React, { FormEvent, useCallback, useRef } from 'react';
+import { AddressElement } from '@stripe/react-stripe-js';
+import styles from './AddressForm.module.scss';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { RootState } from '@/redux/reducers';
+import { setCart } from '@/redux/actions/cart';
 import {
   applyBillingAddress,
   applyCustomerInfoToCart,
-} from "@/api/checkout/cart";
-import { AddressType } from "@/enums/AddressType";
-import { StripeAddress } from "@/interfaces/StripeAddress.interface";
+} from '@/api/checkout/cart';
+import { AddressType } from '@/enums/AddressType';
+import { StripeAddress } from '@/interfaces/StripeAddress.interface';
 
 interface Props {
   email: string;
-  addressType: "shipping" | "billing";
+  addressType: 'shipping' | 'billing';
   onSubmit?: (nextStep: number) => void;
 }
 
@@ -23,81 +23,83 @@ const AddressForm = ({ email, addressType, onSubmit }: Props) => {
   const completedAddress = useRef<StripeAddress>();
   const sameAsBillingRef = useRef<HTMLInputElement>(null);
 
-  const guestInfoSubmit = useCallback(async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const address = completedAddress.current;
-    const sameBillingAddress = sameAsBillingRef.current?.checked;
-    if (address) {
-      if (addressType === "shipping") {
-        const name = address.name.split(" ");
-        const firstName = name[0];
-        const lastName = name.length > 1 ? name[name.length - 1] : "";
-        try {
-          const updatedOrderInfo = await applyCustomerInfoToCart(
-            cartState.cart?.id.toString()!,
-            {
-              firstName,
-              lastName,
-              email,
-              shippingAddress: {
+  const guestInfoSubmit = useCallback(
+    async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const address = completedAddress.current;
+      const sameBillingAddress = sameAsBillingRef.current?.checked;
+      if (address) {
+        if (addressType === 'shipping') {
+          const name = address.name.split(' ');
+          const firstName = name[0];
+          const lastName = name.length > 1 ? name[name.length - 1] : '';
+          try {
+            const updatedOrderInfo = await applyCustomerInfoToCart(
+              cartState.cart?.id.toString()!,
+              {
+                firstName,
+                lastName,
+                email,
+                shippingAddress: {
+                  address_1: address.address.line1,
+                  address_2: address.address.line2 || undefined,
+                  city: address.address.city,
+                  country: address.address.country,
+                  postalCode: address.address.postal_code,
+                  state: address.address.state,
+                  type: AddressType.SHIPPING,
+                },
+                sameAddress: sameBillingAddress,
+              }
+            );
+            dispatch(setCart(updatedOrderInfo.data));
+            if (sameBillingAddress) {
+              onSubmit?.(3);
+            } else {
+              onSubmit?.(2);
+            }
+          } catch (e) {
+            // Handle error from attempt to apply customer info with shipping address
+            // Show error to customer
+          }
+        } else {
+          try {
+            const updatedOrderInfo = await applyBillingAddress(
+              cartState.cart?.id.toString()!,
+              {
                 address_1: address.address.line1,
                 address_2: address.address.line2 || undefined,
                 city: address.address.city,
                 country: address.address.country,
                 postalCode: address.address.postal_code,
                 state: address.address.state,
-                type: AddressType.SHIPPING,
-              },
-              sameAddress: sameBillingAddress,
-            }
-          );
-          dispatch(setCart(updatedOrderInfo.data));
-          if (sameBillingAddress) {
+                type: AddressType.BILLING,
+              }
+            );
+            dispatch(setCart(updatedOrderInfo.data));
             onSubmit?.(3);
-          } else {
-            onSubmit?.(2);
+          } catch (e) {
+            // Handle error from attempt to apply billing address to the order
+            // Show error to customer
           }
-        } catch (e) {
-          // Handle error from attempt to apply customer info with shipping address
-          // Show error to customer
-        }
-      } else {
-        try {
-          const updatedOrderInfo = await applyBillingAddress(
-            cartState.cart?.id.toString()!,
-            {
-              address_1: address.address.line1,
-              address_2: address.address.line2 || undefined,
-              city: address.address.city,
-              country: address.address.country,
-              postalCode: address.address.postal_code,
-              state: address.address.state,
-              type: AddressType.BILLING,
-            }
-          );
-          dispatch(setCart(updatedOrderInfo.data));
-          onSubmit?.(3);
-        } catch (e) {
-          // Handle error from attempt to apply billing address to the order
-          // Show error to customer
         }
       }
-    }
-  }, []);
+    },
+    [addressType, cartState.cart?.id, dispatch, email, onSubmit]
+  );
 
   return (
     <form onSubmit={guestInfoSubmit}>
       <AddressElement
-        options={{ mode: "shipping" }}
+        options={{ mode: 'shipping' }}
         onChange={(event) => {
           if (event.complete) {
             const address = event.value;
             completedAddress.current = address;
-            console.log("current address: ", completedAddress.current);
           }
         }}
       />
-      {addressType === "shipping" && (
+      {addressType === 'shipping' && (
         <div className={styles.sameAsBilling}>
           <input ref={sameAsBillingRef} type="checkbox" />
           Same as Billing Address

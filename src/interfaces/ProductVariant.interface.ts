@@ -1,4 +1,4 @@
-import { ProductVariantValue } from "./ProductVariantValue.interface";
+import { ProductVariantValue } from './ProductVariantValue.interface';
 
 export interface ProductVariant {
   id: string;

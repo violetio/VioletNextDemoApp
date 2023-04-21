@@ -1,9 +1,9 @@
-import { Offer } from "@/interfaces/Offer.interface";
-import { createAction } from "@reduxjs/toolkit";
+import { createAction } from '@reduxjs/toolkit';
+import { Offer } from '@/interfaces/Offer.interface';
 
 enum ProductActionType {
-  SET_SELECTED_OFFER = "SET_SELECTED_OFFER",
-  CLEAR_SELECTED_OFFER = "CLEAR_SELECTED_OFFER",
+  SET_SELECTED_OFFER = 'SET_SELECTED_OFFER',
+  CLEAR_SELECTED_OFFER = 'CLEAR_SELECTED_OFFER',
 }
 
 export const setSelectedOffer = createAction<Offer>(

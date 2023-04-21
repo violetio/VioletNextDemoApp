@@ -1,11 +1,11 @@
-import { Sku } from "./Sku.interface";
-import { Platform } from "@/enums/Platform";
-import { Meta } from "./Meta.interface";
-import { ProductVariant } from "./ProductVariant.interface";
-import { ProductType } from "@/enums/ProductType";
-import { OfferStatus } from "@/enums/OfferStatus";
-import { PublishingStatus } from "@/enums/PublishingStatus";
-import { Variant } from "./Variant.interface";
+import { Sku } from './Sku.interface';
+import { Meta } from './Meta.interface';
+import { ProductVariant } from './ProductVariant.interface';
+import { Variant } from './Variant.interface';
+import { Platform } from '@/enums/Platform';
+import { ProductType } from '@/enums/ProductType';
+import { OfferStatus } from '@/enums/OfferStatus';
+import { PublishingStatus } from '@/enums/PublishingStatus';
 
 export interface Offer {
   id: number;
@@ -51,8 +51,8 @@ export interface Album {
 }
 
 export enum AlbumType {
-  OFFER = "OFFER",
-  SKU = "SKU",
+  OFFER = 'OFFER',
+  SKU = 'SKU',
 }
 
 export interface Media {
@@ -68,6 +68,6 @@ export interface Media {
 }
 
 export enum MediaType {
-  IMAGE = "IMAGE",
-  VIDEO = "VIDEO",
+  IMAGE = 'IMAGE',
+  VIDEO = 'VIDEO',
 }

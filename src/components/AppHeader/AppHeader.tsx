@@ -1,16 +1,15 @@
-import { Bag } from "@/interfaces/Bag.interface";
-import HomeIcon from "@/public/svg/home.svg";
-import CartIcon from "@/public/svg/shopping-cart.svg";
-import { showCart } from "@/redux/actions/cart";
-import { RootState } from "@/redux/reducers";
-import { useAppDispatch, useAppSelector } from "@/redux/store";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import useSWR from "swr";
-import { setCart } from "@/redux/actions/cart";
-import styles from "./AppHeader.module.scss";
-import { useEffect } from "react";
-import { cartEndpoint, getCart } from "@/api/checkout/cart";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import { useEffect } from 'react';
+import styles from './AppHeader.module.scss';
+import { Bag } from '@/interfaces/Bag.interface';
+import HomeIcon from '@/public/svg/home.svg';
+import CartIcon from '@/public/svg/shopping-cart.svg';
+import { setCart, showCart } from '@/redux/actions/cart';
+import { RootState } from '@/redux/reducers';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { cartEndpoint, getCart } from '@/api/checkout/cart';
 
 export default function AppHeader() {
   const router = useRouter();
@@ -27,10 +26,10 @@ export default function AppHeader() {
     if (getCartData) {
       dispatch(setCart(getCartData));
     }
-  }, [getCartData]);
+  }, [getCartData, dispatch]);
   return (
     <div className={styles.header}>
-      <Link href={"/"}>
+      <Link href={'/'}>
         <HomeIcon className={styles.home} />
       </Link>
       <div className={styles.cartContainer}>
@@ -46,7 +45,7 @@ export default function AppHeader() {
               0
             )}
           </div>
-        )}{" "}
+        )}{' '}
       </div>
     </div>
   );

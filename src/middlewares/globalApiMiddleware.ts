@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import nextConnect from "next-connect";
-import { injectUserToken } from "./injectUserToken";
+import { NextApiRequest, NextApiResponse } from 'next';
+import nextConnect from 'next-connect';
+import { injectUserToken } from './injectUserToken';
 
 export const nextConnectConfiguration = () => {
   const apiRoute = nextConnect({

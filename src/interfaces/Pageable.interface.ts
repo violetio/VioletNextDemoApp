@@ -1,4 +1,4 @@
-import { PageSort } from "./PageSort.interface";
+import { PageSort } from './PageSort.interface';
 
 export interface Pageable {
   offset: number;

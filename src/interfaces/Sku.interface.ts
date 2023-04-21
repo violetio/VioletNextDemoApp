@@ -1,4 +1,4 @@
-import { SkuVariantValue } from "./SkuVariantValue.interface";
+import { SkuVariantValue } from './SkuVariantValue.interface';
 export interface Sku {
   id: number;
   merchant_id: number;

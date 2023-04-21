@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   PaymentElement,
   PaymentRequestButtonElement,
@@ -10,8 +10,8 @@ import {
   PaymentRequestShippingOption,
   PaymentRequestUpdateDetails,
 } from '@stripe/stripe-js';
-import styles from './CheckoutForm.module.scss';
 import { useRouter } from 'next/router';
+import styles from './CheckoutForm.module.scss';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { RootState } from '@/redux/reducers';
 import { setCart } from '@/redux/actions/cart';
@@ -38,38 +38,38 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
   );
   const cartState = useAppSelector((state: RootState) => state.cart);
 
-  const applyShipping = async (
-    shippingOption: PaymentRequestShippingOption,
-    updateWith: (details: PaymentRequestUpdateDetails) => void
-  ) => {
-    if (cartState.cart?.id) {
-      const applyShippingResponse = await applyShippingMethodsToBags(
-        cartState.cart?.id.toString(),
-        cartState.cart?.bags.map((bag) => ({
-          bagId: bag.id,
-          shippingMethodId: shippingOption.id,
-        }))
-      );
-
-      console.log('applied shipping: ', applyShippingResponse.data);
-      updateWith({
-        status: 'success',
-        total: {
-          amount: applyShippingResponse.data.total || 0,
-          label: 'Total',
-        },
-      });
-    } else {
-      updateWith({
-        status: 'fail',
-      });
-    }
-  };
-
   useEffect(() => {
+    const applyShipping = async (
+      shippingOption: PaymentRequestShippingOption,
+      updateWith: (details: PaymentRequestUpdateDetails) => void
+    ) => {
+      if (cartState.cart?.id) {
+        const applyShippingResponse = await applyShippingMethodsToBags(
+          cartState.cart?.id.toString(),
+          cartState.cart?.bags.map((bag) => ({
+            bagId: bag.id,
+            shippingMethodId: shippingOption.id,
+          }))
+        );
+
+        updateWith({
+          status: 'success',
+          total: {
+            amount: applyShippingResponse.data.total || 0,
+            label: 'Total',
+          },
+        });
+      } else {
+        updateWith({
+          status: 'fail',
+        });
+      }
+    };
+
     if (stripe && fullApplePayCheckout && cartState.cart) {
       const pr = stripe.paymentRequest({
-        // Using 'US' and 'USD' here for the purposes of the demo. Change this to reflect the appropriate country and currency needed for each use case.
+        // Using 'US' and 'USD' here for the purposes of the demo.
+        // Change this to reflect the appropriate country and currency needed for each use case.
         country: 'US', //From the Order object
         currency: 'usd', //From the Order object
         total: {
@@ -80,11 +80,9 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
         requestPayerEmail: true,
         requestShipping: true,
       });
-      console.log('make payment request: ', pr);
       // Check the availability of the Payment Request API.
       pr.canMakePayment().then((result) => {
         if (result) {
-          console.log('result: ', result);
           setPaymentRequest(pr);
         }
       });
@@ -93,15 +91,6 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
           ev.updateWith({ status: 'invalid_shipping_address' });
         } else {
           // Apply customer info with info from Apple Pay
-          console.log('recipient: ', ev.shippingAddress.recipient);
-          console.log('shipping address: ', {
-            address_1: ev.shippingAddress.addressLine,
-            city: ev.shippingAddress.city,
-            country: ev.shippingAddress.country,
-            postal_code: ev.shippingAddress.postalCode,
-            state: ev.shippingAddress.region,
-            type: 'SHIPPING',
-          });
           const updatedCartResponse = await applyCustomerInfoToCart(
             cartState.cart?.id.toString() as string,
             {
@@ -126,22 +115,6 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
           const availableShippingOptions = await fetchShippingOptions(
             cartState.cart?.id.toString() as string
           );
-          console.log('available shipping options: ', availableShippingOptions);
-          console.log(
-            'update with shipping: ',
-            availableShippingOptions.data.flatMap((bagShippingMethods) => {
-              console.log('bag shipping methods: ', bagShippingMethods);
-              const shippingMethods = bagShippingMethods.shippingMethods;
-              return shippingMethods.map((shippingMethod: any) => {
-                return {
-                  id: shippingMethod.shippingMethodId,
-                  label: shippingMethod.label,
-                  detail: shippingMethod.label,
-                  amount: shippingMethod.price,
-                };
-              });
-            })
-          );
           ev.updateWith({
             status: 'success',
             shippingOptions: availableShippingOptions.data.flatMap(
@@ -161,7 +134,6 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
         }
       });
       pr.on('shippingoptionchange', function (event) {
-        console.log('shipping option change');
         var updateWith = event.updateWith;
         var shippingOption = event.shippingOption;
         // Send shipping method selected to Violet API
@@ -169,7 +141,6 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
       });
       pr.on('paymentmethod', async (event) => {
         // Confirm the PaymentIntent without handling potential next actions (yet).
-        console.log('payment method event: ', event);
         const payerName = event.payerName?.split(' ');
         const updatedCartResponse = await applyCustomerInfoToCart(
           cartState.cart?.id.toString() as string,
@@ -190,20 +161,14 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
           }
         );
 
-        console.log('Updated Customer info: ', updatedCartResponse);
         // Update pricing
-        const updatedPricingResponse = await updatePricing(
-          cartState.cart?.id.toString() as string
+        await updatePricing(cartState.cart?.id.toString() as string);
+
+        const { error: confirmError } = await stripe.confirmCardPayment(
+          cartState.cart?.paymentIntentClientSecret!,
+          { payment_method: event.paymentMethod.id },
+          { handleActions: false }
         );
-
-        console.log('Updated pricing response: ', updatedPricingResponse);
-
-        const { paymentIntent, error: confirmError } =
-          await stripe.confirmCardPayment(
-            cartState.cart?.paymentIntentClientSecret!,
-            { payment_method: event.paymentMethod.id },
-            { handleActions: false }
-          );
         const complete = event.complete;
         // Update customer info with latest customer information
         if (!confirmError) {
@@ -218,7 +183,13 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
         }
       });
     }
-  }, [stripe, cartState.cart?.id]);
+  }, [
+    stripe,
+    cartState.cart?.id,
+    cartState.cart,
+    dispatch,
+    fullApplePayCheckout,
+  ]);
 
   const [errorMessage, setErrorMessage] = useState<string>();
 
@@ -232,8 +203,6 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
       // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
-
-    console.log(window.location.host + router.pathname);
 
     await updatePricing(cartState.cart?.id.toString()!);
 

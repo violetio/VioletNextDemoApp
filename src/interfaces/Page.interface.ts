@@ -1,5 +1,5 @@
-import { PageSort } from "./PageSort.interface";
-import { Pageable } from "./Pageable.interface";
+import { PageSort } from './PageSort.interface';
+import { Pageable } from './Pageable.interface';
 
 export interface Page<T> {
   content: Array<T>;

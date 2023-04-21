@@ -1,5 +1,5 @@
-import { OrderErrorType } from "@/enums/OrderErrorType";
-import { Platform } from "@/enums/Platform";
+import { OrderErrorType } from '@/enums/OrderErrorType';
+import { Platform } from '@/enums/Platform';
 
 export interface OrderError {
   id: number;

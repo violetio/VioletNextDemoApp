@@ -1,8 +1,8 @@
-import { Product } from "@/interfaces/Product.interface";
-import { ProductVariant } from "@/interfaces/ProductVariant.interface";
-import { ProductVariantValue } from "@/interfaces/ProductVariantValue.interface";
-import { useMemo } from "react";
-import useOffer from "./useOffer";
+import { useMemo } from 'react';
+import useOffer from './useOffer';
+import { Product } from '@/interfaces/Product.interface';
+import { ProductVariant } from '@/interfaces/ProductVariant.interface';
+import { ProductVariantValue } from '@/interfaces/ProductVariantValue.interface';
 
 /**
  * A custom hook that provides product-related data including variants, variant values, and available SKU information.
@@ -32,7 +32,7 @@ const useProduct = (product?: Product) => {
         });
     }
     return [];
-  }, [product?.id]);
+  }, [product?.variants]);
 
   /**
    * @returns an array of ProductVariantValues sorted by the display order key.
@@ -42,8 +42,8 @@ const useProduct = (product?: Product) => {
     sortedVariantsMemo?.forEach((variant) => {
       const variantName = variant.name;
       result[variantName] = [...variant.values].sort((a, b) => {
-        let aValue = a.displayOrder!;
-        let bValue = b.displayOrder!;
+        const aValue = a.displayOrder!;
+        const bValue = b.displayOrder!;
 
         if (aValue < bValue) {
           return -1;
@@ -55,7 +55,7 @@ const useProduct = (product?: Product) => {
       });
     });
     return result;
-  }, [product?.id, sortedVariantsMemo]);
+  }, [sortedVariantsMemo]);
 
   return {
     variants: sortedVariantsMemo,

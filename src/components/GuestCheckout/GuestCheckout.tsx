@@ -1,17 +1,17 @@
-import styles from "./GuestCheckout.module.scss";
-import { useAppSelector } from "@/redux/store";
-import { RootState } from "@/redux/reducers";
-import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { Elements } from '@stripe/react-stripe-js';
+import CheckoutForm from '../CheckoutForm/CheckoutForm';
+import AddressForm from '../AddressForm/AddressForm';
+import styles from './GuestCheckout.module.scss';
+import { useAppSelector } from '@/redux/store';
+import { RootState } from '@/redux/reducers';
 
-import { Elements } from "@stripe/react-stripe-js";
 import {
   applyShippingMethodsToBags,
   fetchShippingOptions,
-} from "@/api/checkout/cart";
-import { stripe } from "@/stripe/stripe";
-import CheckoutForm from "../CheckoutForm/CheckoutForm";
-import AddressForm from "../AddressForm/AddressForm";
-import { OrderShippingMethodWrapper } from "@/interfaces/OrderShippingMethodWrapper.interface";
+} from '@/api/checkout/cart';
+import { stripe } from '@/stripe/stripe';
+import { OrderShippingMethodWrapper } from '@/interfaces/OrderShippingMethodWrapper.interface';
 
 /**
  * Panel component for displaying current cart data and Stripe payment elements
@@ -20,7 +20,7 @@ import { OrderShippingMethodWrapper } from "@/interfaces/OrderShippingMethodWrap
 const GuestCheckout = () => {
   const cartState = useAppSelector((state: RootState) => state.cart);
   const [curStep, setCurStep] = useState(0);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [availableShippingMethods, setAvailableShippingMethods] =
     useState<OrderShippingMethodWrapper[]>();
   /**
@@ -50,7 +50,7 @@ const GuestCheckout = () => {
       );
       setAvailableShippingMethods(availableShippingData.data);
     }
-  }, [[]]);
+  }, [cartState.cart?.id]);
 
   const applyShipping = useCallback(async () => {
     if (cartState.cart?.id) {
@@ -72,7 +72,7 @@ const GuestCheckout = () => {
       // Fetch available shipping methods
       fetchShippingOptionsCallback();
     }
-  }, [curStep]);
+  }, [curStep, fetchShippingOptionsCallback]);
 
   return (
     <>
@@ -119,10 +119,10 @@ const GuestCheckout = () => {
         <div className={styles.shippingMethods}>
           Shipping Methods
           {availableShippingMethods.map((shippingMethodWrapper) => (
-            <div className={styles.bag}>
+            <div key={shippingMethodWrapper.bagId} className={styles.bag}>
               Bag 1:
               {shippingMethodWrapper.shippingMethods.map((shippingMethod) => (
-                <div className={styles.shippingMethod}>
+                <div key={shippingMethod.id} className={styles.shippingMethod}>
                   <input
                     type="checkbox"
                     checked={

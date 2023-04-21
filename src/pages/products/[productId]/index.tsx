@@ -1,13 +1,13 @@
-import cx from "classnames";
-import axios from "axios";
-import useSWR from "swr";
-import styles from "./ProductPage.module.scss";
-import { useRouter } from "next/router";
-import { useCallback, useMemo, useState } from "react";
-import { Sku } from "@/interfaces/Sku.interface";
-import { useAppDispatch } from "@/redux/store";
-import { setCart } from "@/redux/actions/cart";
-import { SkuVariantValue } from "@/interfaces/SkuVariantValue.interface";
+import cx from 'classnames';
+import axios from 'axios';
+import useSWR from 'swr';
+import { useRouter } from 'next/router';
+import { useCallback, useMemo, useState } from 'react';
+import styles from './ProductPage.module.scss';
+import { Sku } from '@/interfaces/Sku.interface';
+import { useAppDispatch } from '@/redux/store';
+import { setCart } from '@/redux/actions/cart';
+import { SkuVariantValue } from '@/interfaces/SkuVariantValue.interface';
 
 export default function ProductPage() {
   const router = useRouter();
@@ -39,8 +39,8 @@ export default function ProductPage() {
 
   const addToCart = useCallback(async () => {
     if (selectedSku) {
-      const cart = await axios.post("/api/checkout/cart", {
-        base_currency: "USD",
+      const cart = await axios.post('/api/checkout/cart', {
+        base_currency: 'USD',
         skus: [
           {
             sku_id: selectedSku,
@@ -50,7 +50,7 @@ export default function ProductPage() {
       });
       dispatch(setCart(cart.data));
     }
-  }, [selectedSku]);
+  }, [selectedSku, dispatch]);
 
   // Display all skus from a product and allow the user to select and add one to a cart.
   return (

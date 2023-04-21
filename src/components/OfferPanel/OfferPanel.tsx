@@ -1,25 +1,25 @@
-import React, { useCallback, useEffect, useState } from "react";
-import styles from "./OfferPanel.module.scss";
-import Image from "next/image";
-import Select from "../Select/Select";
-import cx from "classnames";
-import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { setCart } from "@/redux/actions/cart";
-import { RootState } from "@/redux/reducers";
+import React, { useCallback, useEffect, useState } from 'react';
+import Image from 'next/image';
+import cx from 'classnames';
+import useSWR from 'swr';
+import Select from '../Select/Select';
+import styles from './OfferPanel.module.scss';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { setCart } from '@/redux/actions/cart';
+import { RootState } from '@/redux/reducers';
 import {
   addSkusToCart,
   createCart,
   getProduct,
   getProductEndpoint,
-} from "@/api/catalog/products";
-import useOffer from "@/hooks/useOffer";
-import { Offer } from "@/interfaces/Offer.interface";
-import { Variant, VariantValue } from "@/interfaces/Variant.interface";
-import { Product } from "@/interfaces/Product.interface";
-import useProduct from "@/hooks/useProduct";
-import { ProductVariant } from "@/interfaces/ProductVariant.interface";
-import { ProductVariantValue } from "@/interfaces/ProductVariantValue.interface";
-import useSWR from "swr";
+} from '@/api/catalog/products';
+import useOffer from '@/hooks/useOffer';
+import { Offer } from '@/interfaces/Offer.interface';
+import { Variant, VariantValue } from '@/interfaces/Variant.interface';
+import { Product } from '@/interfaces/Product.interface';
+import useProduct from '@/hooks/useProduct';
+import { ProductVariant } from '@/interfaces/ProductVariant.interface';
+import { ProductVariantValue } from '@/interfaces/ProductVariantValue.interface';
 
 interface Props {
   offer: Offer;
@@ -44,7 +44,6 @@ const OfferPanel = ({ offer }: Props) => {
     skusExistForGivenSelections,
   } = useOffer(offer);
 
-  console.log("sku combos: ", skusPerVariantCombination);
   useEffect(() => {
     // Reset selected variant values when a different product is selected
     setSelectedValues({});
@@ -61,7 +60,7 @@ const OfferPanel = ({ offer }: Props) => {
         dispatch(setCart(cart.data));
       } else {
         // Create a new cart with the selected SKU
-        const cart = await createCart("USD", [
+        const cart = await createCart('USD', [
           {
             skuId,
             quantity: 1,
@@ -71,7 +70,7 @@ const OfferPanel = ({ offer }: Props) => {
         dispatch(setCart(cart.data));
       }
     },
-    [cartState.cart]
+    [cartState.cart, dispatch]
   );
 
   return (
@@ -123,7 +122,7 @@ const OfferPanel = ({ offer }: Props) => {
                 }
                 indexSelected={(index: number) => {
                   const productVariant = variantValues[variant.name][index];
-                  let selectable = skusExistForGivenSelections(
+                  const selectable = skusExistForGivenSelections(
                     selectedValues,
                     variant.name,
                     productVariant.name

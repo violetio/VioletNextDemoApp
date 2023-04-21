@@ -1,9 +1,9 @@
-import { DistributionType } from "@/enums/DistributionType";
-import { MerchantCategory } from "@/enums/MerchantCategory";
-import { MerchantConnectionStatus } from "@/enums/MerchantConnectionStatus";
-import { Platform } from "@/enums/Platform";
-import { ReferralSource } from "@/enums/ReferralSource";
-import { UnitOfMeasure } from "@/enums/UnitOfMeasure";
+import { DistributionType } from '@/enums/DistributionType';
+import { MerchantCategory } from '@/enums/MerchantCategory';
+import { MerchantConnectionStatus } from '@/enums/MerchantConnectionStatus';
+import { Platform } from '@/enums/Platform';
+import { ReferralSource } from '@/enums/ReferralSource';
+import { UnitOfMeasure } from '@/enums/UnitOfMeasure';
 
 export interface Merchant {
   id?: number;
@@ -13,7 +13,7 @@ export interface Merchant {
   platform: Platform;
   storeUrl: string;
   verified: boolean;
-  status: "inactive" | "active" | "disabled" | "new";
+  status: 'inactive' | 'active' | 'disabled' | 'new';
   defaultCurrency?: string;
   defaultCountryCode?: string;
   defaultStateCode?: string;

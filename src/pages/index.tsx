@@ -1,13 +1,13 @@
-import useSWR from "swr";
-import styles from "@/styles/Home.module.scss";
-import Image from "next/image";
-import { NextPageWithLayout } from "./_app";
-import { ReactElement } from "react";
-import SidePanelLayout from "@/components/SidePanelLayout/SidePanelLayout";
-import { useAppDispatch } from "@/redux/store";
-import { setSelectedOffer } from "@/redux/actions/offers";
-import { getMerchantOffers } from "@/api/catalog/products";
-import { Offer } from "@/interfaces/Offer.interface";
+import useSWR from 'swr';
+import Image from 'next/image';
+import { ReactElement } from 'react';
+import { NextPageWithLayout } from './_app';
+import styles from '@/styles/Home.module.scss';
+import SidePanelLayout from '@/components/SidePanelLayout/SidePanelLayout';
+import { useAppDispatch } from '@/redux/store';
+import { setSelectedOffer } from '@/redux/actions/offers';
+import { getMerchantOffers } from '@/api/catalog/products';
+import { Offer } from '@/interfaces/Offer.interface';
 
 const Home: NextPageWithLayout = () => {
   const dispatch = useAppDispatch();

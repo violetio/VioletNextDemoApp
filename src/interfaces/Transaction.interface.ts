@@ -9,9 +9,9 @@ export interface Transaction {
   gateway?: string;
   amount?: number;
   currency?: string;
-  type?: "AUTHORIZATION" | "CAPTURE" | "VOID" | "REFUND";
+  type?: 'AUTHORIZATION' | 'CAPTURE' | 'VOID' | 'REFUND';
   errorCode?: string;
-  status?: "PROCESSING" | "COMPLETED" | "REFUNDED" | "REQUIRES_ACTION";
+  status?: 'PROCESSING' | 'COMPLETED' | 'REFUNDED' | 'REQUIRES_ACTION';
   test?: boolean;
   dateCreated?: string;
   dateLastModified?: string;

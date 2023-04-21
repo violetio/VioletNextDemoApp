@@ -1,6 +1,6 @@
-import { Order } from "@/interfaces/Order.interface";
-import { createReducer, PayloadAction } from "@reduxjs/toolkit";
-import { hideCart, setCart, showCart } from "../actions/cart";
+import { createReducer, PayloadAction } from '@reduxjs/toolkit';
+import { hideCart, setCart, showCart } from '../actions/cart';
+import { Order } from '@/interfaces/Order.interface';
 
 export interface CartState {
   cart?: Order;

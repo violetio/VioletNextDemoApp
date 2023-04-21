@@ -1,4 +1,4 @@
-import { OrderAddress } from "./OrderAddress.interface";
+import { OrderAddress } from './OrderAddress.interface';
 
 export interface OrderCustomer {
   id?: number;
