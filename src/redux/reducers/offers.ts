@@ -1,6 +1,6 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
+import { Offer } from '@violet/violet-js/interfaces/Offer.interface';
 import { clearSelectedOffer, setSelectedOffer } from '../actions/offers';
-import { Offer } from '@/interfaces/Offer.interface';
 
 export interface OfferState {
   selectedOffer?: Offer;

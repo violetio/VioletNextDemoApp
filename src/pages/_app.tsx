@@ -6,8 +6,10 @@ import { ReactElement } from 'react';
 import { NextPage } from 'next';
 import store from '@/redux/store';
 import AppHeader from '@/components/AppHeader/AppHeader';
+import { violetjs } from '@violet/violet-js/api/index';
 
 const inter = Inter({ subsets: ['latin'] });
+violetjs('/api');
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => JSX.Element;

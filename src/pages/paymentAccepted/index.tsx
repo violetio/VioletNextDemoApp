@@ -1,6 +1,6 @@
+import { submitPayment } from '@violet/violet-js/api/checkout/cart';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { submitPayment, updatePricing } from '@/api/checkout/cart';
 
 const PaymentAccepted = () => {
   const router = useRouter();

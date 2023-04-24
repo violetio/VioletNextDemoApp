@@ -1,5 +1,0 @@
-export enum ShippingMethodType {
-  CALCULATED = 'CALCULATED',
-  FLAT_RATE_PRICE = 'FLAT_RATE_PRICE',
-  FLAT_RATE_WEIGHT = 'FLAT_RATE_WEIGHT',
-}

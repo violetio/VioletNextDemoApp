@@ -7,17 +7,17 @@ import {
 } from '@stripe/react-stripe-js';
 import { PaymentRequest } from '@stripe/stripe-js';
 import { useRouter } from 'next/router';
+import { Order } from '@violet/violet-js/interfaces/Order.interface';
+import { updatePricing } from '@violet/violet-js/api/checkout/cart';
 import styles from './CheckoutForm.module.scss';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { RootState } from '@/redux/reducers';
-import { updatePricing } from '@/api/checkout/cart';
 import {
+  onPaymentMethodCreated,
   onShippingAddressChange,
   onShippingOptionChange,
-  onPaymentMethodCreated,
 } from '@/stripe/stripe';
 import { setCart } from '@/redux/actions/cart';
-import { Order } from '@/interfaces/Order.interface';
 
 interface Props {
   fullApplePayCheckout: boolean;
@@ -34,7 +34,7 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
   const cartState = useAppSelector((state: RootState) => state.cart);
 
   useEffect(() => {
-    if (stripe && fullApplePayCheckout && cartState.cart) {
+    if (stripe && fullApplePayCheckout && cartState.order) {
       const pr = stripe.paymentRequest({
         // Using 'US' and 'USD' here for the purposes of the demo.
         // Change this to reflect the appropriate country and currency needed for each use case.
@@ -42,7 +42,7 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
         currency: 'usd', //From the Order object
         total: {
           label: 'Sub Total', //From the Order object
-          amount: cartState.cart?.subTotal || 0,
+          amount: cartState.order?.subTotal || 0,
         },
         requestPayerName: true,
         requestPayerEmail: true,
@@ -55,27 +55,27 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
         }
       });
       pr.on('shippingaddresschange', (ev) => {
-        if (cartState.cart) {
-          onShippingAddressChange(ev, cartState.cart, (updatedOrder: Order) =>
+        if (cartState.order) {
+          onShippingAddressChange(ev, cartState.order, (updatedOrder: Order) =>
             dispatch(setCart(updatedOrder))
           );
         }
       });
       pr.on('shippingoptionchange', (ev) => {
-        if (cartState.cart) {
-          onShippingOptionChange(ev, cartState.cart);
+        if (cartState.order) {
+          onShippingOptionChange(ev, cartState.order);
         }
       });
       pr.on('paymentmethod', async (ev) => {
-        if (cartState.cart) {
-          onPaymentMethodCreated(ev, stripe, cartState.cart);
+        if (cartState.order) {
+          onPaymentMethodCreated(ev, stripe, cartState.order);
         }
       });
     }
   }, [
     stripe,
-    cartState.cart?.id,
-    cartState.cart,
+    cartState.order?.id,
+    cartState.order,
     dispatch,
     fullApplePayCheckout,
   ]);
@@ -93,14 +93,14 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
       return;
     }
 
-    await updatePricing(cartState.cart?.id.toString()!);
+    await updatePricing(cartState.order?.id.toString()!);
 
     const { error } = await stripe.confirmPayment({
       //`Elements` instance that was used to create the Payment Element
       elements,
       confirmParams: {
         return_url: `https://${window.location.host}/paymentAccepted?cartId=${
-          cartState.cart?.id
+          cartState.order?.id
         }&${new URLSearchParams(
           router.query as Record<string, string>
         ).toString()}`,

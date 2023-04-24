@@ -1,15 +1,15 @@
 import React, { FormEvent, useCallback, useRef } from 'react';
 import { AddressElement } from '@stripe/react-stripe-js';
+import {
+  applyBillingAddress,
+  applyCustomerInfoToCart,
+} from '@violet/violet-js/api/checkout/cart';
+import { AddressType } from '@violet/violet-js/enums/AddressType';
+import { StripeAddress } from '@violet/violet-js/interfaces/StripeAddress.interface';
 import styles from './AddressForm.module.scss';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { RootState } from '@/redux/reducers';
 import { setCart } from '@/redux/actions/cart';
-import {
-  applyBillingAddress,
-  applyCustomerInfoToCart,
-} from '@/api/checkout/cart';
-import { AddressType } from '@/enums/AddressType';
-import { StripeAddress } from '@/interfaces/StripeAddress.interface';
 
 interface Props {
   email: string;
@@ -35,7 +35,7 @@ const AddressForm = ({ email, addressType, onSubmit }: Props) => {
           const lastName = name.length > 1 ? name[name.length - 1] : '';
           try {
             const updatedOrderInfo = await applyCustomerInfoToCart(
-              cartState.cart?.id.toString()!,
+              cartState.order?.id.toString()!,
               {
                 firstName,
                 lastName,
@@ -65,7 +65,7 @@ const AddressForm = ({ email, addressType, onSubmit }: Props) => {
         } else {
           try {
             const updatedOrderInfo = await applyBillingAddress(
-              cartState.cart?.id.toString()!,
+              cartState.order?.id.toString()!,
               {
                 address_1: address.address.line1,
                 address_2: address.address.line2 || undefined,
@@ -85,7 +85,7 @@ const AddressForm = ({ email, addressType, onSubmit }: Props) => {
         }
       }
     },
-    [addressType, cartState.cart?.id, dispatch, email, onSubmit]
+    [addressType, cartState.order?.id, dispatch, email, onSubmit]
   );
 
   return (

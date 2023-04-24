@@ -1,21 +1,21 @@
 import {
-  applyShippingMethodsToBags,
-  applyCustomerInfoToCart,
-  fetchShippingOptions,
-  updatePricing,
-  submitPayment,
-} from '@/api/checkout/cart';
-import { AddressType } from '@/enums/AddressType';
-import { Order } from '@/interfaces/Order.interface';
-import {
+  loadStripe,
   PaymentRequestPaymentMethodEvent,
   PaymentRequestShippingAddressEvent,
   PaymentRequestShippingOption,
   PaymentRequestShippingOptionEvent,
   PaymentRequestUpdateDetails,
   Stripe,
-  loadStripe,
 } from '@stripe/stripe-js';
+import {
+  applyCustomerInfoToCart,
+  applyShippingMethodsToBags,
+  fetchShippingOptions,
+  submitPayment,
+  updatePricing,
+} from '@violet/violet-js/api/checkout/cart';
+import { AddressType } from '@violet/violet-js/enums/AddressType';
+import { Order } from '@violet/violet-js/interfaces/Order.interface';
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.

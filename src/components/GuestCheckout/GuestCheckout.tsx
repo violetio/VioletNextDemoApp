@@ -1,17 +1,16 @@
 import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
+import {
+  applyShippingMethodsToBags,
+  fetchShippingOptions,
+} from '@violet/violet-js/api/checkout/cart';
+import { OrderShippingMethodWrapper } from '@violet/violet-js/interfaces/OrderShippingMethodWrapper.interface';
 import CheckoutForm from '../CheckoutForm/CheckoutForm';
 import AddressForm from '../AddressForm/AddressForm';
 import styles from './GuestCheckout.module.scss';
 import { useAppSelector } from '@/redux/store';
 import { RootState } from '@/redux/reducers';
-
-import {
-  applyShippingMethodsToBags,
-  fetchShippingOptions,
-} from '@/api/checkout/cart';
 import { stripe } from '@/stripe/stripe';
-import { OrderShippingMethodWrapper } from '@/interfaces/OrderShippingMethodWrapper.interface';
 
 /**
  * Panel component for displaying current cart data and Stripe payment elements
@@ -44,19 +43,19 @@ const GuestCheckout = () => {
   }, []);
 
   const fetchShippingOptionsCallback = useCallback(async () => {
-    if (cartState.cart?.id) {
+    if (cartState.order?.id) {
       const availableShippingData = await fetchShippingOptions(
-        cartState.cart.id.toString()
+        cartState.order.id.toString()
       );
       setAvailableShippingMethods(availableShippingData.data);
     }
-  }, [cartState.cart?.id]);
+  }, [cartState.order?.id]);
 
   const applyShipping = useCallback(async () => {
-    if (cartState.cart?.id) {
+    if (cartState.order?.id) {
       try {
         const response = await applyShippingMethodsToBags(
-          cartState.cart.id.toString(),
+          cartState.order.id.toString(),
           Object.keys(selectedShippingMethods).map((bagId: string) => ({
             bagId: Number(bagId),
             shippingMethodId: selectedShippingMethods[bagId],
@@ -67,7 +66,7 @@ const GuestCheckout = () => {
         // Handle error thrown from attempt to apply shipping methods to bags
       }
     }
-  }, [cartState.cart?.id, selectedShippingMethods]);
+  }, [cartState.order?.id, selectedShippingMethods]);
 
   useEffect(() => {
     if (curStep === 3) {
@@ -93,7 +92,7 @@ const GuestCheckout = () => {
         <Elements
           stripe={stripe}
           options={{
-            clientSecret: cartState.cart?.paymentIntentClientSecret,
+            clientSecret: cartState.order?.paymentIntentClientSecret,
           }}
         >
           <AddressForm
@@ -107,7 +106,7 @@ const GuestCheckout = () => {
         <Elements
           stripe={stripe}
           options={{
-            clientSecret: cartState.cart?.paymentIntentClientSecret,
+            clientSecret: cartState.order?.paymentIntentClientSecret,
           }}
         >
           <AddressForm
@@ -153,7 +152,7 @@ const GuestCheckout = () => {
         <Elements
           stripe={stripe}
           options={{
-            clientSecret: cartState.cart?.paymentIntentClientSecret,
+            clientSecret: cartState.order?.paymentIntentClientSecret,
           }}
         >
           <CheckoutForm fullApplePayCheckout={false} />

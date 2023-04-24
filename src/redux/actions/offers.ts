@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { Offer } from '@/interfaces/Offer.interface';
+import { Offer } from '@violet/violet-js/interfaces/Offer.interface';
 
 enum ProductActionType {
   SET_SELECTED_OFFER = 'SET_SELECTED_OFFER',

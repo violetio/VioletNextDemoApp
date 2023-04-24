@@ -1,13 +1,13 @@
 import useSWR from 'swr';
 import Image from 'next/image';
 import { ReactElement } from 'react';
+import { getMerchantOffers } from '@violet/violet-js/api/catalog/products';
+import { Offer } from '@violet/violet-js/interfaces/Offer.interface';
 import { NextPageWithLayout } from './_app';
 import styles from '@/styles/Home.module.scss';
-import SidePanelLayout from '@/components/SidePanelLayout/SidePanelLayout';
 import { useAppDispatch } from '@/redux/store';
 import { setSelectedOffer } from '@/redux/actions/offers';
-import { getMerchantOffers } from '@/api/catalog/products';
-import { Offer } from '@/interfaces/Offer.interface';
+import SidePanelLayout from '@/components/SidePanelLayout/SidePanelLayout';
 
 const Home: NextPageWithLayout = () => {
   const dispatch = useAppDispatch();

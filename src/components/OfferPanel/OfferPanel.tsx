@@ -1,25 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import cx from 'classnames';
-import useSWR from 'swr';
+import {
+  addSkusToCart,
+  createCart,
+} from '@violet/violet-js/api/catalog/products';
+import { Offer } from '@violet/violet-js/interfaces/Offer.interface';
+import {
+  Variant,
+  VariantValue,
+} from '@violet/violet-js/interfaces/Variant.interface';
 import Select from '../Select/Select';
 import styles from './OfferPanel.module.scss';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { setCart } from '@/redux/actions/cart';
 import { RootState } from '@/redux/reducers';
-import {
-  addSkusToCart,
-  createCart,
-  getProduct,
-  getProductEndpoint,
-} from '@/api/catalog/products';
-import useOffer from '@/hooks/useOffer';
-import { Offer } from '@/interfaces/Offer.interface';
-import { Variant, VariantValue } from '@/interfaces/Variant.interface';
-import { Product } from '@/interfaces/Product.interface';
-import useProduct from '@/hooks/useProduct';
-import { ProductVariant } from '@/interfaces/ProductVariant.interface';
-import { ProductVariantValue } from '@/interfaces/ProductVariantValue.interface';
+import useOffer from '@violet/violet-js/hooks/useOffer';
 
 interface Props {
   offer: Offer;
@@ -51,9 +47,9 @@ const OfferPanel = ({ offer }: Props) => {
 
   const addToCart = useCallback(
     async (skuId: number) => {
-      if (cartState.cart) {
+      if (cartState.order) {
         // Add SKU to cart if we already have a cart created
-        const cart = await addSkusToCart(cartState.cart.id.toString(), {
+        const cart = await addSkusToCart(cartState.order.id.toString(), {
           skuId,
           quantity: 1,
         });
@@ -70,7 +66,7 @@ const OfferPanel = ({ offer }: Props) => {
         dispatch(setCart(cart.data));
       }
     },
-    [cartState.cart, dispatch]
+    [cartState.order, dispatch]
   );
 
   return (

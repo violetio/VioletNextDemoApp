@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import { Elements } from '@stripe/react-stripe-js';
+import {
+  removeSkusFromCart,
+  requestIntentBasedCapturePayment,
+} from '@violet/violet-js/api/checkout/cart';
 import CheckoutForm from '../CheckoutForm/CheckoutForm';
 import GuestCheckout from '../GuestCheckout/GuestCheckout';
 import styles from './CartPanel.module.scss';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { RootState } from '@/redux/reducers';
-
 import { setCart } from '@/redux/actions/cart';
-import {
-  removeSkusFromCart,
-  requestIntentBasedCapturePayment,
-} from '@/api/checkout/cart';
 import { stripe } from '@/stripe/stripe';
 
 /**
@@ -21,14 +20,14 @@ import { stripe } from '@/stripe/stripe';
 const CartPanel = () => {
   const dispatch = useAppDispatch();
   const cartState = useAppSelector((state: RootState) => state.cart);
-  const stripeKey = cartState.cart?.stripeKey;
+  const stripeKey = cartState.order?.stripeKey;
 
   /**
    * Flattens the arrays of SKUs in each bag
    */
   const skusInCart = useMemo(() => {
-    if (cartState.cart) {
-      return cartState.cart.bags.flatMap((bag) =>
+    if (cartState.order) {
+      return cartState.order.bags.flatMap((bag) =>
         bag.skus ? bag.skus?.map((sku) => sku) : []
       );
     }
@@ -40,15 +39,15 @@ const CartPanel = () => {
    */
   const removeFromCart = useCallback(
     async (skuId: number) => {
-      if (cartState.cart?.id) {
+      if (cartState.order?.id) {
         const cart = await removeSkusFromCart(
-          cartState.cart.id.toString(),
+          cartState.order.id.toString(),
           skuId.toString()
         );
         dispatch(setCart(cart.data));
       }
     },
-    [cartState.cart?.id, dispatch]
+    [cartState.order?.id, dispatch]
   );
 
   /**
@@ -56,8 +55,8 @@ const CartPanel = () => {
    * The paymentIntentClientSecret is required for Stripe V3 payments.
    */
   const beginCheckout = useCallback(async () => {
-    const cartId = cartState.cart?.id;
-    if (cartId && !cartState.cart?.paymentIntentClientSecret) {
+    const cartId = cartState.order?.id;
+    if (cartId && !cartState.order?.paymentIntentClientSecret) {
       const paymentResponse = await requestIntentBasedCapturePayment(
         cartId.toString(),
         true
@@ -65,17 +64,21 @@ const CartPanel = () => {
 
       dispatch(setCart(paymentResponse.data));
     }
-  }, [cartState.cart?.id, cartState.cart?.paymentIntentClientSecret, dispatch]);
+  }, [
+    cartState.order?.id,
+    cartState.order?.paymentIntentClientSecret,
+    dispatch,
+  ]);
 
   useEffect(() => {
     // Request a paymentIntentClientSecret to go through checkout
-    if (cartState.cart?.id && !cartState.cart?.paymentIntentClientSecret) {
+    if (cartState.order?.id && !cartState.order?.paymentIntentClientSecret) {
       beginCheckout();
     }
   }, [
-    cartState.cart?.id,
+    cartState.order?.id,
     beginCheckout,
-    cartState.cart?.paymentIntentClientSecret,
+    cartState.order?.paymentIntentClientSecret,
   ]);
 
   return (
@@ -109,12 +112,12 @@ const CartPanel = () => {
           </div>
         ))}
       </div>
-      {cartState.cart?.paymentIntentClientSecret && stripeKey && (
+      {cartState.order?.paymentIntentClientSecret && stripeKey && (
         <div className={styles.stripeElement}>
           <Elements
             stripe={stripe}
             options={{
-              clientSecret: cartState.cart?.paymentIntentClientSecret,
+              clientSecret: cartState.order?.paymentIntentClientSecret,
             }}
           >
             <CheckoutForm fullApplePayCheckout={true} />
