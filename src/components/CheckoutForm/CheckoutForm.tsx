@@ -5,24 +5,19 @@ import {
   useElements,
   useStripe,
 } from '@stripe/react-stripe-js';
-import {
-  PaymentRequest,
-  PaymentRequestShippingOption,
-  PaymentRequestUpdateDetails,
-} from '@stripe/stripe-js';
+import { PaymentRequest } from '@stripe/stripe-js';
 import { useRouter } from 'next/router';
 import styles from './CheckoutForm.module.scss';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { RootState } from '@/redux/reducers';
-import { setCart } from '@/redux/actions/cart';
+import { updatePricing } from '@/api/checkout/cart';
 import {
-  applyCustomerInfoToCart,
-  applyShippingMethodsToBags,
-  fetchShippingOptions,
-  submitPayment,
-  updatePricing,
-} from '@/api/checkout/cart';
-import { AddressType } from '@/enums/AddressType';
+  onShippingAddressChange,
+  onShippingOptionChange,
+  onPaymentMethodCreated,
+} from '@/stripe/stripe';
+import { setCart } from '@/redux/actions/cart';
+import { Order } from '@/interfaces/Order.interface';
 
 interface Props {
   fullApplePayCheckout: boolean;
@@ -39,33 +34,6 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
   const cartState = useAppSelector((state: RootState) => state.cart);
 
   useEffect(() => {
-    const applyShipping = async (
-      shippingOption: PaymentRequestShippingOption,
-      updateWith: (details: PaymentRequestUpdateDetails) => void
-    ) => {
-      if (cartState.cart?.id) {
-        const applyShippingResponse = await applyShippingMethodsToBags(
-          cartState.cart?.id.toString(),
-          cartState.cart?.bags.map((bag) => ({
-            bagId: bag.id,
-            shippingMethodId: shippingOption.id,
-          }))
-        );
-
-        updateWith({
-          status: 'success',
-          total: {
-            amount: applyShippingResponse.data.total || 0,
-            label: 'Total',
-          },
-        });
-      } else {
-        updateWith({
-          status: 'fail',
-        });
-      }
-    };
-
     if (stripe && fullApplePayCheckout && cartState.cart) {
       const pr = stripe.paymentRequest({
         // Using 'US' and 'USD' here for the purposes of the demo.
@@ -86,100 +54,21 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
           setPaymentRequest(pr);
         }
       });
-      pr.on('shippingaddresschange', async (ev) => {
-        if (ev.shippingAddress.country !== 'US') {
-          ev.updateWith({ status: 'invalid_shipping_address' });
-        } else {
-          // Apply customer info with info from Apple Pay
-          const updatedCartResponse = await applyCustomerInfoToCart(
-            cartState.cart?.id.toString() as string,
-            {
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'hello@violet.io',
-              shippingAddress: {
-                address_1: '',
-                city: ev.shippingAddress.city!,
-                country: ev.shippingAddress.country,
-                postalCode: ev.shippingAddress.postalCode!,
-                state: ev.shippingAddress.region!,
-                type: AddressType.SHIPPING,
-              },
-              sameAddress: true,
-            }
+      pr.on('shippingaddresschange', (ev) => {
+        if (cartState.cart) {
+          onShippingAddressChange(ev, cartState.cart, (updatedOrder: Order) =>
+            dispatch(setCart(updatedOrder))
           );
-
-          dispatch(setCart(updatedCartResponse.data));
-
-          // Perform server-side request to fetch shipping options
-          const availableShippingOptions = await fetchShippingOptions(
-            cartState.cart?.id.toString() as string
-          );
-          ev.updateWith({
-            status: 'success',
-            shippingOptions: availableShippingOptions.data.flatMap(
-              (bagShippingMethods: any) => {
-                const shippingMethods = bagShippingMethods.shippingMethods;
-                return shippingMethods.map((shippingMethod: any) => {
-                  return {
-                    id: shippingMethod.shippingMethodId,
-                    label: shippingMethod.label,
-                    detail: shippingMethod.label,
-                    amount: shippingMethod.price,
-                  };
-                });
-              }
-            ),
-          });
         }
       });
-      pr.on('shippingoptionchange', function (event) {
-        var updateWith = event.updateWith;
-        var shippingOption = event.shippingOption;
-        // Send shipping method selected to Violet API
-        applyShipping(shippingOption, updateWith);
+      pr.on('shippingoptionchange', (ev) => {
+        if (cartState.cart) {
+          onShippingOptionChange(ev, cartState.cart);
+        }
       });
-      pr.on('paymentmethod', async (event) => {
-        // Confirm the PaymentIntent without handling potential next actions (yet).
-        const payerName = event.payerName?.split(' ');
-        const updatedCartResponse = await applyCustomerInfoToCart(
-          cartState.cart?.id.toString() as string,
-          {
-            firstName: payerName?.[0]!,
-            lastName: payerName?.[1]!,
-            email: event.payerEmail,
-            shippingAddress: {
-              address_1: event.shippingAddress?.addressLine?.[0]!,
-              address_2: event.shippingAddress?.addressLine?.[1]!,
-              city: event.shippingAddress?.city!,
-              country: event.shippingAddress?.country!,
-              postalCode: event.shippingAddress?.postalCode!,
-              state: event.shippingAddress?.region!,
-              type: AddressType.SHIPPING,
-            },
-            sameAddress: true,
-          }
-        );
-
-        // Update pricing
-        await updatePricing(cartState.cart?.id.toString() as string);
-
-        const { error: confirmError } = await stripe.confirmCardPayment(
-          cartState.cart?.paymentIntentClientSecret!,
-          { payment_method: event.paymentMethod.id },
-          { handleActions: false }
-        );
-        const complete = event.complete;
-        // Update customer info with latest customer information
-        if (!confirmError) {
-          // Submit payment
-          await submitPayment(cartState.cart?.id.toString() as string);
-          complete('success');
-        } else {
-          // Report to the browser that the payment failed, prompting it to
-          // re-show the payment interface, or show an error message and close
-          // the payment interface.
-          complete('fail');
+      pr.on('paymentmethod', async (ev) => {
+        if (cartState.cart) {
+          onPaymentMethodCreated(ev, stripe, cartState.cart);
         }
       });
     }

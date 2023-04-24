@@ -54,15 +54,17 @@ const GuestCheckout = () => {
 
   const applyShipping = useCallback(async () => {
     if (cartState.cart?.id) {
-      const response = await applyShippingMethodsToBags(
-        cartState.cart.id.toString(),
-        Object.keys(selectedShippingMethods).map((bagId: string) => ({
-          bagId: Number(bagId),
-          shippingMethodId: selectedShippingMethods[bagId],
-        }))
-      );
-      if (response.status === 200) {
+      try {
+        const response = await applyShippingMethodsToBags(
+          cartState.cart.id.toString(),
+          Object.keys(selectedShippingMethods).map((bagId: string) => ({
+            bagId: Number(bagId),
+            shippingMethodId: selectedShippingMethods[bagId],
+          }))
+        );
         setCurStep(4);
+      } catch (err) {
+        // Handle error thrown from attempt to apply shipping methods to bags
       }
     }
   }, [cartState.cart?.id, selectedShippingMethods]);
