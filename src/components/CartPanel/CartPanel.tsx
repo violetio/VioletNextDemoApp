@@ -146,15 +146,18 @@ const CartPanel = () => {
       </div>
       <GuestCheckout /> */}
       <div className={styles.footer}>
-        <div className={styles.subtotal}>
-          Subtotal{' '}
-          <div className={styles.price}>
-            {(cartState.order?.subTotal! / 100).toLocaleString('en-US', {
-              style: 'currency',
-              currency: cartState.order?.currency,
-            })}
+        {cartState.order && (
+          <div className={styles.subtotal}>
+            Subtotal{' '}
+            <div className={styles.price}>
+              {(cartState.order?.subTotal! / 100).toLocaleString('en-US', {
+                style: 'currency',
+                currency: cartState.order?.currency,
+              })}
+            </div>
           </div>
-        </div>
+        )}
+
         <div className={styles.subtext}>
           Shipping and taxes calculated at checkout.
         </div>
