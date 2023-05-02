@@ -16,7 +16,7 @@ import { NextPageWithLayout } from '@/pages/_app';
 import StoreIcon from '@/public/svg/store.svg';
 import CircleArrow from '@/public/svg/circle-arrow.svg';
 import Spinner from '@/components/Spinner/Spinner';
-import { setCart } from '@/redux/actions/cart';
+import { setCart, showCart } from '@/redux/actions/cart';
 import { RootState } from '@/redux/reducers';
 import { useAppSelector } from '@/redux/store';
 import { desktopMediaQuery } from '@/utilities/responsive';
@@ -66,6 +66,7 @@ const OfferPage: NextPageWithLayout = () => {
         ]);
 
         dispatch(setCart(cart.data));
+        if (isDesktop) dispatch(showCart());
       }
       setAddToCartLoading(false);
     },
