@@ -1,0 +1,69 @@
+@use '@/styles/_variables';
+
+.offer {
+  width: 272px;
+  height: 430px;
+  // margin-right: 28px;
+  cursor: pointer;
+  .imageContainer {
+    position: relative;
+    width: 272px;
+    height: 272px;
+    margin-bottom: 12px;
+    .productImage {
+      object-fit: cover;
+      border-radius: 6px;
+      width: 100%;
+      height: 100%;
+    }
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition-property: background-color, opacity;
+      transition-timing-function: ease-in-out;
+      transition-duration: 50ms;
+    }
+  }
+  .productName {
+    display: -webkit-box;
+    color: variables.$gray-01;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 6px;
+    font-weight: 600;
+    line-height: 21px;
+    text-overflow: ellipsis;
+    line-clamp: 3;
+    -webkit-line-clamp: 3; /* number of lines to show */
+    -webkit-box-orient: vertical;
+  }
+  .vendor {
+    font-style: italic;
+    color: variables.$gray-03;
+    line-height: 24px;
+  }
+  .seller {
+    display: flex;
+    align-items: center;
+    color: variables.$gray-03;
+    line-height: 24px;
+    margin-bottom: 12px;
+    .icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 4px;
+    }
+  }
+  .price {
+    font-weight: 600;
+  }
+  &:hover {
+    .overlay {
+      background-color: white;
+      opacity: 0.45;
+    }
+  }
+}

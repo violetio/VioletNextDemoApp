@@ -4,9 +4,8 @@ import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import { ReactElement } from 'react';
 import { NextPage } from 'next';
-import store from '@/redux/store';
-import AppHeader from '@/components/AppHeader/AppHeader';
 import { violetjs } from '@violet/violet-js/api/index';
+import store from '@/redux/store';
 
 const inter = Inter({ subsets: ['latin'] });
 violetjs('/api');
@@ -25,7 +24,6 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <main className={inter.className}>
       <Provider store={store}>
-        <AppHeader />
         {getLayout(<Component {...pageProps} />)}
       </Provider>
     </main>

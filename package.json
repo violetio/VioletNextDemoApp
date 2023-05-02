@@ -11,6 +11,8 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx}\""
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.14",
+    "@heroicons/react": "^2.0.17",
     "@manaflair/redux-batch": "^1.0.0",
     "@reduxjs/toolkit": "^1.9.3",
     "@stripe/react-stripe-js": "^2.0.0",
@@ -28,6 +30,10 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-redux": "^8.0.5",
+    "react-responsive": "^9.0.2",
+    "react-virtualized-auto-sizer": "^1.0.15",
+    "react-window": "^1.8.9",
+    "react-window-infinite-loader": "^1.0.9",
     "redux": "^4.2.1",
     "snakecase-keys": "5.4.5",
     "swr": "^2.1.0",
@@ -35,6 +41,9 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^6.5.1",
+    "@types/react-virtualized-auto-sizer": "^1.0.1",
+    "@types/react-window": "^1.8.5",
+    "@types/react-window-infinite-loader": "^1.0.6",
     "@typescript-eslint/eslint-plugin": "~5.31.0",
     "eslint": "8.35.0",
     "eslint-config-next": "13.2.3",

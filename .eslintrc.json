@@ -11,6 +11,7 @@
   ],
   "rules": {
     "semi": "off",
+    "@next/next/no-img-element": "off",
     "@typescript-eslint/semi": ["error", "always"],
     "prefer-const": "error",
     "indent": [

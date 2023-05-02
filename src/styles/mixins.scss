@@ -1,0 +1,23 @@
+@use '@/styles/_variables';
+
+@mixin button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  color: variables.$gray-05;
+  background-color: variables.$gray-01;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover {
+    background-color: variables.$gray-02;
+  }
+  &.loading {
+    background-color: variables.$gray-03;
+  }
+  &:disabled {
+    background-color: variables.$gray-04;
+  }
+}

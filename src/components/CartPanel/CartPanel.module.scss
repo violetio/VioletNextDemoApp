@@ -1,43 +1,63 @@
+@use '@/styles/_variables';
+@use '@/styles/mixins';
+
 .cartPanel {
   display: flex;
+  height: 100%;
   flex-direction: column;
   align-items: center;
-  .header {
-    font-size: 20px;
-    font-weight: 500;
-    margin-bottom: 20px;
-  }
-  .product {
+  .scrollableArea {
     width: 100%;
-    margin-bottom: 20px;
-    .productInfo {
-      display: flex;
-      align-items: center;
-      .productImage {
-        object-fit: contain;
-        min-width: 100px;
-        min-height: 100px;
+    overflow: auto;
+  }
+  .header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 46px 20px 0 20px;
+    margin-bottom: 32px;
+    .label {
+      margin-left: 12px;
+    }
+    .xIcon {
+      width: 28px;
+      height: 28px;
+      margin-right: 17px;
+      cursor: pointer;
+      path {
+        fill: variables.$gray-01;
       }
     }
-    .productQuantity {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 10px;
-    }
   }
-  .guestCheckoutDivider {
+  .bags {
     width: 100%;
-    display: flex;
-    align-items: center;
-    margin-top: 8px;
-    .divider {
-      height: 1px;
-      background-color: gray;
-      flex-grow: 1;
+    padding: 0 20px;
+  }
+  .footer {
+    border-top: 1px solid variables.$gray-04;
+    margin-top: auto;
+    padding: 32px;
+    width: 100%;
+    height: 185px;
+    background-color: white;
+    .subtotal {
+      display: flex;
+      font-weight: 600;
+      .price {
+        margin-left: auto;
+      }
     }
-    .label {
-      margin: 0 8px;
-      color: gray;
+    .subtext {
+      margin-top: 4px;
+      color: variables.$gray-02;
+    }
+    .checkout {
+      @include mixins.button;
+      width: 100%;
+      margin-top: 36px;
     }
   }
 }

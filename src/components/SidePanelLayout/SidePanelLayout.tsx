@@ -1,42 +1,32 @@
 import React from 'react';
 import cx from 'classnames';
-import OfferPanel from '../OfferPanel/OfferPanel';
 import CartPanel from '../CartPanel/CartPanel';
 import styles from './SidePanelLayout.module.scss';
 import { RootState } from '@/redux/reducers';
-import { useAppDispatch, useAppSelector } from '@/redux/store';
-import ClosePanelIcon from '@/public/svg/close-panel.svg';
-import { closeSidePanel } from '@/redux/thunks/common';
+import { useAppSelector } from '@/redux/store';
+import AppHeader from '@/components/AppHeader/AppHeader';
 
 interface Props {
+  virtualizedScroll?: boolean;
   children: React.ReactNode;
 }
 
 /**
  * This is a layout including a sliding side panel to view a product or cart details
  */
-const SidePanelLayout = ({ children }: Props) => {
-  const dispatch = useAppDispatch();
-  const selectedOffer = useAppSelector(
-    (state: RootState) => state.offers.selectedOffer
-  );
+const SidePanelLayout = ({ virtualizedScroll = false, children }: Props) => {
   const cart = useAppSelector((state: RootState) => state.cart);
 
   return (
     <div className={styles.container}>
+      <AppHeader virtualizedScroll={virtualizedScroll} />
       <div className={styles.pageContent}>{children}</div>
       <div
         className={cx(styles.sidePanel, {
-          [styles.active]: selectedOffer || cart.showCart,
+          [styles.active]: cart.showCart,
         })}
       >
-        <ClosePanelIcon
-          className={styles.closePanel}
-          onClick={() => dispatch(closeSidePanel())}
-        />
-        {/* {selectedOffer && <OfferPanel offer={selectedOffer} />} */}
-        {selectedOffer && <OfferPanel offer={selectedOffer} />}
-        {cart.showCart && !selectedOffer && <CartPanel />}
+        {cart.showCart && <CartPanel />}
       </div>
     </div>
   );

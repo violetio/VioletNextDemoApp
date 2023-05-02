@@ -1,21 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import cx from 'classnames';
-import {
-  addSkusToCart,
-  createCart,
-} from '@violet/violet-js/api/catalog/products';
+import { addSkusToCart, createCart } from '@violet/violet-js/api/checkout/cart';
 import { Offer } from '@violet/violet-js/interfaces/Offer.interface';
 import {
   Variant,
   VariantValue,
 } from '@violet/violet-js/interfaces/Variant.interface';
+import useOffer from '@violet/violet-js/hooks/useOffer';
 import Select from '../Select/Select';
 import styles from './OfferPanel.module.scss';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { setCart } from '@/redux/actions/cart';
 import { RootState } from '@/redux/reducers';
-import useOffer from '@violet/violet-js/hooks/useOffer';
 
 interface Props {
   offer: Offer;
@@ -72,7 +69,7 @@ const OfferPanel = ({ offer }: Props) => {
   return (
     <div className={styles.offerPanel}>
       {offer.albums?.[0] && (
-        <Image
+        <img
           className={styles.productImage}
           src={offer.albums[0].primaryMedia.url}
           alt={offer.name}

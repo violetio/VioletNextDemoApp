@@ -2,16 +2,7 @@
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**.cloudfront.net',
-      },
-      {
-        protocol: 'https',
-        hostname: 'cdn.shopify.com',
-      },
-    ],
+    remotePatterns: [],
   },
   webpack(config) {
     config.module.rules.push({

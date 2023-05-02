@@ -1,34 +1,66 @@
+@use '@/styles/_variables';
+
 .header {
-  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 46px;
-  padding: 8px;
-  .home {
-    width: 30px;
-    height: 30px;
-  }
-  .cartContainer {
-    position: relative;
-    margin-left: auto;
-      cursor: pointer;
-    .cart {
-      width: 30px;
-      height: 30px;
+  z-index: 9000;
+  &.virtualizedScroll {
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+      background: transparent; /* Optional: just make scrollbar invisible */
     }
-    .counter {
-      position: absolute;
+  }
+
+  .appHeader {
+    width: 100%;
+    display: flex;
+    margin: 20px 0 20px 0;
+    align-items: center;
+    padding: variables.$header-margin-top 0 variables.$header-margin-bottom 0;
+    margin: 0 auto;
+    background-color: white;
+
+    @media (min-width: variables.$breakpoint-mobile) {
+      max-width: variables.$breakpoint-mobile;
+    }
+    @media (min-width: variables.$breakpoint-tablet) {
+      max-width: variables.$breakpoint-tablet;
+    }
+    @media (min-width: variables.$breakpoint-desktop) {
+      max-width: variables.$breakpoint-desktop;
+    }
+    .ultra {
+      color: variables.$gray-01;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .cartContainer {
       display: flex;
-      top: 0;
-      right: 0;
-      border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      font-size: 12px;
+      padding: 6px 10px;
+      height: fit-content;
+      background-color: variables.$gray-06;
+      border: 2px solid variables.$gray-04;
+      border-radius: 8px;
+      margin-left: auto;
       align-items: center;
-      justify-content: center;
-      color: white;
-      background-color: red;
+      user-select: none;
+      cursor: pointer;
+      &:hover {
+        background-color: variables.$gray-04;
+      }
+      .cart {
+        width: 21px;
+        color: variables.$gray-01;
+      }
+      .counter {
+        margin-left: 5px;
+        color: variables.$gray-01;
+        font-size: 14px;
+        font-weight: 600;
+      }
     }
   }
-  
 }

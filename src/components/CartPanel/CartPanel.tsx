@@ -1,17 +1,16 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import Image from 'next/image';
-import { Elements } from '@stripe/react-stripe-js';
+import { useCallback, useEffect, useMemo } from 'react';
 import {
   removeSkusFromCart,
   requestIntentBasedCapturePayment,
 } from '@violet/violet-js/api/checkout/cart';
-import CheckoutForm from '../CheckoutForm/CheckoutForm';
-import GuestCheckout from '../GuestCheckout/GuestCheckout';
+import { XMarkIcon } from '@heroicons/react/20/solid';
+import { Bag } from '@violet/violet-js/interfaces/Bag.interface';
 import styles from './CartPanel.module.scss';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { RootState } from '@/redux/reducers';
 import { setCart } from '@/redux/actions/cart';
-import { stripe } from '@/stripe/stripe';
+import { closeSidePanel } from '@/redux/thunks/common';
+import BagView from '@/components/CartPanel/BagView/BagView';
 
 /**
  * Panel component for displaying current cart data and Stripe payment elements
@@ -83,12 +82,28 @@ const CartPanel = () => {
 
   return (
     <div className={styles.cartPanel}>
-      <div className={styles.header}>Cart</div>
-      <div className={styles.product}>
+      <div className={styles.scrollableArea}>
+        <div className={styles.header}>
+          <div className={styles.label}>Shopping Cart</div>
+          <XMarkIcon
+            className={styles.xIcon}
+            onClick={() => dispatch(closeSidePanel())}
+          />
+        </div>
+        {cartState.order?.bags && (
+          <div className={styles.bags}>
+            {cartState.order.bags.map((bag: Bag) => (
+              <BagView key={bag.id} bag={bag} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* <div className={styles.product}>
         {skusInCart.map((sku) => (
           <div key={sku.id} className={styles.product}>
             <div className={styles.productInfo}>
-              <Image
+              <img
                 className={styles.productImage}
                 src={sku.thumbnail}
                 alt={sku.name}
@@ -111,8 +126,8 @@ const CartPanel = () => {
             </div>
           </div>
         ))}
-      </div>
-      {cartState.order?.paymentIntentClientSecret && stripeKey && (
+      </div> */}
+      {/*{cartState.order?.paymentIntentClientSecret && stripeKey && (
         <div className={styles.stripeElement}>
           <Elements
             stripe={stripe}
@@ -124,12 +139,27 @@ const CartPanel = () => {
           </Elements>
         </div>
       )}
-      <div className={styles.guestCheckoutDivider}>
+       <div className={styles.guestCheckoutDivider}>
         <div className={styles.divider} />
         <div className={styles.label}>Guest Checkout</div>
         <div className={styles.divider} />
       </div>
-      <GuestCheckout />
+      <GuestCheckout /> */}
+      <div className={styles.footer}>
+        <div className={styles.subtotal}>
+          Subtotal{' '}
+          <div className={styles.price}>
+            {(cartState.order?.subTotal! / 100).toLocaleString('en-US', {
+              style: 'currency',
+              currency: cartState.order?.currency,
+            })}
+          </div>
+        </div>
+        <div className={styles.subtext}>
+          Shipping and taxes calculated at checkout.
+        </div>
+        <button className={styles.checkout}>Checkout</button>
+      </div>
     </div>
   );
 };

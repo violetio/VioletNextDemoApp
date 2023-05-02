@@ -3,7 +3,13 @@ $white: #fff !default;
 $light-gray: #ced4da !default;
 $dark-gray: #495057 !default;
 $black: #000 !default;
-$gray-01: #1d1d27;
+$gray-01: #111827;
+$gray-02: #374151;
+$gray-03: #6b7280;
+$gray-04: #d1d5db;
+$gray-05: #f9fafc;
+$gray-06: #f9fafc;
+$background: #fbfbfb;
 $light-gray-01: #fafafa;
 $outline: #ededf2;
 $background: #ffffff;
@@ -12,3 +18,18 @@ $success-green: #5bdb87;
 
 // Typography
 $font-size-2: 14px !default;
+
+// Sizing + Margins
+$header-height: 56px;
+$header-margin-bottom: 21px;
+$header-margin-top: 38px;
+
+$page-top-padding: $header-height + $header-margin-bottom + $header-margin-top;
+$height-without-header: calc(
+  100% - $header-height - $header-margin-top - $header-margin-bottom
+);
+
+// Breakpoints
+$breakpoint-desktop: 1172px;
+$breakpoint-tablet: 572px;
+$breakpoint-mobile: 272px;

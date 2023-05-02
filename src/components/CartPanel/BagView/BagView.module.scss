@@ -1,0 +1,103 @@
+@use '@/styles/_variables';
+
+.bagView {
+  padding: 12px;
+  border: 1px solid variables.$gray-04;
+  border-radius: 6px;
+  width: 100%;
+  margin-bottom: 20px;
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    .storeIcon {
+      width: 16px;
+      height: 16px;
+    }
+    .merchantName {
+      margin-left: 6px;
+      color: variables.$gray-01;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .itemCount {
+      color: variables.$gray-03;
+      margin: 0 6px 0 auto;
+    }
+  }
+  .sku {
+    display: flex;
+    padding: 0 0 16px 0;
+    margin-bottom: 16px;
+    border-bottom: 1px solid variables.$gray-04;
+    &.lastIndex {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    .skuImage {
+      width: 75px;
+      height: 75px;
+      object-fit: contain;
+      margin-right: 16px;
+      border: 1px solid variables.$gray-04;
+      border-radius: 6px;
+    }
+    .skuInfo {
+      width: 100%;
+      .name {
+        display: -webkit-box;
+        color: variables.$gray-01;
+        font-weight: 600;
+        line-height: 21px;
+        text-overflow: ellipsis;
+        line-clamp: 3;
+        overflow: hidden;
+        -webkit-line-clamp: 3; /* number of lines to show */
+        -webkit-box-orient: vertical;
+      }
+      .brand {
+        font-style: italic;
+        color: variables.$gray-03;
+        line-height: 175%;
+      }
+      .quantityAndPrice {
+        display: flex;
+        align-items: center;
+        margin-top: 16px;
+        color: variables.$gray-03;
+        .remove {
+          cursor: pointer;
+        }
+        .quantity {
+          display: flex;
+          align-items: center;
+          margin-left: 14px;
+          cursor: pointer;
+          .chevronIcon {
+            margin-left: 12px;
+          }
+        }
+        .price {
+          margin-left: auto;
+        }
+      }
+    }
+  }
+  .bagTotal {
+    display: flex;
+    padding: 14px 0 6px 0;
+    font-weight: 600;
+    border-top: 1px solid variables.$gray-04;
+    .subtotal {
+      margin-left: auto;
+    }
+  }
+  .chevronIcon {
+    width: 13px;
+    cursor: pointer;
+    user-select: none;
+    &.flipped {
+      transform: rotate(180deg);
+    }
+  }
+}
