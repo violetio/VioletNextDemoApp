@@ -10,7 +10,7 @@ const initialState: OfferState = {
   selectedOffer: undefined,
 };
 
-export default createReducer(initialState, (builder) =>
+export default createReducer(initialState, (builder) => {
   builder
     .addCase(
       setSelectedOffer,
@@ -20,5 +20,5 @@ export default createReducer(initialState, (builder) =>
     )
     .addCase(clearSelectedOffer, (state: OfferState) => {
       state.selectedOffer = undefined;
-    })
-);
+    });
+});

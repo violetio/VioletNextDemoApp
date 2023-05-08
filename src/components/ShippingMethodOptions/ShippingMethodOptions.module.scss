@@ -1,0 +1,39 @@
+@use '@/styles/_variables';
+@use '@/styles/mixins';
+
+.shippingMethodStep {
+  .header {
+    display: flex;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    .edit {
+      margin-left: auto;
+      border: none;
+      background: none;
+      cursor: pointer;
+      outline: none;
+    }
+  }
+  .contactContainer {
+    border: 1px solid variables.$gray-04;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    padding: 12px;
+    .header {
+      font-weight: 600;
+      font-size: 14px;
+    }
+  }
+  .shippingMethods {
+    margin-top: 24px;
+  }
+  .submit {
+    margin: 16px auto 0 auto;
+  }
+}
+
+.spinner {
+  width: fit-content;
+  margin: auto;
+}

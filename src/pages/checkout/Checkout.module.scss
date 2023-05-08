@@ -1,0 +1,53 @@
+@use '@/styles/_variables';
+@use '@/styles/mixins';
+
+.checkoutPage {
+  display: flex;
+  width: 100%;
+  min-height: 100%;
+  margin: 0 auto;
+  .leftSide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    background-color: variables.$gray-05;
+    margin-right: variables.$panel-width;
+    padding: 38px 0;
+    .checkout {
+      display: flex;
+      flex-direction: column;
+      width: 576px;
+      .ultra {
+        @include mixins.ultraLogo;
+        margin: 0 auto 32px 0;
+      }
+      .container {
+        background-color: white;
+        border: 2px solid variables.$gray-04;
+        border-radius: 6px;
+        padding: 32px;
+      }
+    }
+  }
+
+  .cartPanel {
+    position: fixed;
+    right: 0;
+    width: variables.$panel-width;
+    height: 100%;
+    border: 1px solid variables.$gray-04;
+  }
+  &.vertical {
+    flex-direction: column;
+    background-color: variables.$gray-05;
+    align-items: center;
+    .leftSide {
+      margin-right: 0;
+    }
+    .cartPanel {
+      position: unset;
+      margin-bottom: 26px;
+    }
+  }
+}

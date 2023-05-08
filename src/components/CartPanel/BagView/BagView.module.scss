@@ -66,32 +66,60 @@
         margin-top: 16px;
         color: variables.$gray-03;
         .remove {
+          font-size: 14px;
+          margin-right: 14px;
           cursor: pointer;
         }
-        .quantity {
-          display: flex;
-          align-items: center;
-          margin-left: 14px;
-          cursor: pointer;
-          .chevronIcon {
-            margin-left: 12px;
+        .list {
+          width: fit-content;
+          .options {
+            width: 100%;
           }
         }
+        .listButton {
+          border: none;
+          background: none;
+          color: variables.$gray-03;
+          font-size: 14px;
+          font-family: inherit;
+          .quantity {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            &.disabled {
+              cursor: unset;
+            }
+            .chevronIcon {
+              margin-left: 12px;
+            }
+          }
+        }
+
         .price {
           margin-left: auto;
         }
       }
     }
   }
-  .bagTotal {
-    display: flex;
+  .priceOverview {
     padding: 14px 0 6px 0;
-    font-weight: 600;
     border-top: 1px solid variables.$gray-04;
-    .subtotal {
-      margin-left: auto;
+    .shippingPrice {
+      display: flex;
+      margin-bottom: 6px;
+      .price {
+        margin-left: auto;
+      }
+    }
+    .bagTotal {
+      display: flex;
+      font-weight: 600;
+      .subtotal {
+        margin-left: auto;
+      }
     }
   }
+
   .chevronIcon {
     width: 13px;
     cursor: pointer;

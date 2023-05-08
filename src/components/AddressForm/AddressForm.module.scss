@@ -1,7 +1,44 @@
+@use '@/styles/mixins';
+$focus-box-shadow: 0 0 0 3px hsla(210, 96%, 45%, 25%),
+  0 1px 1px 0 rgba(0, 0, 0, 0.08);
+.doubleInput {
+  display: flex;
+  .leftInput {
+    margin-right: 32px;
+  }
+}
 .sameAsBilling {
   display: flex;
-  margin-top: 16px;
+  margin: 16px 0;
+  font-weight: 600;
+  .checkbox {
+    margin-right: 14px;
+  }
 }
+.countryDropdown {
+  width: 100%;
+  .label {
+    font-weight: 600;
+    margin: 0 0 4px 13px;
+  }
+  .list {
+    .listButton {
+      box-shadow: none;
+      border-radius: 6px;
+      outline: none;
+      &:focus {
+        border-color: rgba(5, 115, 225, 0.5);
+        box-shadow: 6px 1px 1px rgba(0, 0, 0, 0.03),
+          0px 3px 6px rgba(0, 0, 0, 0.02), $focus-box-shadow;
+      }
+    }
+    .options {
+      max-height: 250px;
+      outline: none;
+    }
+  }
+}
+
 .submit {
-  composes: submit from "../GuestCheckout/GuestCheckout.module.scss";
+  margin-top: 44px;
 }

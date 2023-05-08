@@ -28,10 +28,10 @@ export default function AppHeader({ virtualizedScroll = false }: Props) {
   );
 
   useEffect(() => {
-    if (getCartData) {
+    if (getCartData && router.pathname !== '/paymentAccepted') {
       dispatch(setCart(getCartData));
     }
-  }, [getCartData, dispatch]);
+  }, [getCartData, dispatch, router.pathname]);
 
   return (
     <header

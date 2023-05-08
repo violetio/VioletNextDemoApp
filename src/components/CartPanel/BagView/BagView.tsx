@@ -1,18 +1,31 @@
 import cx from 'classnames';
 import { Bag } from '@violet/violet-js/interfaces/Bag.interface';
 import { BuildingStorefrontIcon } from '@heroicons/react/24/solid';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import {
+  removeSkusFromCart,
+  updateSkuInCart,
+} from '@violet/violet-js/api/checkout/cart';
+import { Listbox } from '@headlessui/react';
 import styles from './BagView.module.scss';
 import ChevronDownIcon from '@/public/svg/chevron-down.svg';
+import { setCart } from '@/redux/actions/cart';
+import { RootState } from '@/redux/reducers';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import Dropdown from '@/components/Dropdown/Dropdown';
 
 interface Props {
   bag: Bag;
+  showShipping?: boolean;
+  editable?: boolean;
 }
 
 /**
  * A collapsible view of items in a bag
  */
-const BagView = ({ bag }: Props) => {
+const BagView = ({ bag, showShipping = false, editable = false }: Props) => {
+  const dispatch = useAppDispatch();
+  const cartState = useAppSelector((state: RootState) => state.cart);
   const [expanded, setExpanded] = useState(true);
 
   const itemCount = useMemo(() => {
@@ -22,12 +35,52 @@ const BagView = ({ bag }: Props) => {
     );
   }, [bag]);
 
+  /**
+   * Removes a SKU ID from the cart
+   */
+  const removeFromCart = useCallback(
+    async (skuId: number) => {
+      if (cartState.order?.id) {
+        const cart = await removeSkusFromCart(
+          cartState.order.id.toString(),
+          skuId.toString()
+        );
+        dispatch(setCart(cart.data));
+      }
+    },
+    [cartState.order?.id, dispatch]
+  );
+
+  /**
+   * Updates quantity of SKU
+   */
+  const updateSku = useCallback(
+    async (skuId: number, quantity: number) => {
+      if (cartState.order?.id) {
+        const cart = await updateSkuInCart(
+          cartState.order.id.toString(),
+          skuId.toString(),
+          {
+            skuId,
+            quantity,
+          }
+        );
+        dispatch(setCart(cart.data));
+      }
+    },
+    [cartState.order?.id, dispatch]
+  );
+
   return (
     <div className={styles.bagView}>
       <div className={styles.header}>
         <BuildingStorefrontIcon className={styles.storeIcon} />
         <div className={styles.merchantName}>{bag.merchantName}</div>
-        <div className={styles.itemCount}>{itemCount} Item</div>
+        {itemCount && (
+          <div className={styles.itemCount}>
+            {itemCount} {itemCount > 1 ? 'Items' : 'Item'}
+          </div>
+        )}
         <ChevronDownIcon
           className={cx(styles.chevronIcon, { [styles.flipped]: expanded })}
           onClick={() => setExpanded((prev) => !prev)}
@@ -50,11 +103,39 @@ const BagView = ({ bag }: Props) => {
               <div className={styles.name}> {sku.name}</div>
               <div className={styles.brand}>{sku.brand}</div>
               <div className={styles.quantityAndPrice}>
-                <div className={styles.remove}>Remove</div>
-                <div className={styles.quantity}>
-                  Quantity: {sku.quantity}{' '}
-                  <ChevronDownIcon className={cx(styles.chevronIcon)} />
-                </div>
+                {editable && (
+                  <div
+                    className={styles.remove}
+                    onClick={() => removeFromCart(sku.id)}
+                  >
+                    Remove
+                  </div>
+                )}
+                <Dropdown
+                  classes={{
+                    list: styles.list,
+                    options: styles.options,
+                  }}
+                  value={sku.quantity?.toString() || '1'}
+                  options={['1', '2', '3', '4', '5', '6']}
+                  disabled={!editable}
+                  customButton={
+                    <Listbox.Button className={styles.listButton}>
+                      <div
+                        className={cx(styles.quantity, {
+                          [styles.disabled]: !editable,
+                        })}
+                      >
+                        Quantity: {sku.quantity}{' '}
+                        {editable && (
+                          <ChevronDownIcon className={cx(styles.chevronIcon)} />
+                        )}
+                      </div>
+                    </Listbox.Button>
+                  }
+                  clearOption={false}
+                  onChange={(newValue) => updateSku(sku.id, Number(newValue))}
+                />
                 <div className={styles.price}>
                   {((sku.price / 100) * (sku.quantity || 1)).toLocaleString(
                     'en-US',
@@ -68,13 +149,29 @@ const BagView = ({ bag }: Props) => {
             </div>
           </div>
         ))}
-      <div className={styles.bagTotal}>
-        Bag Total
-        <div className={styles.subtotal}>
-          {(bag.subTotal! / 100).toLocaleString('en-US', {
-            style: 'currency',
-            currency: bag.currency,
-          })}
+      <div className={styles.priceOverview}>
+        {showShipping && (
+          <div className={styles.shippingPrice}>
+            Shipping Method
+            <div className={styles.price}>
+              {bag.shippingMethod?.price
+                ? (bag.shippingMethod.price / 100).toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: bag.currency,
+                })
+                : '----'}
+            </div>
+          </div>
+        )}
+
+        <div className={styles.bagTotal}>
+          Bag Total
+          <div className={styles.subtotal}>
+            {((bag.total || bag.subTotal!) / 100).toLocaleString('en-US', {
+              style: 'currency',
+              currency: bag.currency,
+            })}
+          </div>
         </div>
       </div>
     </div>

@@ -1,12 +1,10 @@
 import useSWR from 'swr';
 import cx from 'classnames';
-import { Fragment, ReactElement, useCallback, useMemo, useState } from 'react';
+import { ReactElement, useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getOfferById } from '@violet/violet-js/api/catalog/products';
 import useOffer from '@violet/violet-js/hooks/useOffer';
-import { Listbox, Transition } from '@headlessui/react';
 import { Variant } from '@violet/violet-js/interfaces/Variant.interface';
-import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { useDispatch } from 'react-redux';
 import { addSkusToCart, createCart } from '@violet/violet-js/api/checkout/cart';
 import { Sku } from '@violet/violet-js/interfaces/Sku.interface';
@@ -19,13 +17,15 @@ import Spinner from '@/components/Spinner/Spinner';
 import { setCart, showCart } from '@/redux/actions/cart';
 import { RootState } from '@/redux/reducers';
 import { useAppSelector } from '@/redux/store';
-import { desktopMediaQuery } from '@/utilities/responsive';
+import { useDesktopMediaQuery } from '@/utilities/responsive';
+import Dropdown from '@/components/Dropdown/Dropdown';
+import Button from '@/components/Button/Button';
 
 const CLEAR_SELECTION = 'Clear Selection';
 
 const OfferPage: NextPageWithLayout = () => {
   const router = useRouter();
-  const isDesktop = desktopMediaQuery();
+  const isDesktop = useDesktopMediaQuery();
   const dispatch = useDispatch();
   const cartState = useAppSelector((state: RootState) => state.cart);
   const { offerId } = router.query;
@@ -70,7 +70,7 @@ const OfferPage: NextPageWithLayout = () => {
       }
       setAddToCartLoading(false);
     },
-    [cartState.order, dispatch]
+    [cartState.order, dispatch, isDesktop]
   );
 
   const selectedSkuId = useMemo(() => {
@@ -180,136 +180,62 @@ const OfferPage: NextPageWithLayout = () => {
         <div className={styles.variants}>
           {offer.variants &&
             variants.map((variant: Variant) => (
-              <div key={`${variant.id}${variant.name}`}>
-                <Listbox
-                  value={selectedValues[variant.name] || ''}
-                  onChange={(value: string) => {
-                    const productVariant = variantValues[variant.name].find(
-                      (variantValue) => variantValue.name === value
-                    );
-                    if (value === CLEAR_SELECTION) {
-                      setSelectedValues((prevSelectedValues) => {
-                        const newSelectedValues = { ...prevSelectedValues };
-                        delete newSelectedValues[variant.name];
-                        return newSelectedValues;
-                      });
-                      // setSelectedValues((prevSelectedValues) => ({
-                      //   ...prevSelectedValues,
-                      //   [variant.name]: undefined,
-                      // }));
-                      return;
-                    }
-                    if (!productVariant) return;
-                    const selectable = skusExistForGivenSelections(
-                      selectedValues,
-                      variant.name,
-                      productVariant.name
-                    );
+              <Dropdown
+                classes={{ list: styles.list }}
+                key={`${variant.id}${variant.name}`}
+                value={selectedValues[variant.name] || ''}
+                options={variantValues[variant.name].map(
+                  (variantValue) => variantValue.name
+                )}
+                placeholder={variant.name}
+                onChange={(value: string) => {
+                  const productVariant = variantValues[variant.name].find(
+                    (variantValue) => variantValue.name === value
+                  );
+                  if (value === CLEAR_SELECTION) {
+                    setSelectedValues((prevSelectedValues) => {
+                      const newSelectedValues = { ...prevSelectedValues };
+                      delete newSelectedValues[variant.name];
+                      return newSelectedValues;
+                    });
+                    return;
+                  }
+                  if (!productVariant) return;
+                  const selectable = skusExistForGivenSelections(
+                    selectedValues,
+                    variant.name,
+                    productVariant.name
+                  );
 
-                    if (selectable) {
-                      setSelectedValues((prevSelectedValues) => ({
-                        ...prevSelectedValues,
-                        [variant.name]: productVariant.name,
-                      }));
-                    } else {
-                      // Clear other selections
-                      setSelectedValues({
-                        [variant.name]: productVariant.name,
-                      });
-                    }
-                  }}
-                >
-                  <div className={styles.list}>
-                    <Listbox.Button className={styles.listButton}>
-                      <span className={styles.value}>
-                        {selectedValues[variant.name] || variant.name}
-                      </span>
-                      <span className={styles.chevronIcon}>
-                        <ChevronDownIcon
-                          className={styles.icon}
-                          aria-hidden="true"
-                        />
-                      </span>
-                    </Listbox.Button>
-                    <Transition
-                      as={Fragment}
-                      leave={styles.transitionLeave}
-                      leaveFrom={styles.transitionLeaveFrom}
-                      leaveTo={styles.transitionLeaveto}
-                    >
-                      <Listbox.Options className={styles.options}>
-                        <Listbox.Option
-                          className={({ active }) =>
-                            cx(styles.option, {
-                              [styles.active]: active,
-                            })
-                          }
-                          value={CLEAR_SELECTION}
-                        >
-                          {({ selected, disabled }) => (
-                            <>
-                              <span
-                                className={cx(styles.row, styles.clear, {
-                                  [styles.selected]: selected,
-                                  [styles.disabled]: disabled,
-                                })}
-                              >
-                                {CLEAR_SELECTION}
-                              </span>
-                            </>
-                          )}
-                        </Listbox.Option>
-                        {variantValues[variant.name].map((variantValue) => (
-                          <Listbox.Option
-                            key={variantValue.id}
-                            className={({ active }) =>
-                              cx(styles.option, {
-                                [styles.active]: active,
-                              })
-                            }
-                            value={variantValue.name}
-                            disabled={
-                              !skusExistForGivenSelections(
-                                selectedValues,
-                                variant.name,
-                                variantValue.name
-                              )
-                            }
-                          >
-                            {({ selected, disabled }) => (
-                              <>
-                                <span
-                                  className={cx(styles.row, {
-                                    [styles.selected]: selected,
-                                    [styles.disabled]: disabled,
-                                  })}
-                                >
-                                  {variantValue.name}
-                                </span>
-                                {selected ? (
-                                  <span className={styles.checkIcon}>
-                                    <CheckIcon
-                                      className={styles.icon}
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                ) : null}
-                              </>
-                            )}
-                          </Listbox.Option>
-                        ))}
-                      </Listbox.Options>
-                    </Transition>
-                  </div>
-                </Listbox>
-              </div>
+                  if (selectable) {
+                    setSelectedValues((prevSelectedValues) => ({
+                      ...prevSelectedValues,
+                      [variant.name]: productVariant.name,
+                    }));
+                  } else {
+                    // Clear other selections
+                    setSelectedValues({
+                      [variant.name]: productVariant.name,
+                    });
+                  }
+                }}
+                disabledRow={(value: string) =>
+                  !skusExistForGivenSelections(
+                    selectedValues,
+                    variant.name,
+                    value
+                  )
+                }
+              />
             ))}
         </div>
-        <button
+        <Button
           className={cx(styles.addToCart, {
             [styles.loading]: addToCartLoading,
           })}
+          label="Add to Cart"
           disabled={variants.length !== Object.keys(selectedValues).length}
+          loading={addToCartLoading}
           onClick={() => {
             if (offer.variants?.length! > 0) {
               addToCart(selectedSkuId!);
@@ -319,9 +245,7 @@ const OfferPage: NextPageWithLayout = () => {
               }
             }
           }}
-        >
-          {addToCartLoading ? <Spinner /> : <>Add to Cart</>}
-        </button>
+        />
         <div className={styles.descriptionHeader}>Description</div>
         <div className={styles.description}>{offer.description}</div>
       </div>

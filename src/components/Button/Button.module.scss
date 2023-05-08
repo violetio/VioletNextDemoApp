@@ -1,0 +1,6 @@
+@use '@/styles/mixins';
+
+.button {
+  @include mixins.button;
+  width: 100%;
+}

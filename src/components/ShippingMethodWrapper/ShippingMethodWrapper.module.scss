@@ -1,0 +1,85 @@
+@use '@/styles/_variables';
+
+.bag {
+  margin-top: 16px;
+  border: 1px solid variables.$gray-04;
+  border-radius: 6px;
+  padding: 16px;
+  .bagHeader {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    &.expanded {
+      margin-bottom: 28px;
+    }
+    .storeIcon {
+      width: 16px;
+      height: 16px;
+      margin-right: 6px;
+    }
+    .itemCount {
+      color: variables.$gray-03;
+      margin-left: auto;
+      font-weight: 400;
+      font-size: 14px;
+    }
+    .chevronIcon {
+      width: 13px;
+      margin-left: 10px;
+      cursor: pointer;
+      user-select: none;
+      &.flipped {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  .divider {
+    height: 1px;
+    width: 100%;
+    background-color: variables.$gray-04;
+    margin: 12px 0 15px 0;
+  }
+  .shippingMethod {
+    border: 1px solid variables.$gray-04;
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: 12px;
+    cursor: pointer;
+    .selected {
+      border: 1px solid variables.$gray-03;
+    }
+    .shippingMethodHeader {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      .radioButton {
+        margin-left: auto;
+      }
+      .checkmarkContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 2px solid variables.$gray-04;
+        margin-left: auto;
+        &.selected {
+          border: 2px solid variables.$gray-01;
+          background-color: variables.$gray-01;
+        }
+        .checkIcon {
+          width: 8px;
+          color: white;
+        }
+      }
+    }
+    .price {
+      width: 100%;
+      text-align: end;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+  }
+}

@@ -1,0 +1,21 @@
+@use '@/styles/_variables';
+
+.radioButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid variables.$gray-04;
+  &.active {
+    border: 2px solid variables.$gray-01;
+    background-color: variables.$gray-01;
+  }
+  .activeCircle {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: white;
+  }
+}

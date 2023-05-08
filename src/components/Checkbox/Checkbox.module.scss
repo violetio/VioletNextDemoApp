@@ -1,0 +1,21 @@
+@use '@/styles/_variables';
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  width: 20px;
+  min-height: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 2px solid variables.$gray-04;
+  user-select: none;
+  &.checked {
+    border: 2px solid variables.$gray-01;
+    background-color: variables.$gray-01;
+  }
+  .checkmark {
+    fill: white;
+  }
+}

@@ -1,0 +1,31 @@
+@use '@/styles/_variables';
+
+.review {
+  .header {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+  .container {
+    padding: 12px;
+    border: 1px solid variables.$gray-04;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    line-height: 24px;
+    .header {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .shippingMethod {
+      margin-bottom: 8px;
+      .merchantName {
+        display: flex;
+        margin-bottom: 4px;
+        .storeIcon {
+          width: 16px;
+          margin-right: 6px;
+        }
+      }
+    }
+  }
+}

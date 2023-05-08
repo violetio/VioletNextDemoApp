@@ -1,7 +1,6 @@
 .stripeElement {
-  margin-top: 40px;
-  width: 400px;
+  width: 100%;
 }
 .submitButton {
-  composes: submit from "../GuestCheckout/GuestCheckout.module.scss";
+  composes: submit from '../GuestCheckout/GuestCheckout.module.scss';
 }

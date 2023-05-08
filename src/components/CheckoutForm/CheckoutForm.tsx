@@ -18,6 +18,7 @@ import {
   onShippingOptionChange,
 } from '@/stripe/stripe';
 import { setCart } from '@/redux/actions/cart';
+import Button from '@/components/Button/Button';
 
 interface Props {
   fullApplePayCheckout: boolean;
@@ -32,6 +33,7 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
     null
   );
   const cartState = useAppSelector((state: RootState) => state.cart);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (stripe && fullApplePayCheckout && cartState.order) {
@@ -86,13 +88,12 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
     // We don't want to let default form submission happen here,
     // which would refresh the page.
     event.preventDefault();
-
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
       // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
-
+    setLoading(true);
     await updatePricing(cartState.order?.id.toString()!);
 
     const { error } = await stripe.confirmPayment({
@@ -117,6 +118,7 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
       // methods like iDEAL, your customer will be redirected to an intermediate
       // site first to authorize the payment, then redirected to the `return_url`.
     }
+    setLoading(false);
   };
 
   return (
@@ -133,18 +135,18 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
       ) : (
         <form onSubmit={handleSubmit}>
           <PaymentElement />
-          <button className={styles.submitButton} disabled={!stripe}>
-            Submit
-          </button>
+          <Button
+            className={styles.submitButton}
+            label="Submit"
+            disabled={!stripe}
+            loading={loading}
+          />
           {/* Show error message to your customers */}
           {errorMessage && <div>{errorMessage}</div>}
         </form>
       )}
     </>
   );
-  // }
-  // Use a traditional checkout form.
-  // return <div>Insert your form or button component here.</div>;
 };
 
 export default CheckoutForm;

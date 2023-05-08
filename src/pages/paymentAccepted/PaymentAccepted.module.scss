@@ -1,0 +1,29 @@
+@use '@/styles/_variables';
+
+.paymentAccepted {
+  display: flex;
+  background-color: variables.$gray-05;
+  width: 100%;
+  justify-content: center;
+  padding-top: variables.$page-top-padding;
+  .receiptContainer {
+    width: 576px;
+    height: fit-content;
+    border: 1px solid variables.$gray-04;
+    border-radius: 6px;
+    padding: 32px;
+    background-color: white;
+    .header {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .subheader {
+      margin-bottom: 16px;
+      .continueShopping {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+  }
+}

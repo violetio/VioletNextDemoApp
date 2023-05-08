@@ -14,10 +14,17 @@
   &:hover {
     background-color: variables.$gray-02;
   }
+  &:disabled {
+    background-color: variables.$gray-04;
+    cursor: not-allowed;
+  }
   &.loading {
     background-color: variables.$gray-03;
   }
-  &:disabled {
-    background-color: variables.$gray-04;
-  }
+}
+
+@mixin ultraLogo {
+  color: variables.$gray-01;
+  font-size: 20px;
+  font-weight: 700;
 }

@@ -11,17 +11,15 @@ import SidePanelLayout from '@/components/SidePanelLayout/SidePanelLayout';
 import Spinner from '@/components/Spinner/Spinner';
 import OfferCard from '@/components/OfferCard/OfferCard';
 import {
-  desktopMediaQuery,
-  mobileMediaQuery,
-  tabletMediaQuery,
+  useDesktopMediaQuery,
+  useTabletMediaQuery,
 } from '@/utilities/responsive';
 
 const Home: NextPageWithLayout = () => {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [page, setPage] = useState<Page<Offer>>();
-  const isDesktop = desktopMediaQuery();
-  const isMedium = tabletMediaQuery();
-  const isMobile = mobileMediaQuery();
+  const isDesktop = useDesktopMediaQuery();
+  const isMedium = useTabletMediaQuery();
 
   const fetchOffers = useCallback(
     async (page: number = 1, size: number = 20) => {
