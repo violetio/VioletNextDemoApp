@@ -70,7 +70,7 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
       });
       pr.on('paymentmethod', async (ev) => {
         if (cartState.order) {
-          onPaymentMethodCreated(ev, stripe, cartState.order);
+          onPaymentMethodCreated(ev, stripe, cartState.order, router);
         }
       });
     }
@@ -80,6 +80,7 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
     cartState.order,
     dispatch,
     fullApplePayCheckout,
+    router,
   ]);
 
   const [errorMessage, setErrorMessage] = useState<string>();

@@ -16,6 +16,7 @@ import {
 } from '@violet/violet-js/api/checkout/cart';
 import { AddressType } from '@violet/violet-js/enums/AddressType';
 import { Order } from '@violet/violet-js/interfaces/Order.interface';
+import { NextRouter } from 'next/router';
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
@@ -116,6 +117,7 @@ export const onPaymentMethodCreated = async (
   ev: PaymentRequestPaymentMethodEvent,
   stripe: Stripe,
   order: Order,
+  router: NextRouter,
   onSuccess?: (order: Order) => void,
   onFailure?: (err: any) => void
 ) => {
@@ -158,6 +160,9 @@ export const onPaymentMethodCreated = async (
     try {
       await submitPayment(order.id.toString());
       complete('success');
+      router.push(
+        `${window.location.protocol}//${window.location.host}/paymentAccepted?cartId=${order.id}`
+      );
     } catch (err) {
       complete('fail');
     }
