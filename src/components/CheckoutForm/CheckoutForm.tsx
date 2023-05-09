@@ -100,9 +100,9 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
       //`Elements` instance that was used to create the Payment Element
       elements,
       confirmParams: {
-        return_url: `${window.location.protocol}//${window.location.host}/paymentAccepted?cartId=${
-          cartState.order?.id
-        }&${new URLSearchParams(
+        return_url: `${window.location.protocol}//${
+          window.location.host
+        }/paymentAccepted?cartId=${cartState.order?.id}&${new URLSearchParams(
           router.query as Record<string, string>
         ).toString()}`,
       },
