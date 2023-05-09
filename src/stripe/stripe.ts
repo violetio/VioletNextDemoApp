@@ -23,8 +23,8 @@ export const stripe = loadStripe('pk_test_UHg8oLvg4rrDCbvtqfwTE8qd');
 
 const applyShipping = async (
   shippingOption: PaymentRequestShippingOption,
-  updateWith: (details: PaymentRequestUpdateDetails) => void,
-  order: Order
+  order: Order,
+  updateWith?: (details: PaymentRequestUpdateDetails) => void
 ) => {
   try {
     const applyShippingResponse = await applyShippingMethodsToBags(
@@ -34,7 +34,7 @@ const applyShipping = async (
         shippingMethodId: shippingOption.id,
       }))
     );
-    updateWith({
+    updateWith?.({
       status: 'success',
       total: {
         amount: applyShippingResponse.data.total || 0,
@@ -42,7 +42,7 @@ const applyShipping = async (
       },
     });
   } catch (err) {
-    updateWith({
+    updateWith?.({
       status: 'fail',
     });
   }
@@ -106,10 +106,10 @@ export const onShippingOptionChange = (
   onSuccess?: (order: Order) => void,
   onFailure?: (err: any) => void
 ) => {
-  var updateWith = ev.updateWith;
-  var shippingOption = ev.shippingOption;
+  const updateWith = ev.updateWith;
+  const shippingOption = ev.shippingOption;
   // Send shipping method selected to Violet API
-  applyShipping(shippingOption, updateWith, order);
+  applyShipping(shippingOption, order, updateWith);
 };
 
 export const onPaymentMethodCreated = async (
@@ -120,6 +120,12 @@ export const onPaymentMethodCreated = async (
   onFailure?: (err: any) => void
 ) => {
   // Confirm the PaymentIntent without handling potential next actions (yet).
+  const shippingOption = ev.shippingOption;
+
+  if (shippingOption) {
+    await applyShipping(shippingOption, order);
+  }
+
   const payerName = ev.payerName?.split(' ');
   await applyCustomerInfoToCart(order.id.toString(), {
     firstName: payerName?.[0]!,
