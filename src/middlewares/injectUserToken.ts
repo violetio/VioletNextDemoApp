@@ -7,7 +7,7 @@ import {
   VIOLET_APP_SECRET_HEADER,
   VIOLET_TOKEN_HEADER,
 } from '@/strings/headers';
-import { loginEndpoint } from '@/strings/VioletApiPaths';
+import { loginEndpoint, refreshTokenEndpoint } from '@/strings/VioletApiPaths';
 
 /**
  * Middleware to check cookie authentication
@@ -24,22 +24,16 @@ const tokenIsExpired = (token: string) => {
 
 export default tokenIsExpired;
 
-// Login with the Violet username and password
-const login = async (next: NextHandler) => {
+// Fetch a new token with the Violet refresh token
+const refreshToken = async (next: NextHandler) => {
   try {
-    const getTokenResponse = await axios.post(
-      loginEndpoint,
-      {
-        username: process.env.USERNAME,
-        password: process.env.PASSWORD,
+    const getTokenResponse = await axios.get(refreshTokenEndpoint, {
+      headers: {
+        [VIOLET_APP_SECRET_HEADER]: process.env.APP_SECRET as string,
+        [VIOLET_APP_ID_HEADER]: process.env.APP_ID as string,
+        [VIOLET_TOKEN_HEADER]: process.env.REFRESH_TOKEN as string,
       },
-      {
-        headers: {
-          [VIOLET_APP_SECRET_HEADER]: process.env.APP_SECRET as string,
-          [VIOLET_APP_ID_HEADER]: process.env.APP_ID as string,
-        },
-      }
-    );
+    });
     return getTokenResponse.data.token;
   } catch (e: any) {
     next(e);
@@ -56,7 +50,7 @@ export const injectUserToken = async (
   // Check if the server has a valid token for requests
   if (!token || tokenIsExpired(token)) {
     // Login with username and password from environment variables
-    token = await login(next);
+    token = await refreshToken(next);
   }
 
   req.headers[VIOLET_TOKEN_HEADER] = token;
