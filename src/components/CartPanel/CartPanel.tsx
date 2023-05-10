@@ -6,8 +6,7 @@ import Link from 'next/link';
 import styles from './CartPanel.module.scss';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { RootState } from '@/redux/reducers';
-import { setCart } from '@/redux/actions/cart';
-import { closeSidePanel } from '@/redux/thunks/common';
+import { hideCart, setCart } from '@/redux/actions/cart';
 import BagView from '@/components/CartPanel/BagView/BagView';
 import Button from '@/components/Button/Button';
 
@@ -67,7 +66,7 @@ const CartPanel = ({
           {closeable && (
             <XMarkIcon
               className={styles.xIcon}
-              onClick={() => dispatch(closeSidePanel())}
+              onClick={() => dispatch(hideCart())}
             />
           )}
         </div>
