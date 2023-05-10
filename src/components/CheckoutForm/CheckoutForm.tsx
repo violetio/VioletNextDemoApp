@@ -17,7 +17,7 @@ import {
   onShippingAddressChange,
   onShippingOptionChange,
 } from '@/stripe/stripe';
-import { setCart } from '@/redux/actions/cart';
+import { clearCart, hideCart, setCart } from '@/redux/actions/cart';
 import Button from '@/components/Button/Button';
 
 interface Props {
@@ -70,7 +70,13 @@ const CheckoutForm = ({ fullApplePayCheckout }: Props) => {
       });
       pr.on('paymentmethod', async (ev) => {
         if (cartState.order) {
-          onPaymentMethodCreated(ev, stripe, cartState.order, router);
+          onPaymentMethodCreated(ev, stripe, cartState.order, (order) => {
+            dispatch(hideCart());
+            dispatch(clearCart());
+            router.push(
+              `${window.location.protocol}//${window.location.host}/paymentAccepted?cartId=${order.id}`
+            );
+          });
         }
       });
     }

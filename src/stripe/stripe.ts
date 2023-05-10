@@ -128,7 +128,6 @@ export const onPaymentMethodCreated = async (
   ev: PaymentRequestPaymentMethodEvent,
   stripe: Stripe,
   order: Order,
-  router: NextRouter,
   onSuccess?: (order: Order) => void,
   onFailure?: (err: any) => void
 ) => {
@@ -171,9 +170,6 @@ export const onPaymentMethodCreated = async (
       // Submit payment
       const submittedOrder = (await submitPayment(order.id.toString())).data;
       complete('success');
-      router.push(
-        `${window.location.protocol}//${window.location.host}/paymentAccepted?cartId=${order.id}`
-      );
       onSuccess?.(submittedOrder);
     } else {
       // Report to the browser that the payment failed, prompting it to
