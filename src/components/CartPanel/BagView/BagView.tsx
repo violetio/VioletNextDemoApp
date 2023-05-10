@@ -160,7 +160,7 @@ const BagView = ({
           <div className={styles.shippingPrice}>
             Shipping Method
             <div className={styles.price}>
-              {bag.shippingMethod?.price
+              {bag.shippingMethod?.price !== undefined
                 ? (bag.shippingMethod.price / 100).toLocaleString('en-US', {
                   style: 'currency',
                   currency: bag.currency,
@@ -173,7 +173,7 @@ const BagView = ({
           <div className={styles.shippingPrice}>
             Taxes
             <div className={styles.price}>
-              {bag.taxTotal
+              {bag.taxTotal !== undefined
                 ? (bag.taxTotal / 100).toLocaleString('en-US', {
                   style: 'currency',
                   currency: bag.currency,
