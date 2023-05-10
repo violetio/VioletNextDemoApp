@@ -3,7 +3,6 @@ import cx from 'classnames';
 import { ReactElement, useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getOfferById } from '@violet/violet-js/api/catalog/products';
-import useOffer from '@violet/violet-js/hooks/useOffer';
 import { Variant } from '@violet/violet-js/interfaces/Variant.interface';
 import { useDispatch } from 'react-redux';
 import { addSkusToCart, createCart } from '@violet/violet-js/api/checkout/cart';
@@ -20,6 +19,7 @@ import { useDesktopMediaQuery } from '@/utilities/responsive';
 import Dropdown from '@/components/Dropdown/Dropdown';
 import Button from '@/components/Button/Button';
 import Spinner from '@/components/Spinner/Spinner';
+import useOffer from '@/hooks/useOffer';
 
 const CLEAR_SELECTION = 'Clear Selection';
 

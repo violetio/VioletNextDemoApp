@@ -129,7 +129,6 @@ const ShippingMethodOptions = ({ setCurStep }: ShippingMethodOptionsProps) => {
                   // Replace the previous shipping method selected for this bag
                   [shippingMethod.bagId]: shippingMethod.shippingMethodId,
                 }));
-                dispatch(setShipping(shippingMethod));
                 /**
                  * Find the next bag that does not have a shipping method selected
                  * This is for the UX flow for expanding the next shipping wrapper

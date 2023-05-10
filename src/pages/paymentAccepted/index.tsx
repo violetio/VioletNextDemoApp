@@ -54,6 +54,7 @@ const PaymentAccepted = () => {
             key={bag.id}
             bag={bag}
             showShipping={true}
+            showTaxes={true}
             editable={false}
           />
         ))}

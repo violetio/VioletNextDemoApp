@@ -25,7 +25,8 @@ const CheckoutPage = () => {
       <div className={styles.cartPanel}>
         <CartPanel
           closeable={false}
-          showShippingPerBag={curStep >= 1}
+          showShippingPerBag={curStep >= 2}
+          showTaxesPerBag={curStep >= 2}
           showTotal={curStep >= 2}
         />
       </div>

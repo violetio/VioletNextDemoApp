@@ -17,13 +17,19 @@ import Dropdown from '@/components/Dropdown/Dropdown';
 interface Props {
   bag: Bag;
   showShipping?: boolean;
+  showTaxes?: boolean;
   editable?: boolean;
 }
 
 /**
  * A collapsible view of items in a bag
  */
-const BagView = ({ bag, showShipping = false, editable = false }: Props) => {
+const BagView = ({
+  bag,
+  showShipping = false,
+  showTaxes = false,
+  editable = false,
+}: Props) => {
   const dispatch = useAppDispatch();
   const cartState = useAppSelector((state: RootState) => state.cart);
   const [expanded, setExpanded] = useState(true);
@@ -156,21 +162,44 @@ const BagView = ({ bag, showShipping = false, editable = false }: Props) => {
             <div className={styles.price}>
               {bag.shippingMethod?.price
                 ? (bag.shippingMethod.price / 100).toLocaleString('en-US', {
-                  style: 'currency',
-                  currency: bag.currency,
-                })
+                    style: 'currency',
+                    currency: bag.currency,
+                  })
                 : '----'}
             </div>
           </div>
         )}
-
+        {showTaxes && (
+          <div className={styles.shippingPrice}>
+            Taxes
+            <div className={styles.price}>
+              {bag.taxTotal
+                ? (bag.taxTotal / 100).toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: bag.currency,
+                  })
+                : '----'}
+            </div>
+          </div>
+        )}
         <div className={styles.bagTotal}>
           Bag Total
           <div className={styles.subtotal}>
-            {((bag.total || bag.subTotal!) / 100).toLocaleString('en-US', {
-              style: 'currency',
-              currency: bag.currency,
-            })}
+            {showShipping && showTaxes ? (
+              <>
+                {(bag?.total! / 100).toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: bag.currency,
+                })}
+              </>
+            ) : (
+              <>
+                {(bag?.subTotal! / 100).toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: bag.currency,
+                })}
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ import Button from '@/components/Button/Button';
 interface Props {
   closeable?: boolean;
   showShippingPerBag?: boolean;
+  showTaxesPerBag?: boolean;
   showTotal?: boolean;
 }
 /**
@@ -22,6 +23,7 @@ interface Props {
 const CartPanel = ({
   closeable = true,
   showShippingPerBag = false,
+  showTaxesPerBag = false,
   showTotal = false,
 }: Props) => {
   const dispatch = useAppDispatch();
@@ -77,6 +79,7 @@ const CartPanel = ({
                 key={bag.id}
                 bag={bag}
                 showShipping={showShippingPerBag}
+                showTaxes={showTaxesPerBag}
                 editable={!showTotal}
               />
             ))}
