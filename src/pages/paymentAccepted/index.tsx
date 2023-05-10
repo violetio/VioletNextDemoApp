@@ -12,8 +12,6 @@ import { Bag } from '@violet/violet-js/interfaces/Bag.interface';
 import styles from './PaymentAccepted.module.scss';
 import SidePanelLayout from '@/components/SidePanelLayout/SidePanelLayout';
 import BagView from '@/components/CartPanel/BagView/BagView';
-import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { RootState } from '@/redux/reducers';
 import CheckoutReview from '@/components/CheckoutReview/CheckoutReview';
 
 const PaymentAccepted = () => {

@@ -46,6 +46,7 @@ const applyShipping = async (
     updateWith?.({
       status: 'fail',
     });
+    throw err;
   }
 };
 
@@ -56,52 +57,57 @@ export const onShippingAddressChange = async (
   onFailure?: (err: any) => void
 ) => {
   if (ev.shippingAddress.country !== 'US') {
+    onFailure?.('invalid_shipping_address');
     ev.updateWith({ status: 'invalid_shipping_address' });
   } else {
-    // Apply customer info with info from Apple Pay
-    const updatedCartResponse = await applyCustomerInfoToCart(
-      order.id.toString(),
-      {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'hello@violet.io',
-        shippingAddress: {
-          address_1: '',
-          city: ev.shippingAddress.city!,
-          country: ev.shippingAddress.country,
-          postalCode: ev.shippingAddress.postalCode!,
-          state: ev.shippingAddress.region!,
-          type: AddressType.SHIPPING,
-        },
-        sameAddress: true,
-      }
-    );
-
-    // Perform server-side request to fetch shipping options
-    const availableShippingOptions = await fetchShippingOptions(
-      order.id.toString()
-    );
-    onSuccess?.(updatedCartResponse.data);
-    ev.updateWith({
-      status: 'success',
-      shippingOptions: availableShippingOptions.data.flatMap(
-        (bagShippingMethods: any) => {
-          const shippingMethods = bagShippingMethods.shippingMethods;
-          return shippingMethods.map((shippingMethod: any) => {
-            return {
-              id: shippingMethod.shippingMethodId,
-              label: shippingMethod.label,
-              detail: shippingMethod.label,
-              amount: shippingMethod.price,
-            };
-          });
+    try {
+      // Apply customer info with info from Apple Pay
+      const updatedCartResponse = await applyCustomerInfoToCart(
+        order.id.toString(),
+        {
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'hello@violet.io',
+          shippingAddress: {
+            address_1: '',
+            city: ev.shippingAddress.city!,
+            country: ev.shippingAddress.country,
+            postalCode: ev.shippingAddress.postalCode!,
+            state: ev.shippingAddress.region!,
+            type: AddressType.SHIPPING,
+          },
+          sameAddress: true,
         }
-      ),
-    });
+      );
+
+      // Perform server-side request to fetch shipping options
+      const availableShippingOptions = await fetchShippingOptions(
+        order.id.toString()
+      );
+      onSuccess?.(updatedCartResponse.data);
+      ev.updateWith({
+        status: 'success',
+        shippingOptions: availableShippingOptions.data.flatMap(
+          (bagShippingMethods: any) => {
+            const shippingMethods = bagShippingMethods.shippingMethods;
+            return shippingMethods.map((shippingMethod: any) => {
+              return {
+                id: shippingMethod.shippingMethodId,
+                label: shippingMethod.label,
+                detail: shippingMethod.label,
+                amount: shippingMethod.price,
+              };
+            });
+          }
+        ),
+      });
+    } catch (err) {
+      onFailure?.(err);
+    }
   }
 };
 
-export const onShippingOptionChange = (
+export const onShippingOptionChange = async (
   ev: PaymentRequestShippingOptionEvent,
   order: Order,
   onSuccess?: (order: Order) => void,
@@ -110,7 +116,12 @@ export const onShippingOptionChange = (
   const updateWith = ev.updateWith;
   const shippingOption = ev.shippingOption;
   // Send shipping method selected to Violet API
-  applyShipping(shippingOption, order, updateWith);
+  try {
+    await applyShipping(shippingOption, order, updateWith);
+    onSuccess?.(order);
+  } catch (err) {
+    onFailure?.(err);
+  }
 };
 
 export const onPaymentMethodCreated = async (
@@ -123,53 +134,55 @@ export const onPaymentMethodCreated = async (
 ) => {
   // Confirm the PaymentIntent without handling potential next actions (yet).
   const shippingOption = ev.shippingOption;
+  try {
+    if (shippingOption) {
+      await applyShipping(shippingOption, order);
+    }
 
-  if (shippingOption) {
-    await applyShipping(shippingOption, order);
-  }
+    const payerName = ev.payerName?.split(' ');
+    await applyCustomerInfoToCart(order.id.toString(), {
+      firstName: payerName?.[0]!,
+      lastName:
+        payerName?.length! > 1 ? payerName?.[payerName.length - 1]! : '',
+      email: ev.payerEmail,
+      shippingAddress: {
+        address_1: ev.shippingAddress?.addressLine?.[0]!,
+        address_2: ev.shippingAddress?.addressLine?.[1]!,
+        city: ev.shippingAddress?.city!,
+        country: ev.shippingAddress?.country!,
+        postalCode: ev.shippingAddress?.postalCode!,
+        state: ev.shippingAddress?.region!,
+        type: AddressType.SHIPPING,
+      },
+      sameAddress: true,
+    });
 
-  const payerName = ev.payerName?.split(' ');
-  await applyCustomerInfoToCart(order.id.toString(), {
-    firstName: payerName?.[0]!,
-    lastName: payerName?.length! > 1 ? payerName?.[payerName.length - 1]! : '',
-    email: ev.payerEmail,
-    shippingAddress: {
-      address_1: ev.shippingAddress?.addressLine?.[0]!,
-      address_2: ev.shippingAddress?.addressLine?.[1]!,
-      city: ev.shippingAddress?.city!,
-      country: ev.shippingAddress?.country!,
-      postalCode: ev.shippingAddress?.postalCode!,
-      state: ev.shippingAddress?.region!,
-      type: AddressType.SHIPPING,
-    },
-    sameAddress: true,
-  });
+    // Update pricing
+    await updatePricing(order.id.toString());
 
-  // Update pricing
-  await updatePricing(order.id.toString());
-
-  const { error: confirmError } = await stripe.confirmCardPayment(
-    order.paymentIntentClientSecret,
-    { payment_method: ev.paymentMethod.id },
-    { handleActions: false }
-  );
-  const complete = ev.complete;
-  // Update customer info with latest customer information
-  if (!confirmError) {
-    // Submit payment
-    try {
-      await submitPayment(order.id.toString());
+    const { error: confirmError } = await stripe.confirmCardPayment(
+      order.paymentIntentClientSecret,
+      { payment_method: ev.paymentMethod.id },
+      { handleActions: false }
+    );
+    const complete = ev.complete;
+    // Update customer info with latest customer information
+    if (!confirmError) {
+      // Submit payment
+      const submittedOrder = (await submitPayment(order.id.toString())).data;
       complete('success');
       router.push(
         `${window.location.protocol}//${window.location.host}/paymentAccepted?cartId=${order.id}`
       );
-    } catch (err) {
+      onSuccess?.(submittedOrder);
+    } else {
+      // Report to the browser that the payment failed, prompting it to
+      // re-show the payment interface, or show an error message and close
+      // the payment interface.
+      onFailure?.(confirmError);
       complete('fail');
     }
-  } else {
-    // Report to the browser that the payment failed, prompting it to
-    // re-show the payment interface, or show an error message and close
-    // the payment interface.
-    complete('fail');
+  } catch (err) {
+    onFailure?.(err);
   }
 };

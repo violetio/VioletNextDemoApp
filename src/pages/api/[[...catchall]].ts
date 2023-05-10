@@ -54,6 +54,8 @@ apiRoute.all(async (req: NextApiRequest, res: NextApiResponse) => {
       .json(
         camelcaseKeys(response.data, {
           deep: true,
+          // The snakecaseKeys library does not recognize numbers as camelcase for conversion
+          // so we are excluding these keys to avoid mix ups when we convert between camelcaseKeys/snakecaseKeys
           exclude: ['address_1', 'address_2'],
         })
       );

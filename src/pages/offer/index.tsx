@@ -13,7 +13,6 @@ import SidePanelLayout from '@/components/SidePanelLayout/SidePanelLayout';
 import { NextPageWithLayout } from '@/pages/_app';
 import StoreIcon from '@/public/svg/store.svg';
 import CircleArrow from '@/public/svg/circle-arrow.svg';
-import Spinner from '@/components/Spinner/Spinner';
 import { setCart, showCart } from '@/redux/actions/cart';
 import { RootState } from '@/redux/reducers';
 import { useAppSelector } from '@/redux/store';

@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import nextConnect from 'next-connect';
 import { injectUserToken } from './injectUserToken';
 
+// next-connect enables us to chain middlewares functions similar to Connect and Express middlewares
+// on NextJS api routes
 export const nextConnectConfiguration = () => {
   const apiRoute = nextConnect({
     onError(error, req: NextApiRequest, res: NextApiResponse<any>) {

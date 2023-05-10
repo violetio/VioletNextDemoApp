@@ -49,6 +49,7 @@ export default function AppHeader({ virtualizedScroll = false }: Props) {
         >
           <ShoppingCartIcon className={styles.cart} />
           <div className={styles.counter}>
+            {/* Go through each bag and add the quantity for each sku to display amount of items in the cart */}
             {cart.order?.bags.reduce(
               (totalQuantity: number, bag: Bag) =>
                 totalQuantity +
@@ -60,7 +61,6 @@ export default function AppHeader({ virtualizedScroll = false }: Props) {
               0
             ) || 0}
           </div>
-          {/* (bag.skus?.length || 0) */}
         </div>
       </div>
     </header>
