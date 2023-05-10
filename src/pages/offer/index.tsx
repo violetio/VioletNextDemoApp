@@ -94,6 +94,7 @@ const OfferPage: NextPageWithLayout = () => {
   );
 
   if (!offer) {
+    // Are we still doing this?
     // TODO: Show a loading spinner instead of null
     return null;
   }

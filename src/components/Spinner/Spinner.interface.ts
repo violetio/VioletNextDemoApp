@@ -1,3 +1,6 @@
+// This is the only interface class you have in components. Everywhere else you
+// seem to just declare those interfaces in the component itself. Should we just
+// do that for Spinner for consistency?
 interface SpinnerProps {
   /**
    * Diameter of ring

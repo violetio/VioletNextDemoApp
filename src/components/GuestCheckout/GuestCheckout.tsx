@@ -2,6 +2,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from '../CheckoutForm/CheckoutForm';
 import AddressForm from '../AddressForm/AddressForm';
 import styles from './GuestCheckout.module.scss';
+// TODO: unused useAppDispatch import
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { RootState } from '@/redux/reducers';
 import { stripe } from '@/stripe/stripe';

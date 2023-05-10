@@ -5,6 +5,7 @@ enum CommonThunkType {
   CLOSE_SIDE_PANEL = 'common/closeSidePanel',
 }
 
+// Remove
 export const closeSidePanel = createAsyncThunk<void, void, any>(
   CommonThunkType.CLOSE_SIDE_PANEL,
   async (_, thunkApi) => {
