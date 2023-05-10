@@ -9,8 +9,8 @@ import ShippingMethodWrapper from '@/components/ShippingMethodWrapper/ShippingMe
 import { setCart, setShipping } from '@/redux/actions/cart';
 import { RootState } from '@/redux/reducers';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import Spinner from '@/components/Spinner';
 import Button from '@/components/Button/Button';
+import Spinner from '@/components/Spinner/Spinner';
 
 interface ShippingMethodOptionsProps {
   setCurStep: (step: number) => void;
@@ -112,9 +112,16 @@ const ShippingMethodOptions = ({ setCurStep }: ShippingMethodOptionsProps) => {
             <ShippingMethodWrapper
               key={shippingMethodWrapper.bagId}
               shippingMethodWrapper={shippingMethodWrapper}
-              isExpanded={index === currentBag}
+              shouldExpand={index === currentBag}
               expandedStateChanged={(expanded) => {
-                if (expanded) setCurrentBag(index);
+                // Set the current bag when it is opened.
+                if (expanded) {
+                  setCurrentBag(index);
+                } else {
+                  // Set the selected bag index to an out of range number.
+                  // No bag is selected when the wrapper is closed.
+                  setCurrentBag(-1);
+                }
               }}
               onChange={(shippingMethod) => {
                 setSelectedShippingMethods((prev) => ({
@@ -123,7 +130,12 @@ const ShippingMethodOptions = ({ setCurStep }: ShippingMethodOptionsProps) => {
                   [shippingMethod.bagId]: shippingMethod.shippingMethodId,
                 }));
                 dispatch(setShipping(shippingMethod));
-                // Find the next bag that does not have a shipping method selected
+                /**
+                 * Find the next bag that does not have a shipping method selected
+                 * This is for the UX flow for expanding the next shipping wrapper
+                 * when a shipping option is selected.
+                 * */
+                let newCurrentBagFound = false;
                 for (
                   let i = index + 1;
                   i < availableShippingMethods.length;
@@ -131,9 +143,13 @@ const ShippingMethodOptions = ({ setCurStep }: ShippingMethodOptionsProps) => {
                 ) {
                   const curBagId = availableShippingMethods[i].bagId;
                   if (!selectedShippingMethods[curBagId]) {
+                    newCurrentBagFound = true;
                     setCurrentBag(i);
                     break;
                   }
+                }
+                if (!newCurrentBagFound) {
+                  setCurrentBag(-1);
                 }
               }}
             />

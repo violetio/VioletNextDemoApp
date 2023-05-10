@@ -19,6 +19,7 @@ import { useAppSelector } from '@/redux/store';
 import { useDesktopMediaQuery } from '@/utilities/responsive';
 import Dropdown from '@/components/Dropdown/Dropdown';
 import Button from '@/components/Button/Button';
+import Spinner from '@/components/Spinner/Spinner';
 
 const CLEAR_SELECTION = 'Clear Selection';
 
@@ -94,8 +95,11 @@ const OfferPage: NextPageWithLayout = () => {
   );
 
   if (!offer) {
-    // TODO: Show a loading spinner instead of null
-    return null;
+    return (
+      <div className={styles.spinner}>
+        <Spinner diameter={100} strokeWidth={10} />
+      </div>
+    );
   }
 
   return (

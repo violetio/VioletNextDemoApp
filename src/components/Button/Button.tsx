@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import styles from './Button.module.scss';
-import Spinner from '@/components/Spinner';
+import Spinner from '@/components/Spinner/Spinner';
 
 interface ButtonProps {
   className?: string;

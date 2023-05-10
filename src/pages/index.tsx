@@ -6,7 +6,7 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeGrid } from 'react-window';
 import { Page } from '@violet/violet-js/interfaces/Page.interface';
 import { NextPageWithLayout } from './_app';
-import styles from '@/styles/Home.module.scss';
+import styles from './Home.module.scss';
 import SidePanelLayout from '@/components/SidePanelLayout/SidePanelLayout';
 import Spinner from '@/components/Spinner/Spinner';
 import OfferCard from '@/components/OfferCard/OfferCard';

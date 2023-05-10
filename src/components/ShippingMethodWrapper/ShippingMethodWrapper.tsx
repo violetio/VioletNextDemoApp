@@ -67,26 +67,28 @@ const ShippingMethod = ({
 
 interface ShippingMethodWrapperProps {
   shippingMethodWrapper: OrderShippingMethodWrapper;
-  isExpanded?: boolean;
+  shouldExpand?: boolean;
   expandedStateChanged?: (expanded: boolean) => void;
   onChange?: (shippingMethodId: OrderShippingMethod) => void;
 }
 
 const ShippingMethodWrapper = ({
   shippingMethodWrapper,
-  isExpanded = false,
+  shouldExpand = false,
   expandedStateChanged,
   onChange,
 }: ShippingMethodWrapperProps) => {
   const cartState = useAppSelector((state: RootState) => state.cart);
-  const [expanded, setExpanded] = useState(isExpanded);
+  const [expanded, setExpanded] = useState(shouldExpand);
   const [selectedMethod, setSelectedMethod] = useState<OrderShippingMethod>();
 
   useEffect(() => {
+    // Do not close this wrapper if it has been manually opened by the user.
+    // See usage in ShippingMethodOptions for more details
     if (!expanded) {
-      setExpanded(isExpanded);
+      setExpanded(shouldExpand);
     }
-  }, [isExpanded, expanded]);
+  }, [shouldExpand, expanded]);
 
   const getBag = useCallback(
     (bagId: number) => {
