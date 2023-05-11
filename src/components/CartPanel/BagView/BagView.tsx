@@ -43,11 +43,15 @@ const BagView = ({
   const removeFromCart = useCallback(
     async (skuId: number) => {
       if (cartState.order?.id) {
-        const cart = await removeSkusFromCart(
-          cartState.order.id.toString(),
-          skuId.toString()
-        );
-        dispatch(setCart(cart.data));
+        try {
+          const cart = await removeSkusFromCart(
+            cartState.order.id.toString(),
+            skuId.toString()
+          );
+          dispatch(setCart(cart.data));
+        } catch (err) {
+          // Error removing SKU from cart
+        }
       }
     },
     [cartState.order?.id, dispatch]

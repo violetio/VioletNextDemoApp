@@ -21,17 +21,21 @@ const Home: NextPageWithLayout = () => {
 
   const fetchOffers = useCallback(
     async (page: number = 1, size: number = 20) => {
-      const response = await searchOffers({
-        page,
-        size,
-      });
+      try {
+        const response = await searchOffers({
+          page,
+          size,
+        });
 
-      setOffers((prevOffers) =>
-        prevOffers
-          ? prevOffers.concat(response.data.content)
-          : response.data.content
-      );
-      setPage(response.data);
+        setOffers((prevOffers) =>
+          prevOffers
+            ? prevOffers.concat(response.data.content)
+            : response.data.content
+        );
+        setPage(response.data);
+      } catch (err) {
+        // Error fetching offers
+      }
     },
     []
   );
