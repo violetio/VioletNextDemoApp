@@ -25,7 +25,7 @@ const parsedUrl = (req: NextApiRequest) => {
 
 /**
  * This NextJS api routes forwards all the requests from the client to Violet.
- * This allows us to use the APP_SECRET, APP_ID, USERNAME, and PASSWORD environment variables on the server side
+ * This allows us to use the APP_SECRET, APP_ID, and REFRESH_TOKEN environment variables on the server side
  * without exposing it to the browser.
  * @see https://nextjs.org/docs/basic-features/environment-variables
  */
