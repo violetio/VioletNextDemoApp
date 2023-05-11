@@ -33,14 +33,32 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## (Optional) Testing Apple pay:
 
-Start ngrok
+Apple Pay and other wallet-based Payment Methods have already been built into checkout for this sample application. To enable these, you will need to do the following:
+
+Run the app through https using ngrok
 
 ```
-ngrok http 3000
+nrgrok http 3000
 ```
 
-Add the ngrok domain to the approved domains on Stripe's dashboard
 
-Example: `https://d497-38-95-108-171.ngrok.io`
+This will give you a path that routes to your local running instance of the store. Google Pay and other wallet-based payment methods should now be enabled by default when you navigate through checkout.
+
+To enable Apple Pay on compatible devices, an extra step is needed:
+
+Reach out to support@violet.io with the following email:
+
+```
+Hi Team Violet,
+
+This is <INTRODUCTION> using the Violet ULTRA Sample App. Please enable this domain for Apple Pay: 
+
+<ENTER YOUR NGROK PATH HERE Example: `https://d497-38-95-108-171.ngrok.io`>
+
+Thank you! 
+
+<YOUR_NAME>
+
+```
 
 Access the page with the ngrok url instead of localhost
