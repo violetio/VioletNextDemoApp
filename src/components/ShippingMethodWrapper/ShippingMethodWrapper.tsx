@@ -7,7 +7,7 @@ import cx from 'classnames';
 import {
   OrderShippingMethod,
   OrderShippingMethodWrapper,
-} from '@violet/violet-js';
+} from '@violetio/violet-js';
 import styles from './ShippingMethodWrapper.module.scss';
 import CheckIcon from '@/public/svg/check.svg';
 import { RootState } from '@/redux/reducers';

@@ -2,7 +2,7 @@ import { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import InfiniteLoader from 'react-window-infinite-loader';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeGrid } from 'react-window';
-import { Offer, Page, searchOffers } from '@violet/violet-js';
+import { Offer, Page, searchOffers } from '@violetio/violet-js';
 import { NextPageWithLayout } from './_app';
 import styles from './Home.module.scss';
 import SidePanelLayout from '@/components/SidePanelLayout/SidePanelLayout';

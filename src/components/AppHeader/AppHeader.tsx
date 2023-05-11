@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { useEffect } from 'react';
 import { ShoppingCartIcon } from '@heroicons/react/20/solid';
-import { Bag, cartEndpoint, getCart, OrderSku } from '@violet/violet-js';
+import { Bag, cartEndpoint, getCart, OrderSku } from '@violetio/violet-js';
 import styles from './AppHeader.module.scss';
 import { setCart, showCart } from '@/redux/actions/cart';
 import { RootState } from '@/redux/reducers';

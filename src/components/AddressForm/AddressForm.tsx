@@ -4,7 +4,7 @@ import {
   AddressType,
   applyBillingAddress,
   applyCustomerInfoToCart,
-} from '@violet/violet-js';
+} from '@violetio/violet-js';
 import styles from './AddressForm.module.scss';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { RootState } from '@/redux/reducers';

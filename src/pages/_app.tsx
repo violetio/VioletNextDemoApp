@@ -4,7 +4,7 @@ import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import { ReactElement } from 'react';
 import { NextPage } from 'next';
-import { initializeVioletjs } from '@violet/violet-js';
+import { initializeVioletjs } from '@violetio/violet-js';
 import store from '@/redux/store';
 
 const inter = Inter({ subsets: ['latin'] });

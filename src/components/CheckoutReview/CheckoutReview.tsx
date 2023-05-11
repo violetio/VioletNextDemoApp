@@ -1,6 +1,6 @@
 import { BuildingStorefrontIcon } from '@heroicons/react/24/solid';
 import { Elements } from '@stripe/react-stripe-js';
-import { Order } from '@violet/violet-js';
+import { Order } from '@violetio/violet-js';
 import styles from './CheckoutReview.module.scss';
 import { stripe } from '@/stripe/stripe';
 import CheckoutForm from '@/components/CheckoutForm/CheckoutForm';

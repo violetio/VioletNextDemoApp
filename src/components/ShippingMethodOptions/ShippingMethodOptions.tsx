@@ -3,7 +3,7 @@ import {
   applyShippingMethodsToBags,
   fetchShippingOptions,
   OrderShippingMethodWrapper,
-} from '@violet/violet-js';
+} from '@violetio/violet-js';
 import styles from './ShippingMethodOptions.module.scss';
 import ShippingMethodWrapper from '@/components/ShippingMethodWrapper/ShippingMethodWrapper';
 import { setCart } from '@/redux/actions/cart';

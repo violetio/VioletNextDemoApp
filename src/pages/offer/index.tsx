@@ -9,7 +9,7 @@ import {
   getOfferById,
   Sku,
   Variant,
-} from '@violet/violet-js';
+} from '@violetio/violet-js';
 import styles from './Offer.module.scss';
 import SidePanelLayout from '@/components/SidePanelLayout/SidePanelLayout';
 import { NextPageWithLayout } from '@/pages/_app';

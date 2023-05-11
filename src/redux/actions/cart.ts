@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { Order, OrderShippingMethod } from '@violet/violet-js';
+import { Order, OrderShippingMethod } from '@violetio/violet-js';
 
 enum CartActionType {
   SET_CART = 'SET_CART',

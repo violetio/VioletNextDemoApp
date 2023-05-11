@@ -8,7 +8,7 @@ import {
   getCart,
   OrderStatus,
   submitPayment,
-} from '@violet/violet-js';
+} from '@violetio/violet-js';
 import styles from './PaymentAccepted.module.scss';
 import SidePanelLayout from '@/components/SidePanelLayout/SidePanelLayout';
 import BagView from '@/components/CartPanel/BagView/BagView';

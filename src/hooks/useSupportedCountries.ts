@@ -1,4 +1,4 @@
-import { ICountry } from '@violet/violet-js';
+import { ICountry } from '@violetio/violet-js';
 import axios from 'axios';
 import useSWR from 'swr';
 

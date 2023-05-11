@@ -4,7 +4,7 @@ import {
   Product,
   ProductVariant,
   ProductVariantValue,
-} from '@violet/violet-js';
+} from '@violetio/violet-js';
 import useOffer from './useOffer';
 
 /**

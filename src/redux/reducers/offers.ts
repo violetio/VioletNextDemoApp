@@ -1,5 +1,5 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
-import { Offer } from '@violet/violet-js';
+import { Offer } from '@violetio/violet-js';
 import { clearSelectedOffer, setSelectedOffer } from '../actions/offers';
 
 export interface OfferState {

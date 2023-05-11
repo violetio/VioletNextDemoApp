@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Offer } from '@violet/violet-js';
+import { Offer } from '@violetio/violet-js';
 import styles from './OfferCard.module.scss';
 import StoreIcon from '@/public/svg/store.svg';
 

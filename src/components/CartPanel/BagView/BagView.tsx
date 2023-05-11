@@ -2,7 +2,7 @@ import cx from 'classnames';
 import { BuildingStorefrontIcon } from '@heroicons/react/24/solid';
 import { useCallback, useMemo, useState } from 'react';
 import { Listbox } from '@headlessui/react';
-import { Bag, removeSkusFromCart, updateSkuInCart } from '@violet/violet-js';
+import { Bag, removeSkusFromCart, updateSkuInCart } from '@violetio/violet-js';
 import styles from './BagView.module.scss';
 import ChevronDownIcon from '@/public/svg/chevron-down.svg';
 import { setCart } from '@/redux/actions/cart';
@@ -158,9 +158,9 @@ const BagView = ({
             <div className={styles.price}>
               {bag.shippingMethod?.price !== undefined
                 ? (bag.shippingMethod.price / 100).toLocaleString('en-US', {
-                  style: 'currency',
-                  currency: bag.currency,
-                })
+                    style: 'currency',
+                    currency: bag.currency,
+                  })
                 : '----'}
             </div>
           </div>
@@ -171,9 +171,9 @@ const BagView = ({
             <div className={styles.price}>
               {bag.taxTotal !== undefined
                 ? (bag.taxTotal / 100).toLocaleString('en-US', {
-                  style: 'currency',
-                  currency: bag.currency,
-                })
+                    style: 'currency',
+                    currency: bag.currency,
+                  })
                 : '----'}
             </div>
           </div>

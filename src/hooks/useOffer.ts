@@ -1,4 +1,4 @@
-import { Offer, Variant, VariantValue } from '@violet/violet-js';
+import { Offer, Variant, VariantValue } from '@violetio/violet-js';
 import { useCallback, useMemo } from 'react';
 
 /**

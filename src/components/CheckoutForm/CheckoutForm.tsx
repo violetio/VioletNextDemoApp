@@ -7,7 +7,7 @@ import {
 } from '@stripe/react-stripe-js';
 import { PaymentRequest } from '@stripe/stripe-js';
 import { useRouter } from 'next/router';
-import { Order, updatePricing } from '@violet/violet-js';
+import { Order, updatePricing } from '@violetio/violet-js';
 import styles from './CheckoutForm.module.scss';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { RootState } from '@/redux/reducers';
