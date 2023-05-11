@@ -59,15 +59,6 @@ Thank you!
 
 <YOUR_NAME>
 
-Hi Team Violet,
-
-This is <INTRODUCTION> using the Violet ULTRA Sample App. Please enable this domain for Apple Pay: 
-
-<ENTER YOUR NGROK PATH HERE>
-
-Thank you! 
-
-<YOUR_NAME>
 ```
 
 Access the page with the ngrok url instead of localhost
