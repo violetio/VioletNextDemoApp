@@ -1,10 +1,8 @@
 import { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import { Offer } from '@violet/violet-js/interfaces/Offer.interface';
-import { searchOffers } from '@violet/violet-js/api/catalog/products';
 import InfiniteLoader from 'react-window-infinite-loader';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeGrid } from 'react-window';
-import { Page } from '@violet/violet-js/interfaces/Page.interface';
+import { Offer, Page, searchOffers } from '@violet/violet-js';
 import { NextPageWithLayout } from './_app';
 import styles from './Home.module.scss';
 import SidePanelLayout from '@/components/SidePanelLayout/SidePanelLayout';

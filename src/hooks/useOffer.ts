@@ -1,8 +1,4 @@
-import { Offer } from '@violet/violet-js/interfaces/Offer.interface';
-import {
-  Variant,
-  VariantValue,
-} from '@violet/violet-js/interfaces/Variant.interface';
+import { Offer, Variant, VariantValue } from '@violet/violet-js';
 import { useCallback, useMemo } from 'react';
 
 /**

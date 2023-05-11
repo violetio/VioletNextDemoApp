@@ -1,7 +1,10 @@
 import { useMemo } from 'react';
-import { Product } from '@violet/violet-js/interfaces/Product.interface';
-import { ProductVariant } from '@violet/violet-js/interfaces/ProductVariant.interface';
-import { ProductVariantValue } from '@violet/violet-js/interfaces/ProductVariantValue.interface';
+
+import {
+  Product,
+  ProductVariant,
+  ProductVariantValue,
+} from '@violet/violet-js';
 import useOffer from './useOffer';
 
 /**

@@ -1,14 +1,14 @@
-import {
-  cartEndpoint,
-  getCart,
-  submitPayment,
-} from '@violet/violet-js/api/checkout/cart';
-import { OrderStatus } from '@violet/violet-js/enums/OrderStatus';
 import { useRouter } from 'next/router';
 import { ReactElement, useEffect } from 'react';
 import useSWR from 'swr';
 import Link from 'next/link';
-import { Bag } from '@violet/violet-js/interfaces/Bag.interface';
+import {
+  Bag,
+  cartEndpoint,
+  getCart,
+  OrderStatus,
+  submitPayment,
+} from '@violet/violet-js';
 import styles from './PaymentAccepted.module.scss';
 import SidePanelLayout from '@/components/SidePanelLayout/SidePanelLayout';
 import BagView from '@/components/CartPanel/BagView/BagView';

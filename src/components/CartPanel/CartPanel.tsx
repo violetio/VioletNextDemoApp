@@ -1,8 +1,7 @@
 import { useCallback, useEffect } from 'react';
-import { requestIntentBasedCapturePayment } from '@violet/violet-js/api/checkout/cart';
 import { XMarkIcon } from '@heroicons/react/20/solid';
-import { Bag } from '@violet/violet-js/interfaces/Bag.interface';
 import Link from 'next/link';
+import { Bag, requestIntentBasedCapturePayment } from '@violet/violet-js';
 import styles from './CartPanel.module.scss';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { RootState } from '@/redux/reducers';

@@ -1,5 +1,5 @@
-import { Offer } from '@violet/violet-js/interfaces/Offer.interface';
 import Link from 'next/link';
+import { Offer } from '@violet/violet-js';
 import styles from './OfferCard.module.scss';
 import StoreIcon from '@/public/svg/store.svg';
 

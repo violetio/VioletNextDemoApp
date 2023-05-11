@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import {
+  AddressType,
   applyBillingAddress,
   applyCustomerInfoToCart,
-} from '@violet/violet-js/api/checkout/cart';
-import { AddressType } from '@violet/violet-js/enums/AddressType';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+} from '@violet/violet-js';
 import styles from './AddressForm.module.scss';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { RootState } from '@/redux/reducers';

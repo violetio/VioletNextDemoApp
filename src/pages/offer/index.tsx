@@ -2,11 +2,14 @@ import useSWR from 'swr';
 import cx from 'classnames';
 import { ReactElement, useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import { getOfferById } from '@violet/violet-js/api/catalog/products';
-import { Variant } from '@violet/violet-js/interfaces/Variant.interface';
 import { useDispatch } from 'react-redux';
-import { addSkusToCart, createCart } from '@violet/violet-js/api/checkout/cart';
-import { Sku } from '@violet/violet-js/interfaces/Sku.interface';
+import {
+  addSkusToCart,
+  createCart,
+  getOfferById,
+  Sku,
+  Variant,
+} from '@violet/violet-js';
 import styles from './Offer.module.scss';
 import SidePanelLayout from '@/components/SidePanelLayout/SidePanelLayout';
 import { NextPageWithLayout } from '@/pages/_app';

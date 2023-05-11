@@ -1,12 +1,12 @@
+import { useCallback, useEffect, useState } from 'react';
 import {
   applyShippingMethodsToBags,
   fetchShippingOptions,
-} from '@violet/violet-js/api/checkout/cart';
-import { OrderShippingMethodWrapper } from '@violet/violet-js/interfaces/OrderShippingMethodWrapper.interface';
-import { useCallback, useEffect, useState } from 'react';
+  OrderShippingMethodWrapper,
+} from '@violet/violet-js';
 import styles from './ShippingMethodOptions.module.scss';
 import ShippingMethodWrapper from '@/components/ShippingMethodWrapper/ShippingMethodWrapper';
-import { setCart, setShipping } from '@/redux/actions/cart';
+import { setCart } from '@/redux/actions/cart';
 import { RootState } from '@/redux/reducers';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import Button from '@/components/Button/Button';

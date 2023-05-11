@@ -1,13 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { NextHandler } from 'next-connect';
 import jwtDecode from 'jwt-decode';
+// import axios from 'axios';
 import axios from 'axios';
 import {
   VIOLET_APP_ID_HEADER,
   VIOLET_APP_SECRET_HEADER,
   VIOLET_TOKEN_HEADER,
 } from '@/strings/headers';
-import { loginEndpoint, refreshTokenEndpoint } from '@/strings/VioletApiPaths';
+import { refreshTokenEndpoint } from '@/strings/VioletApiPaths';
 
 /**
  * Middleware to check cookie authentication

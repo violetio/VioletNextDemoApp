@@ -1,11 +1,13 @@
-import { OrderShippingMethodWrapper } from '@violet/violet-js/interfaces/OrderShippingMethodWrapper.interface';
 import {
   BuildingStorefrontIcon,
   ChevronDownIcon,
 } from '@heroicons/react/24/solid';
 import { useCallback, useEffect, useState } from 'react';
 import cx from 'classnames';
-import { OrderShippingMethod } from '@violet/violet-js/interfaces/OrderShippingMethod.interface';
+import {
+  OrderShippingMethod,
+  OrderShippingMethodWrapper,
+} from '@violet/violet-js';
 import styles from './ShippingMethodWrapper.module.scss';
 import CheckIcon from '@/public/svg/check.svg';
 import { RootState } from '@/redux/reducers';

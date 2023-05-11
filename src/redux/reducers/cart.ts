@@ -1,6 +1,6 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
-import { Order } from '@violet/violet-js/interfaces/Order.interface';
-import { OrderShippingMethod } from '@violet/violet-js/interfaces/OrderShippingMethod.interface';
+
+import { Order, OrderShippingMethod } from '@violet/violet-js';
 import {
   clearCart,
   hideCart,

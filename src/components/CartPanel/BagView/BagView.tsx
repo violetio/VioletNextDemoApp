@@ -1,12 +1,8 @@
 import cx from 'classnames';
-import { Bag } from '@violet/violet-js/interfaces/Bag.interface';
 import { BuildingStorefrontIcon } from '@heroicons/react/24/solid';
 import { useCallback, useMemo, useState } from 'react';
-import {
-  removeSkusFromCart,
-  updateSkuInCart,
-} from '@violet/violet-js/api/checkout/cart';
 import { Listbox } from '@headlessui/react';
+import { Bag, removeSkusFromCart, updateSkuInCart } from '@violet/violet-js';
 import styles from './BagView.module.scss';
 import ChevronDownIcon from '@/public/svg/chevron-down.svg';
 import { setCart } from '@/redux/actions/cart';
