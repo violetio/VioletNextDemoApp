@@ -1,5 +1,9 @@
 # Violet NextJS Demo App
 
+## Important
+
+This is a demo app that shows how to use Violet's Checkout API. It should not be deployed to production without adding user authentication to prevent malicious use.
+
 ## Getting Started
 
 1. Sign up at https://channel.violet.io/signup and create an app to get your app ID and app secret.
