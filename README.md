@@ -27,6 +27,8 @@ Make sure to replace [REDACTED] and [VIOLET REFRESH TOKEN] with the appropriate 
 
 ## Starting the Development Server
 
+### Minimum Node version: 16.0.0
+
 ### Install dependencies
 
 ```bash
