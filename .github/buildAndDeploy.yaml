@@ -1,0 +1,19 @@
+name: Build and Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      force-deploy:
+        type: boolean
+        required: true
+        description: "Force Deploy this out to Dev even if it's not the main branch?"
+  push:
+
+jobs:
+  violet-demo-app:
+    uses: violetio/VioletCiCd/.github/workflows/FEMainBuildAndDeployTemplate.yaml@main
+    with:
+      service-name: violet-demo-app
+      force-deploy: ${{ inputs.force-deploy == true }} #Massage input since the push trigger won't have this variable
+      deploy-sandbox: false
+    secrets: inherit
