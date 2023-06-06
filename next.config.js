@@ -4,6 +4,7 @@ const nextConfig = {
   images: {
     remotePatterns: [],
   },
+  output: 'standalone',
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
