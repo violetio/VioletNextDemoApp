@@ -10,11 +10,7 @@ import { setCart, showCart } from '@/redux/actions/cart';
 import { RootState } from '@/redux/reducers';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 
-interface Props {
-  virtualizedScroll?: boolean;
-}
-
-export default function AppHeader({ virtualizedScroll = false }: Props) {
+export default function AppHeader() {
   const router = useRouter();
   const cartId = router.query.cartId as string;
   const dispatch = useAppDispatch();
@@ -32,11 +28,7 @@ export default function AppHeader({ virtualizedScroll = false }: Props) {
   }, [getCartData, dispatch, router.pathname]);
 
   return (
-    <header
-      className={cx(styles.header, {
-        [styles.virtualizedScroll]: virtualizedScroll,
-      })}
-    >
+    <header className={styles.header}>
       <div className={styles.appHeader}>
         <Link className={styles.ultra} href={'/'}>
           Ultra
