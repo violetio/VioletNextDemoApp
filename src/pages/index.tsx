@@ -126,7 +126,7 @@ const Home: NextPageWithLayout = () => {
 };
 
 Home.getLayout = function getLayout(page: ReactElement) {
-  return <SidePanelLayout virtualizedScroll={true}>{page}</SidePanelLayout>;
+  return <SidePanelLayout>{page}</SidePanelLayout>;
 };
 
 export default Home;

@@ -24,13 +24,13 @@
     background-color: variables.$gray-05;
 
     @media (min-width: variables.$breakpoint-mobile) {
-      max-width: variables.$breakpoint-mobile;
+      max-width: variables.$breakpoint-mobile + 8px;
     }
     @media (min-width: variables.$breakpoint-tablet) {
-      max-width: variables.$breakpoint-tablet;
+      max-width: variables.$breakpoint-tablet + 8px;
     }
     @media (min-width: variables.$breakpoint-desktop) {
-      max-width: variables.$breakpoint-desktop;
+      max-width: variables.$breakpoint-desktop + 8px;
     }
     .ultra {
       @include mixins.ultraLogo;
