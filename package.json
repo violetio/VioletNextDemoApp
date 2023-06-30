@@ -51,5 +51,8 @@
     "eslint-config-prettier": "~8.5.0",
     "prettier": "~2.6.0",
     "sass": "^1.58.3"
-  }
+  },
+  "overrides": {
+    "semver": "7.5.3"
+ }
 }
