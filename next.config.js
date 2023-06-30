@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  env: {
+    EXCLUDE_PUBLIC_OFFERS: process.env.EXCLUDE_PUBLIC_OFFERS,
+  },
   images: {
     remotePatterns: [],
   },

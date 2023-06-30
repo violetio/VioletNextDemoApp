@@ -25,6 +25,7 @@ const Home: NextPageWithLayout = () => {
         const response = await searchOffers({
           page,
           size,
+          excludePublic: process.env.EXCLUDE_PUBLIC_OFFERS === 'true',
         });
 
         setOffers((prevOffers) =>

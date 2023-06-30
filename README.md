@@ -21,6 +21,7 @@ APP_SECRET=[REDACTED]
 APP_ID=[REDACTED]
 API_ENDPOINT=https://sandbox-api.violet.io
 REFRESH_TOKEN=[VIOLET REFRESH TOKEN]
+EXCLUDE_PUBLIC_OFFERS=true|false
 ```
 
 Make sure to replace [REDACTED] and [VIOLET REFRESH TOKEN] with the appropriate values.
