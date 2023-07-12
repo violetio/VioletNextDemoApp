@@ -20,7 +20,7 @@ import { refreshTokenEndpoint } from '@/strings/VioletApiPaths';
 const tokenIsExpired = (token: string) => {
   const { exp }: any = jwtDecode(token);
   // Refresh the token 30 minutes before the token expires
-  return exp * 1000 < Date.now() - 1800000;
+  return (exp - 1800) * 1000 < Date.now();
 };
 
 export default tokenIsExpired;
