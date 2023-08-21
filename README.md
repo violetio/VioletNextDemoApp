@@ -8,9 +8,9 @@ This is a demo app that shows how to use Violet's Checkout API. It should not be
 
 1. Sign up at https://channel.violet.io/signup and create an app to get your app ID and app secret.
 
-2. Login with the instructions [here](https://docs.violet.io/postman-login) to retrieve your refresh token
+2. Login with the instructions [here](https://docs.violet.io/guides/quickstart/postman-login) to retrieve your refresh token
 
-More information about the demo app [here](https://docs.violet.io/violet-sample-app-the-ultra-store)
+More information about the demo app [here](https://docs.violet.io/guides/violet-sample-app)
 
 ## Environment variables:
 
