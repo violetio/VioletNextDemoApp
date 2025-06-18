@@ -15,7 +15,7 @@ const OfferCard = ({ offer }: OfferCardProps) => {
           <div className={styles.imageContainer}>
             <img
               className={styles.productImage}
-              src={offer.albums[0].primaryMedia.url}
+              src={offer.albums[0].primaryMedia?.url}
               alt={offer.name}
               width={272}
               height={272}
