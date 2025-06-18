@@ -26,6 +26,7 @@ const Home: NextPageWithLayout = () => {
           page,
           size,
           excludePublic: process.env.EXCLUDE_PUBLIC_OFFERS === 'true',
+          excludeHidden: false
         });
 
         setOffers((prevOffers) =>
